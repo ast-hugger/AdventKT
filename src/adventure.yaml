@@ -1,0 +1,4025 @@
+# This YAML file gets processed into a collection of data structures and
+# variable initializers describing Colossal Cave.  It replaces an ad-hoc
+# text database shipped with Adventure versions up to 2.5.  The format
+# change enabled a lot of use of symbolic names where there were previously
+# inscrutable numeric literals.
+#
+# We define a bunch of YAML structures:
+#
+# motions: Motion words, grouped into synonyms.  The 'oldstyle'
+#    attribute, if false, means that single-letter synonyms should be
+#    accepted in oldstyle mode; it defaults to true.
+#
+# actions: Action words, grouped into synonyms, and their corresponding
+#    default messages. The 'oldstyle' attribute is as for motions.
+#
+# hints: Each item contains a hint number, a hint label (used to
+#    generate the value macro for the hint) the number of turns he
+#    must be at the right loc(s) before triggering the hint, the
+#    points deducted for taking the hint, the message number (in
+#    arbitrary_messages) of the question, and the message number of
+#    the hint.
+#
+# locations: They have attributes as follows...
+#      long:         Long description, always shown on first encounter.
+#      short:        Short description. If none, use long description.
+#      conditions:   A dictionary of attributes
+#        LIT		Light
+#        OILY		If FLUID flag is on: true for oil, false for water
+#        FLUID		Liquid asset
+#        NOARRR		Pirate doesn't go here unless following player
+#        NOBACK		Cannot use "back" to move away
+#        HCAVE		Trying to get into cave
+#        HBIRD		Trying to catch bird
+#        HSNAKE		Trying to deal with snake
+#        HMAZE		Lost in maze
+#        HDARK		Pondering dark room
+#        HWITT		At Witt's End
+#        HCLIFF		Cliff with urn
+#        HWOODS		Lost in forest
+#        HOGRE		Trying to deal with ogre
+#        HJADE		Found all treasures except jade
+#      hints:        A list of YAML references to hints that may be available at
+#                    this location. (This is why locations has to follow hints.)
+#      sound:        Label for a location sound.
+#      loud:         If true, object sounds are drowned out at this location.
+#      travel:       A list of movement rules.  They're applied in the order
+#                    they appear.  For a rule to fire, (1) the movement command
+#                    must be a synonym for one of its verbs, and (2) the
+#                    condition, if present, must evaluate to true. In that case
+#                    the action fires.  The action may be a goto (move to
+#                    a named location) a speak (utter a named message), or
+#                    a special (branch to special case in movement code).
+#                    The conditional may be one of the following:
+#                      [pct, N]       Roll a die, n% chance of success
+#                      [carry, OBJ]   Must be carrying named object
+#                      [with, OBJ]    Must be carrying or in room with
+#                      [not, OBJ N]   Property of named OBJ must not be N.
+#                                     N may be numeric or a state label.
+#                      [nodwarves]    Dwarves must skip this rule.
+#    All attributes are optional except the long description and
+#    travel. Order of locations is not significant.
+#
+# arbitrary_messages: These are arguments to rspeak(). Some spans of
+#    these messages need to be kept adjacent and ordered (for now),
+#    though there are no depenencies on actual numbers left.  To see
+#    which, grep for rspeak() calls containing expressions with
+#    arithmetic.  Eventually, these will be pulled out into more
+#    appropriate data structures. Then ordering can be dropped.
+#
+# classes: Each item contains a point threshold and a message
+#    describing a classification of player.  Point thresholds must be
+#    in ascending order. The scoring code selects the appropriate
+#    message, where each message is considered to apply to players
+#    whose scores are higher than the previous N but not higher than
+#    this N.  Note that these scores probably change with every
+#    modification (and particularly expansion) of the program.
+#
+# turn_thresholds:  Each item contains a number and a message
+#    berating the player for taking so many turns.  When the turn count
+#    matches one of the thresholds, the corresponding message is shown.
+#    Order doesn't matter; the logic simply tests every threshold on
+#    the assumption that turn counts never decrease nor skip values.
+#
+# objects: Objects have attributes as follows...
+#      inventory:    A description for use in the inventory command.
+#      states:       A list of state labels for states from 0 up. Each
+#                    becomes a #define, and is also a state label that
+#                    can be used in travel-rule 'not' clauses.
+#      descriptions: Messages describing the object in different states.
+#                    Must correspond 1:1 with state labels if the latter exist.
+#      changes:      State-change messages to be emitted whenever the object
+#                    *changes* to the (0-origin) state that is the index of the
+#                    message in this array. Must correspond 1:1 with state
+#                    labels if the latter exist.
+#      words:        The vocabulary word(s) referring to this object.
+#      treasure:     A boolean "treasure" used for point-scoring and pirate
+#                    snatches, defaulting to false.
+#      immovable:    An object may also be flagged
+#                    immovable, meaning it cannot be carried.
+#      locations:    An object may have one or two start locations (the gate
+#                    is an example of a two-location object; it can be accessed
+#                    from above or below).
+#
+# obituaries: Death messages and reincarnation queries.  Order is
+#    significant, they're used in succession as the player racks up
+#    deaths.
+#
+# Message strings may include certain special character sequences to
+# denote that the program must provide parameters to insert into a
+# message when the message is printed.  These sequences are:
+#       %d = an integer
+#       %s = an ASCII string
+#	%S = The letter 's' or nothing (if a previous %d value is exactly 1)
+#	%V = substitute program version string
+
+motions: !!omap
+- MOT_0:
+    words: !!null
+- HERE:
+    words: !!null
+- MOT_2:
+    words: ['road', 'hill']
+- ENTER:
+    words: ['enter']
+- MOT_4:
+    words: ['upstr']
+- MOT_5:
+    words: ['downs']
+- MOT_6:
+    words: ['fores']
+- FORWARD:
+    words: ['forwa', 'conti', 'onwar']
+- BACK:
+    words: ['back', 'retur', 'retre']
+- MOT_9:
+    words: ['valle']
+- MOT_10:
+    words: ['stair']
+- OUTSIDE:
+    words: ['out', 'outsi', 'exit', 'leave']
+- MOT_12:
+    words: ['build', 'house']
+- MOT_13:
+    words: ['gully']
+- STREAM:
+    words: ['strea']
+- MOT_15:
+    words: ['fork']
+- MOT_16:
+    words: ['bed']
+- CRAWL:
+    words: ['crawl']
+- MOT_18:
+    words: ['cobbl']
+- INSIDE:
+    words: ['inwar', 'insid', 'in']
+- MOT_20:
+    words: ['surfa']
+- NUL:
+    words: ['null', 'nowhe']
+- MOT_22:
+    words: ['dark']
+- MOT_23:
+    words: ['passa', 'tunne']
+- MOT_24:
+    words: ['low']
+- MOT_25:
+    words: ['canyo']
+- MOT_26:
+    words: ['awkwa']
+- MOT_27:
+    words: ['giant']
+- MOT_28:
+    words: ['view']
+- UP:
+    words: ['upwar', 'up', 'u', 'above', 'ascen']
+- DOWN:
+    words: ['d', 'downw', 'down', 'desce']
+- MOT_31:
+    words: ['pit']
+- MOT_32:
+    words: ['outdo']
+- MOT_33:
+    words: ['crack']
+- MOT_34:
+    words: ['steps']
+- MOT_35:
+    words: ['dome']
+- LEFT:
+    words: ['left']
+- RIGHT:
+    words: ['right']
+- MOT_38:
+    words: ['hall']
+- MOT_39:
+    words: ['jump']
+- MOT_40:
+    words: ['barre']
+- MOT_41:
+    words: ['over']
+- MOT_42:
+    words: ['acros']
+- EAST:
+    words: ['east', 'e']
+- WEST:
+    words: ['west', 'w']
+- NORTH:
+    words: ['north', 'n']
+- SOUTH:
+    words: ['south', 's']
+- NE:
+    words: ['ne']
+- SE:
+    words: ['se']
+- SW:
+    words: ['sw']
+- NW:
+    words: ['nw']
+- MOT_51:
+    words: ['debri']
+- MOT_52:
+    words: ['hole']
+- MOT_53:
+    words: ['wall']
+- MOT_54:
+    words: ['broke']
+- MOT_55:
+    words: ['y2']
+- MOT_56:
+    words: ['climb']
+- LOOK:
+    words: ['l', 'x', 'look', 'exami', 'touch', 'descr']
+    oldstyle: false
+- MOT_58:
+    words: ['floor']
+- MOT_59:
+    words: ['room']
+- MOT_60:
+    words: ['slit']
+- MOT_61:
+    words: ['slab', 'slabr']
+- XYZZY:
+    words: ['xyzzy']
+- DEPRESSION:
+    words: ['depre']
+- ENTRANCE:
+    words: ['entra']
+- PLUGH:
+    words: ['plugh']
+- MOT_66:
+    words: ['secre']
+- CAVE:
+    words: ['cave']
+- CROSS:
+    words: ['cross']
+- BEDQUILT:
+    words: ['bedqu']
+- PLOVER:
+    words: ['plove']
+- ORIENTAL:
+    words: ['orien']
+- CAVERN:
+    words: ['caver']
+- SHELLROOM:
+    words: ['shell']
+- RESERVOIR:
+    words: ['reser']
+- OFFICE:
+    words: ['main', 'offic']
+
+hints:
+  - hint: &grate
+      name: CAVE
+      number: 1
+      turns: 4
+      penalty: 2
+      question: 'Are you trying to get into the cave?'
+      hint: |-
+          The grate is very solid and has a hardened steel lock.  You cannot
+          enter without a key, and there are no keys nearby.  I would recommend
+          looking elsewhere for the keys.
+  - hint: &bird
+      name: BIRD
+      number: 2
+      turns: 5
+      penalty: 2
+      question: 'Are you trying to catch the bird?'
+      hint: |-
+          Something about you seems to be frightening the bird.  Perhaps you
+          might figure out what it is.
+  - hint: &snake
+      name: SNAKE
+      number: 3
+      turns: 8
+      penalty: 2
+      question: 'Are you trying to somehow deal with the snake?'
+      hint: |-
+          You can't kill the snake, or drive it away, or avoid it, or anything
+          like that.  There is a way to get by, but you don't have the necessary
+          resources right now.
+  - hint: &maze
+      name: MAZE
+      number: 4
+      turns: 75
+      penalty: 4
+      question: 'Do you need help getting out of the maze?'
+      hint: 'You can make the passages look less alike by dropping things.'
+  - hint: &dark
+      name: DARK
+      number: 5
+      turns: 25
+      penalty: 5
+      question: 'Are you trying to explore beyond the plover room?'
+      hint: |-
+          There is a way to explore that region without having to worry about
+          falling into a pit.  None of the objects available is immediately
+          useful in discovering the secret.
+  - hint: &witt
+      name: WITT
+      number: 6
+      turns: 20
+      penalty: 3
+      question: 'Do you need help getting out of here?'
+      hint: 'Don''t go west.\n'
+  - hint: &urn
+      name: CLIFF
+      number: 7
+      turns: 8
+      penalty: 2
+      question: 'Are you wondering what to do here?'
+      hint: 'This section is quite advanced.  Find the cave first.\n'
+  - hint: &forest
+      name: WOODS
+      number: 8
+      turns: 25
+      penalty: 2
+      question: 'Would you like to be shown out of the forest?'
+      hint: |-
+          Go east ten times.  If that doesn't get you out, then go south, then
+          west twice, then south.
+  - hint: &ogre
+      name: OGRE
+      number: 9
+      turns: 10
+      penalty: 4
+      question: 'Do you need help dealing with the ogre?'
+      hint: |-
+          There is nothing the presence of which will prevent you from defeating
+          him; thus it can't hurt to fetch everything you possibly can.
+  - hint: &jade
+      name: JADE
+      number: 10
+      turns: 1
+      penalty: 4
+      question: 'You''re missing only one other treasure.  Do you need help finding it?'
+      hint: |-
+        Once you've found all the other treasures, it is no longer possible to
+        locate the one you're now missing.
+
+locations: !!omap
+- LOC_NOWHERE:
+    description:
+      long: !!null
+      short: !!null
+    conditions: {}
+    travel: [
+    ]
+- LOC_START:
+    description:
+      long: |-
+          You are standing at the end of a road before a small brick building.
+          Around you is a forest.  A small stream flows out of the building and
+          down a gully.
+      short: 'You''re in front of building.'
+    conditions: {FLUID: true, ABOVE: true, LIT: true}
+    sound: STREAM_GURGLES
+    travel: [
+      {verbs: [ROAD, WEST, UPWAR], action: [goto, LOC_HILL]},
+      {verbs: [ENTER, BUILD, INWAR, EAST], action: [goto, LOC_BUILDING]},
+      {verbs: [DOWNS, GULLY, STREA, SOUTH, DOWN], action: [goto, LOC_VALLEY]},
+      {verbs: [FORES, NORTH], action: [goto, LOC_FOREST1]},
+      {verbs: [DEPRE], action: [goto, LOC_GRATE]},
+    ]
+- LOC_HILL:
+    description:
+      long: |-
+          You have walked up a hill, still in the forest.  The road slopes back
+          down the other side of the hill.  There is a building in the distance.
+      short: 'You''re at hill in road.'
+    conditions: {ABOVE: true, LIT: true}
+    travel: [
+      {verbs: [BUILD, EAST], action: [goto, LOC_START]},
+      {verbs: [WEST], action: [goto, LOC_ROADEND]},
+      {verbs: [NORTH], action: [goto, LOC_FOREST20]},
+      {verbs: [SOUTH, FORES], action: [goto, LOC_FOREST13]},
+      {verbs: [DOWN], action: [speak, WHICH_WAY]},
+    ]
+- LOC_BUILDING:
+    description:
+      long: 'You are inside a building, a well house for a large spring.'
+      short: 'You''re inside building.'
+    conditions: {FLUID: true, ABOVE: true, LIT: true}
+    sound: STREAM_GURGLES
+    travel: [
+      {verbs: [OUT, OUTDO, WEST], action: [goto, LOC_START]},
+      {verbs: [XYZZY], action: [goto, LOC_FOOF1]},
+      {verbs: [PLUGH], action: [goto, LOC_FOOF3]},
+      {verbs: [DOWNS, STREA], action: [goto, LOC_SEWER]},
+    ]
+- LOC_VALLEY:
+    description:
+      long: |-
+          You are in a valley in the forest beside a stream tumbling along a
+          rocky bed.
+      short: 'You''re in valley.'
+    conditions: {FLUID: true, ABOVE: true, LIT: true}
+    sound: STREAM_GURGLES
+    travel: [
+      {verbs: [UPSTR, BUILD, NORTH], action: [goto, LOC_START]},
+      {verbs: [EAST, FORES], action: [goto, LOC_FOREST6]},
+      {verbs: [WEST], action: [goto, LOC_FOREST12]},
+      {verbs: [DOWNS, SOUTH, DOWN], action: [goto, LOC_SLIT]},
+      {verbs: [DEPRE], action: [goto, LOC_GRATE]},
+      {verbs: [STREA], action: [speak, UPSTREAM_DOWNSTREAM]},
+    ]
+- LOC_ROADEND:
+    description:
+      long: 'The road, which approaches from the east, ends here amid the trees.'
+      short: 'You''re at end of road.'
+    conditions: {ABOVE: true, LIT: true}
+    travel: [
+      {verbs: [ROAD, EAST, UPWAR], action: [goto, LOC_HILL]},
+      {verbs: [BUILD], action: [goto, LOC_START]},
+      {verbs: [SOUTH, FORES], action: [goto, LOC_FOREST14]},
+      {verbs: [WEST], action: [goto, LOC_FOREST15]},
+      {verbs: [NORTH], action: [goto, LOC_FOREST21]},
+    ]
+- LOC_CLIFF:
+    description:
+      long: |-
+          The forest thins out here to reveal a steep cliff.  There is no way
+          down, but a small ledge can be seen to the west across the chasm.
+      short: 'You''re at cliff.'
+    conditions: {ABOVE: true, NOBACK: true, LIT: true}
+    hints: [*urn]
+    travel: [
+      {verbs: [SOUTH, FORES], action: [goto, LOC_FOREST17]},
+      {verbs: [EAST], action: [goto, LOC_FOREST19]},
+      {verbs: [JUMP], action: [goto, LOC_NOMAKE]},
+    ]
+- LOC_SLIT:
+    description:
+      long: |-
+          At your feet all the water of the stream splashes into a 2-inch slit
+          in the rock.  Downstream the streambed is bare rock.
+      short: 'You''re at slit in streambed.'
+    conditions: {FLUID: true, ABOVE: true, LIT: true}
+    sound: STREAM_GURGLES
+    travel: [
+      {verbs: [BUILD], action: [goto, LOC_START]},
+      {verbs: [UPSTR, NORTH], action: [goto, LOC_VALLEY]},
+      {verbs: [EAST, FORES], action: [goto, LOC_FOREST6]},
+      {verbs: [WEST], action: [goto, LOC_FOREST10]},
+      {verbs: [DOWNS, BED, SOUTH, DEPRE], action: [goto, LOC_GRATE]},
+      {verbs: [SLIT, STREA, DOWN, INWAR, ENTER], action: [speak, DONT_FIT]},
+    ]
+- LOC_GRATE:
+    description:
+      long: |-
+          You are in a 20-foot depression floored with bare dirt.  Set into the
+          dirt is a strong steel grate mounted in concrete.  A dry streambed
+          leads into the depression.
+      short: 'You''re outside grate.'
+    conditions: {ABOVE: true, LIT: true}
+    hints: [*grate, *jade]
+    travel: [
+      {verbs: [EAST, FORES], action: [goto, LOC_FOREST7]},
+      {verbs: [SOUTH], action: [goto, LOC_FOREST10]},
+      {verbs: [WEST], action: [goto, LOC_FOREST9]},
+      {verbs: [BUILD], action: [goto, LOC_START]},
+      {verbs: [UPSTR, GULLY, NORTH], action: [goto, LOC_SLIT]},
+      {verbs: [ENTER, INWAR, DOWN],
+                             cond: [not, GRATE, GRATE_CLOSED],
+                             action: [goto, LOC_BELOWGRATE]},
+      {verbs: [ENTER], action: [speak, GRATE_NOWAY]},
+    ]
+- LOC_BELOWGRATE:
+    description:
+      long: |-
+          You are in a small chamber beneath a 3x3 steel grate to the surface.
+          A low crawl over cobbles leads inward to the west.
+      short: 'You''re below the grate.'
+    conditions: {LIT: true}
+    travel: [
+      {verbs: [OUT, UPWAR], cond: [not, GRATE, GRATE_CLOSED],
+                            action: [goto, LOC_GRATE]},
+      {verbs: [OUT], action: [speak, GRATE_NOWAY]},
+      {verbs: [CRAWL, COBBL, INWAR, WEST], action: [goto, LOC_COBBLE]},
+      {verbs: [PIT], action: [goto, LOC_PITTOP]},
+      {verbs: [DEBRI], action: [goto, LOC_DEBRIS]},
+    ]
+- LOC_COBBLE:
+    description:
+      long: |-
+          You are crawling over cobbles in a low passage.  There is a dim light
+          at the east end of the passage.
+      short: 'You''re in cobble crawl.'
+    conditions: {LIT: true}
+    travel: [
+      {verbs: [OUT, SURFA, EAST], action: [goto, LOC_BELOWGRATE]},
+      {verbs: [INWAR, DARK, WEST, DEBRI], action: [goto, LOC_DEBRIS]},
+      {verbs: [PIT], action: [goto, LOC_PITTOP]},
+    ]
+- LOC_DEBRIS:
+    description:
+      long: |-
+          You are in a debris room filled with stuff washed in from the surface.
+          A low wide passage with cobbles becomes plugged with mud and debris
+          here, but an awkward canyon leads upward and west.  In the mud someone
+          has scrawled, "MAGIC WORD XYZZY".
+      short: 'You''re in debris room.'
+    conditions: {}
+    travel: [
+      {verbs: [DEPRE], cond: [not, GRATE, GRATE_CLOSED],
+                       action: [goto, LOC_GRATE]},
+      {verbs: [ENTRA], action: [goto, LOC_BELOWGRATE]},
+      {verbs: [CRAWL, COBBL, PASSA, LOW, EAST], action: [goto, LOC_COBBLE]},
+      {verbs: [CANYO, INWAR, UPWAR, WEST], action: [goto, LOC_AWKWARD]},
+      {verbs: [XYZZY], action: [goto, LOC_FOOF2]},
+      {verbs: [PIT], action: [goto, LOC_PITTOP]},
+    ]
+- LOC_AWKWARD:
+    description:
+      long: 'You are in an awkward sloping east/west canyon.'
+      short: !!null
+    conditions: {}
+    travel: [
+      {verbs: [DEPRE], cond: [not, GRATE, GRATE_CLOSED],
+                       action: [goto, LOC_GRATE]},
+      {verbs: [ENTRA], action: [goto, LOC_BELOWGRATE]},
+      {verbs: [DOWN, EAST, DEBRI], action: [goto, LOC_DEBRIS]},
+      {verbs: [INWAR, UPWAR, WEST], action: [goto, LOC_BIRD]},
+      {verbs: [PIT], action: [goto, LOC_PITTOP]},
+    ]
+- LOC_BIRD:
+    description:
+      long: |-
+          You are in a splendid chamber thirty feet high.  The walls are frozen
+          rivers of orange stone.  An awkward canyon and a good passage exit
+          from east and west sides of the chamber.
+      short: 'You''re in bird chamber.'
+    conditions: {}
+    hints: [*bird] 
+    travel: [
+      {verbs: [DEPRE], cond: [not, GRATE, GRATE_CLOSED],
+                       action: [goto, LOC_GRATE]},
+      {verbs: [ENTRA], action: [goto, LOC_BELOWGRATE]},
+      {verbs: [DEBRI], action: [goto, LOC_DEBRIS]},
+      {verbs: [CANYO, EAST], action: [goto, LOC_AWKWARD]},
+      {verbs: [PASSA, PIT, WEST], action: [goto, LOC_PITTOP]},
+    ]
+- LOC_PITTOP:
+    description:
+      long: |-
+          At your feet is a small pit breathing traces of white mist.  An east
+          passage ends here except for a small crack leading on.
+      short: 'You''re at top of small pit.'
+    conditions: {}
+    travel: [
+      {verbs: [DEPRE], cond: [not, GRATE, GRATE_CLOSED],
+                       action: [goto, LOC_GRATE]},
+      {verbs: [ENTRA], action: [goto, LOC_BELOWGRATE]},
+      {verbs: [DEBRI], action: [goto, LOC_DEBRIS]},
+      {verbs: [PASSA, EAST], action: [goto, LOC_BIRD]},
+      {verbs: [DOWN, PIT, STEPS], cond: [carry, NUGGET],
+                               action: [goto, LOC_NECKBROKE]},
+      {verbs: [DOWN], action: [goto, LOC_MISTHALL]},
+      {verbs: [CRACK, WEST], action: [goto, LOC_CRACK]},
+    ]
+- LOC_MISTHALL:
+    description:
+      long: |-
+          You are at one end of a vast hall stretching forward out of sight to
+          the west.  There are openings to either side.  Nearby, a wide stone
+          staircase leads downward.  The hall is filled with wisps of white mist
+          swaying to and fro almost as if alive.  A cold wind blows up the
+          staircase.  There is a passage at the top of a dome behind you.
+      short: 'You''re in Hall of Mists.'
+    conditions: {DEEP: true}
+    hints: [*jade]
+    sound: WIND_WHISTLES
+    travel: [
+      {verbs: [LEFT, SOUTH], action: [goto, LOC_NUGGET]},
+      {verbs: [FORWA, HALL, WEST], action: [goto, LOC_EASTBANK]},
+      {verbs: [STAIR, DOWN, NORTH], action: [goto, LOC_KINGHALL]},
+      {verbs: [UPWAR, PIT, STEPS, DOME, PASSA, EAST],
+                              cond: [carry, NUGGET], action: [goto, LOC_DOME]},
+      {verbs: [UPWAR], action: [goto, LOC_PITTOP]},
+      {verbs: [Y2], action: [goto, LOC_JUMBLE]},
+    ]
+- LOC_CRACK:
+    description:
+      long: |-
+          The crack is far too small for you to follow.  At its widest it is
+          barely wide enough to admit your foot.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [], action: [goto, LOC_PITTOP]},
+    ]
+- LOC_EASTBANK:
+    description:
+      long: |-
+          You are on the east bank of a fissure slicing clear across the hall.
+          The mist is quite thick here, and the fissure is too wide to jump.
+      short: 'You''re on east bank of fissure.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [HALL, EAST], action: [goto, LOC_MISTHALL]},
+      {verbs: [JUMP], cond: [not, FISSURE, UNBRIDGED],
+                                              action: [speak, CROSS_BRIDGE]},
+      {verbs: [FORWA], cond: [not, FISSURE, BRIDGED],
+                                              action: [goto, LOC_NOMAKE]},
+      {verbs: [OVER, ACROS, WEST, CROSS],
+                                              cond: [not, FISSURE, BRIDGED],
+                                              action: [speak, NO_CROSS]},
+      {verbs: [OVER], action: [goto, LOC_WESTBANK]},
+    ]
+- LOC_NUGGET:
+    description:
+      long: |-
+          This is a low room with a crude note on the wall.  The note says,
+          "You won't get it up the steps".
+      short: 'You''re in nugget-of-gold room.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [HALL, OUT, NORTH], action: [goto, LOC_MISTHALL]},
+    ]
+- LOC_KINGHALL:
+    description:
+      long: |-
+          You are in the Hall of the Mountain King, with passages off in all
+          directions.
+      short: 'You''re in Hall of Mt King.'
+    conditions: {DEEP: true}
+    hints: [*snake]
+    travel: [
+      {verbs: [STAIR, UPWAR, EAST], action: [goto, LOC_MISTHALL]},
+      {verbs: [NORTH, RIGHT], cond: [not, SNAKE, SNAKE_BLOCKS],
+                                  action: [goto, LOC_FLOORHOLE]},
+      {verbs: [SOUTH, LEFT], cond: [not, SNAKE, SNAKE_BLOCKS],
+                                  action: [goto, LOC_SOUTHSIDE]},
+      {verbs: [WEST, FORWA], cond: [not, SNAKE, SNAKE_BLOCKS],
+                                 action: [goto, LOC_WESTSIDE]},
+      {verbs: [NORTH], action: [goto, LOC_SNAKEBLOCK]},
+      {verbs: [SW], cond: [pct, 35], action: [goto, LOC_SECRET3]},
+      {verbs: [SW], cond: ["with", SNAKE], action: [goto, LOC_SNAKEBLOCK]},
+      {verbs: [SECRE], action: [goto, LOC_SECRET3]},
+    ]
+- LOC_NECKBROKE:
+    description:
+      long: 'You are at the bottom of the pit with a broken neck.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [], action: [goto, LOC_NOWHERE]},
+    ]
+- LOC_NOMAKE:
+    description:
+      long: 'You didn''t make it.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [], action: [goto, LOC_NOWHERE]},
+    ]
+- LOC_DOME:
+    description:
+      long: 'The dome is unclimbable.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [], action: [goto, LOC_MISTHALL]},
+    ]
+- LOC_WESTEND:
+    description:
+      long: |-
+          You are at the west end of the Twopit Room.  There is a large hole in
+          the wall above the pit at this end of the room.
+      short: 'You''re at west end of Twopit Room.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [EAST, ACROS], action: [goto, LOC_EASTEND]},
+      {verbs: [WEST, SLAB], action: [goto, LOC_SLAB]},
+      {verbs: [DOWN, PIT], action: [goto, LOC_WESTPIT]},
+      {verbs: [HOLE], action: [speak, TOO_FAR]},
+    ]
+- LOC_EASTPIT:
+    description:
+      long: |-
+          You are at the bottom of the eastern pit in the Twopit Room.  There is
+          a small pool of oil in one corner of the pit.
+      short: 'You''re in east pit.'
+    conditions: {FLUID: true, DEEP: true, OILY: true}
+    travel: [
+      {verbs: [UPWAR, OUT], action: [goto, LOC_EASTEND]},
+    ]
+- LOC_WESTPIT:
+    description:
+      long: |-
+          You are at the bottom of the western pit in the Twopit Room.  There is
+          a large hole in the wall about 25 feet above you.
+      short: 'You''re in west pit.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [UPWAR, OUT], action: [goto, LOC_WESTEND]},
+      {verbs: [CLIMB], cond: [not, PLANT, PLANT_GROWN],
+                       action: [goto, LOC_BUILDING1]},
+      {verbs: [CLIMB], action: [goto, LOC_CLIMBSTALK]},
+    ]
+- LOC_CLIMBSTALK:
+    description:
+      long: 'You clamber up the plant and scurry through the hole at the top.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [], action: [goto, LOC_NARROW]},
+    ]
+- LOC_WESTBANK:
+    description:
+      long: 'You are on the west side of the fissure in the Hall of Mists.'
+      short: 'You''re on west bank of fissure.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [JUMP], cond: [not, FISSURE, UNBRIDGED],
+                        action: [speak, CROSS_BRIDGE]},
+      {verbs: [FORWA], cond: [not, FISSURE, BRIDGED],
+                         action: [goto, LOC_NOMAKE]},
+      {verbs: [OVER, ACROS, EAST, CROSS],
+                         cond: [not, FISSURE, BRIDGED],
+                         action: [speak, NO_CROSS]},
+      {verbs: [OVER], action: [goto, LOC_EASTBANK]},
+      {verbs: [NORTH], action: [goto, LOC_PARALLEL1]},
+      {verbs: [WEST], action: [goto, LOC_MISTWEST]},
+    ]
+- LOC_FLOORHOLE:
+    description:
+      long: |-
+          You are in a low n/s passage at a hole in the floor.  The hole goes
+          down to an e/w passage.
+      short: 'You''re in n/s passage above e/w passage.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [HALL, OUT, SOUTH], action: [goto, LOC_KINGHALL]},
+      {verbs: [NORTH, Y2], action: [goto, LOC_Y2]},
+      {verbs: [DOWN, HOLE], action: [goto, LOC_BROKEN]},
+    ]
+- LOC_SOUTHSIDE:
+    description:
+      long: 'You are in the south side chamber.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [HALL, OUT, NORTH], action: [goto, LOC_KINGHALL]},
+    ]
+- LOC_WESTSIDE:
+    description:
+      long: |-
+          You are in the west side chamber of the Hall of the Mountain King.
+          A passage continues west and up here.
+      short: 'You''re in the west side chamber.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [HALL, OUT, EAST], action: [goto, LOC_KINGHALL]},
+      {verbs: [WEST, UPWAR], action: [goto, LOC_CROSSOVER]},
+    ]
+- LOC_BUILDING1:
+    description:
+      long: ''
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [], cond: [not, PLANT, PLANT_BELLOWING],
+                  action: [goto, LOC_NOCLIMB]},
+      {verbs: [], action: [goto, LOC_PLANTTOP]},
+    ]
+- LOC_SNAKEBLOCK:
+    description:
+      long: 'You can''t get by the snake.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [], action: [goto, LOC_KINGHALL]},
+    ]
+- LOC_Y2:
+    description:
+      long: |-
+          You are in a large room, with a passage to the south, a passage to the
+          west, and a wall of broken rock to the east.  There is a large "Y2" on
+          a rock in the room's center.
+      short: 'You''re at "Y2".'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [PLUGH], action: [goto, LOC_FOOF4]},
+      {verbs: [SOUTH], action: [goto, LOC_FLOORHOLE]},
+      {verbs: [EAST, WALL, BROKE], action: [goto, LOC_JUMBLE]},
+      {verbs: [WEST], action: [goto, LOC_WINDOW1]},
+      {verbs: [PLOVE], cond: [carry, EMERALD], action: ["special", 2]},
+      {verbs: [PLOVE], action: [goto, LOC_FOOF5]},
+    ]
+- LOC_JUMBLE:
+    description:
+      long: 'You are in a jumble of rock, with cracks everywhere.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [DOWN, Y2], action: [goto, LOC_Y2]},
+      {verbs: [UPWAR], action: [goto, LOC_MISTHALL]},
+    ]
+- LOC_WINDOW1:
+    description:
+      long: |-
+          You're at a low window overlooking a huge pit, which extends up out of
+          sight.  A floor is indistinctly visible over 50 feet below.  Traces of
+          white mist cover the floor of the pit, becoming thicker to the right.
+          Marks in the dust around the window would seem to indicate that
+          someone has been here recently.  Directly across the pit from you and
+          25 feet away there is a similar window looking into a lighted room.  A
+          shadowy figure can be seen there peering back at you.
+      short: 'You''re at window on pit.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [EAST, Y2], action: [goto, LOC_Y2]},
+      {verbs: [JUMP], action: [goto, LOC_NECKBROKE]},
+    ]
+- LOC_BROKEN:
+    description:
+      long: |-
+          You are in a dirty broken passage.  To the east is a crawl.  To the
+          west is a large passage.  Above you is a hole to another passage.
+      short: 'You''re in dirty passage.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [EAST, CRAWL], action: [goto, LOC_SMALLPITBRINK]},
+      {verbs: [UPWAR, HOLE], action: [goto, LOC_FLOORHOLE]},
+      {verbs: [WEST], action: [goto, LOC_DUSTY]},
+      {verbs: [BEDQU], action: [goto, LOC_BEDQUILT]},
+    ]
+- LOC_SMALLPITBRINK:
+    description:
+      long: |-
+          You are on the brink of a small clean climbable pit.  A crawl leads
+          west.
+      short: 'You''re at brink of small pit.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [WEST, CRAWL], action: [goto, LOC_BROKEN]},
+      {verbs: [DOWN, PIT, CLIMB], action: [goto, LOC_SMALLPIT]},
+    ]
+- LOC_SMALLPIT:
+    description:
+      long: |-
+         You are in the bottom of a small pit with a little stream, which
+         enters and exits through tiny slits.
+      short: 'You''re at bottom of pit with stream.'
+    conditions: {FLUID: true, DEEP: true}
+    sound: STREAM_GURGLES
+    travel: [
+      {verbs: [CLIMB, UPWAR, OUT], action: [goto, LOC_SMALLPITBRINK]},
+      {verbs: [SLIT, STREA, DOWN, UPSTR, DOWNS, ENTER, INWAR],
+                                   action: [speak, DONT_FIT]},
+    ]
+- LOC_DUSTY:
+    description:
+      long: |-
+          You are in a large room full of dusty rocks.  There is a big hole in
+          the floor.  There are cracks everywhere, and a passage leading east.
+      short: 'You''re in dusty rock room.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [EAST, PASSA], action: [goto, LOC_BROKEN]},
+      {verbs: [DOWN, HOLE, FLOOR], action: [goto, LOC_COMPLEX]},
+      {verbs: [BEDQU], action: [goto, LOC_BEDQUILT]},
+    ]
+- LOC_PARALLEL1:
+    description:
+      long: |-
+          You have crawled through a very low wide passage parallel to and north
+          of the Hall of Mists.
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [], action: [goto, LOC_MISTWEST]},
+    ]
+- LOC_MISTWEST:
+    description:
+      long: |-
+          You are at the west end of the Hall of Mists.  A low wide crawl
+          continues west and another goes north.  To the south is a little
+          passage 6 feet off the floor.
+      short: 'You''re at west end of Hall of Mists.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [SOUTH, UPWAR, PASSA, CLIMB], action: [goto, LOC_ALIKE1]},
+      {verbs: [EAST], action: [goto, LOC_WESTBANK]},
+      {verbs: [NORTH], action: [goto, LOC_PARALLEL2]},
+      {verbs: [WEST, CRAWL], action: [goto, LOC_LONGEAST]},
+    ]
+- LOC_ALIKE1:
+    description:
+      long: 'You are in a maze of twisty little passages, all alike.'
+      short: !!null
+    conditions: {DEEP: true, NOBACK: true}
+    hints: [*maze]
+    travel: [
+      {verbs: [UPWAR], action: [goto, LOC_MISTWEST]},
+      {verbs: [NORTH], action: [goto, LOC_ALIKE1]},
+      {verbs: [EAST], action: [goto, LOC_ALIKE2]},
+      {verbs: [SOUTH], action: [goto, LOC_ALIKE4]},
+      {verbs: [WEST], action: [goto, LOC_ALIKE11]},
+    ]
+- LOC_ALIKE2:
+    description:
+      long: 'You are in a maze of twisty little passages, all alike.'
+      short: !!null
+    conditions: {DEEP: true, NOBACK: true}
+    hints: [*maze]
+    travel: [
+      {verbs: [WEST], action: [goto, LOC_ALIKE1]},
+      {verbs: [SOUTH], action: [goto, LOC_ALIKE3]},
+      {verbs: [EAST], action: [goto, LOC_ALIKE4]},
+    ]
+- LOC_ALIKE3:
+    description:
+      long: 'You are in a maze of twisty little passages, all alike.'
+      short: !!null
+    conditions: {DEEP: true, NOBACK: true}
+    hints: [*maze]
+    travel: [
+      {verbs: [EAST], action: [goto, LOC_ALIKE2]},
+      {verbs: [DOWN], action: [goto, LOC_DEADEND3]},
+      {verbs: [SOUTH], action: [goto, LOC_ALIKE6]},
+      {verbs: [NORTH], action: [goto, LOC_DEADEND9]},
+    ]
+- LOC_ALIKE4:
+    description:
+      long: 'You are in a maze of twisty little passages, all alike.'
+      short: !!null
+    conditions: {DEEP: true, NOBACK: true}
+    hints: [*maze]
+    travel: [
+      {verbs: [WEST], action: [goto, LOC_ALIKE1]},
+      {verbs: [NORTH], action: [goto, LOC_ALIKE2]},
+      {verbs: [EAST], action: [goto, LOC_DEADEND1]},
+      {verbs: [SOUTH], action: [goto, LOC_DEADEND2]},
+      {verbs: [UPWAR, DOWN], action: [goto, LOC_ALIKE14]},
+    ]
+- LOC_DEADEND1:
+    description:
+      long: 'Dead end'
+      short: !!null
+    conditions: {DEEP: true, NOARRR: true}
+    hints: [*maze]
+    travel: [
+      {verbs: [WEST, OUT], action: [goto, LOC_ALIKE4]},
+    ]
+- LOC_DEADEND2:
+    description:
+      long: 'Dead end'
+      short: !!null
+    conditions: {DEEP: true, NOARRR: true}
+    hints: [*maze]
+    travel: [
+      {verbs: [EAST, OUT], action: [goto, LOC_ALIKE4]},
+    ]
+- LOC_DEADEND3:
+    description:
+      long: 'Dead end'
+      short: !!null
+    conditions: {DEEP: true, NOARRR: true}
+    hints: [*maze]
+    travel: [
+      {verbs: [UPWAR, OUT], action: [goto, LOC_ALIKE3]},
+    ]
+- LOC_ALIKE5:
+    description:
+      long: 'You are in a maze of twisty little passages, all alike.'
+      short: !!null
+    conditions: {DEEP: true, NOBACK: true}
+    hints: [*maze]
+    travel: [
+      {verbs: [EAST], action: [goto, LOC_ALIKE6]},
+      {verbs: [WEST], action: [goto, LOC_ALIKE7]},
+    ]
+- LOC_ALIKE6:
+    description:
+      long: 'You are in a maze of twisty little passages, all alike.'
+      short: !!null
+    conditions: {DEEP: true, NOBACK: true}
+    hints: [*maze]
+    travel: [
+      {verbs: [EAST], action: [goto, LOC_ALIKE3]},
+      {verbs: [WEST], action: [goto, LOC_ALIKE5]},
+      {verbs: [DOWN], action: [goto, LOC_ALIKE7]},
+      {verbs: [SOUTH], action: [goto, LOC_ALIKE8]},
+    ]
+- LOC_ALIKE7:
+    description:
+      long: 'You are in a maze of twisty little passages, all alike.'
+      short: !!null
+    conditions: {DEEP: true, NOBACK: true}
+    hints: [*maze]
+    travel: [
+      {verbs: [WEST], action: [goto, LOC_ALIKE5]},
+      {verbs: [UPWAR], action: [goto, LOC_ALIKE6]},
+      {verbs: [EAST], action: [goto, LOC_ALIKE8]},
+      {verbs: [SOUTH], action: [goto, LOC_ALIKE9]},
+    ]
+- LOC_ALIKE8:
+    description:
+      long: 'You are in a maze of twisty little passages, all alike.'
+      short: !!null
+    conditions: {DEEP: true, NOBACK: true}
+    hints: [*maze]
+    travel: [
+      {verbs: [WEST], action: [goto, LOC_ALIKE6]},
+      {verbs: [EAST], action: [goto, LOC_ALIKE7]},
+      {verbs: [SOUTH], action: [goto, LOC_ALIKE8]},
+      {verbs: [UPWAR], action: [goto, LOC_ALIKE9]},
+      {verbs: [NORTH], action: [goto, LOC_ALIKE10]},
+      {verbs: [DOWN], action: [goto, LOC_DEADEND11]},
+    ]
+- LOC_ALIKE9:
+    description:
+      long: 'You are in a maze of twisty little passages, all alike.'
+      short: !!null
+    conditions: {DEEP: true, NOBACK: true}
+    hints: [*maze]
+    travel: [
+      {verbs: [WEST], action: [goto, LOC_ALIKE7]},
+      {verbs: [NORTH], action: [goto, LOC_ALIKE8]},
+      {verbs: [SOUTH], action: [goto, LOC_DEADEND4]},
+    ]
+- LOC_DEADEND4:
+    description:
+      long: 'Dead end'
+      short: !!null
+    conditions: {DEEP: true, NOARRR: true}
+    hints: [*maze]
+    travel: [
+      {verbs: [WEST, OUT], action: [goto, LOC_ALIKE9]},
+    ]
+- LOC_ALIKE10:
+    description:
+      long: 'You are in a maze of twisty little passages, all alike.'
+      short: !!null
+    conditions: {DEEP: true, NOBACK: true}
+    hints: [*maze]
+    travel: [
+      {verbs: [WEST], action: [goto, LOC_ALIKE8]},
+      {verbs: [NORTH], action: [goto, LOC_ALIKE10]},
+      {verbs: [DOWN], action: [goto, LOC_DEADEND5]},
+      {verbs: [EAST], action: [goto, LOC_PITBRINK]},
+    ]
+- LOC_DEADEND5:
+    description:
+      long: 'Dead end'
+      short: !!null
+    conditions: {DEEP: true, NOARRR: true}
+    hints: [*maze]
+    travel: [
+      {verbs: [UPWAR, OUT], action: [goto, LOC_ALIKE10]},
+    ]
+- LOC_PITBRINK:
+    description:
+      long: |-
+          You are on the brink of a thirty foot pit with a massive orange column
+          down one wall.  You could climb down here but you could not get back
+          up.  The maze continues at this level.
+      short: 'You''re at brink of pit.'
+    conditions: {DEEP: true, NOBACK: true}
+    travel: [
+      {verbs: [DOWN, CLIMB], action: [goto, LOC_BIRD]},
+      {verbs: [WEST], action: [goto, LOC_ALIKE10]},
+      {verbs: [SOUTH], action: [goto, LOC_DEADEND6]},
+      {verbs: [NORTH], action: [goto, LOC_ALIKE12]},
+      {verbs: [EAST], action: [goto, LOC_ALIKE13]},
+    ]
+- LOC_DEADEND6:
+    description:
+      long: 'Dead end'
+      short: !!null
+    conditions: {NOARRR: true, DEEP: true}
+    travel: [
+      {verbs: [EAST, OUT], action: [goto, LOC_PITBRINK]},
+    ]
+- LOC_PARALLEL2:
+    description:
+      long: |-
+          You have crawled through a very low wide passage parallel to and north
+          of the Hall of Mists.
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [], action: [goto, LOC_WESTBANK]},
+    ]
+- LOC_LONGEAST:
+    description:
+      long: |-
+          You are at the east end of a very long hall apparently without side
+          chambers.  To the east a low wide crawl slants up.  To the north a
+          round two foot hole slants down.
+      short: 'You''re at east end of long hall.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [EAST, UPWAR, CRAWL], action: [goto, LOC_MISTWEST]},
+      {verbs: [WEST], action: [goto, LOC_LONGWEST]},
+      {verbs: [NORTH, DOWN, HOLE], action: [goto, LOC_CROSSOVER]},
+    ]
+- LOC_LONGWEST:
+    description:
+      long: |-
+          You are at the west end of a very long featureless hall.  The hall
+          joins up with a narrow north/south passage.
+      short: 'You''re at west end of long hall.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [EAST], action: [goto, LOC_LONGEAST]},
+      {verbs: [NORTH], action: [goto, LOC_CROSSOVER]},
+      {verbs: [SOUTH], cond: ["nodwarves"], action: [goto, LOC_DIFFERENT1]},
+    ]
+- LOC_CROSSOVER:
+    description:
+      long: 'You are at a crossover of a high n/s passage and a low e/w one.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [WEST], action: [goto, LOC_LONGEAST]},
+      {verbs: [NORTH], action: [goto, LOC_DEADEND7]},
+      {verbs: [EAST], action: [goto, LOC_WESTSIDE]},
+      {verbs: [SOUTH], action: [goto, LOC_LONGWEST]},
+    ]
+- LOC_DEADEND7:
+    description:
+      long: 'Dead end'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [SOUTH, OUT], action: [goto, LOC_CROSSOVER]},
+    ]
+- LOC_COMPLEX:
+    description:
+      long: |-
+          You are at a complex junction.  A low hands and knees passage from the
+          north joins a higher crawl from the east to make a walking passage
+          going west.  There is also a large room above.  The air is damp here.
+      short: 'You''re at complex junction.'
+    conditions: {DEEP: true}
+    hints: [*jade]
+    sound: WIND_WHISTLES
+    travel: [
+      {verbs: [UPWAR, CLIMB, ROOM], action: [goto, LOC_DUSTY]},
+      {verbs: [WEST, BEDQU], action: [goto, LOC_BEDQUILT]},
+      {verbs: [NORTH, SHELL], action: [goto, LOC_SHELLROOM]},
+      {verbs: [EAST], action: [goto, LOC_ANTEROOM]},
+    ]
+- LOC_BEDQUILT:
+    description:
+      long: |-
+          You are in Bedquilt, a long east/west passage with holes everywhere.
+          To explore at random select north, south, up, or down.
+      short: 'You''re in Bedquilt.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [EAST], action: [goto, LOC_COMPLEX]},
+      {verbs: [WEST], action: [goto, LOC_SWISSCHEESE]},
+      {verbs: [SOUTH], cond: [pct, 65], action: [speak, FUTILE_CRAWL]},
+      {verbs: [SLAB], action: [goto, LOC_SLAB]},
+      {verbs: [UPWAR], cond: [pct, 60], action: [speak, FUTILE_CRAWL]},
+      {verbs: [UPWAR], cond: [pct, 70], action: [goto, LOC_SECRET2]},
+      {verbs: [UPWAR], action: [goto, LOC_DUSTY]},
+      {verbs: [NORTH], cond: [pct, 50], action: [speak, FUTILE_CRAWL]},
+      {verbs: [NORTH], cond: [pct, 75], action: [goto, LOC_LOWROOM]},
+      {verbs: [NORTH], action: [goto, LOC_THREEJUNCTION]},
+      {verbs: [DOWN], cond: [pct, 65], action: [speak, FUTILE_CRAWL]},
+      {verbs: [DOWN], action: [goto, LOC_ANTEROOM]},
+    ]
+- LOC_SWISSCHEESE:
+    description:
+      long: |-
+          You are in a room whose walls resemble swiss cheese.  Obvious passages
+          go west, east, ne, and nw.  Part of the room is occupied by a large
+          bedrock block.
+      short: 'You''re in Swiss Cheese Room.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [NE], action: [goto, LOC_BEDQUILT]},
+      {verbs: [WEST], action: [goto, LOC_EASTEND]},
+      {verbs: [SOUTH], cond: [pct, 80], action: [speak, FUTILE_CRAWL]},
+      {verbs: [CANYO], action: [goto, LOC_TALL]},
+      {verbs: [EAST], action: [goto, LOC_SOFTROOM]},
+      {verbs: [NW], cond: [pct, 50], action: [speak, FUTILE_CRAWL]},
+      {verbs: [ORIEN], action: [goto, LOC_ORIENTAL]},
+    ]
+- LOC_EASTEND:
+    description:
+      long: |-
+          You are at the east end of the Twopit Room.  The floor here is
+          littered with thin rock slabs, which make it easy to descend the pits.
+          There is a path here bypassing the pits to connect passages from east
+          and west.  There are holes all over, but the only big one is on the
+          wall directly over the west pit where you can't get to it.
+      short: 'You''re at east end of Twopit Room.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [EAST], action: [goto, LOC_SWISSCHEESE]},
+      {verbs: [WEST, ACROS], action: [goto, LOC_WESTEND]},
+      {verbs: [DOWN, PIT], action: [goto, LOC_EASTPIT]},
+    ]
+- LOC_SLAB:
+    description:
+      long: |-
+          You are in a large low circular chamber whose floor is an immense slab
+          fallen from the ceiling (Slab Room).  East and west there once were
+          large passages, but they are now filled with boulders.  Low small
+          passages go north and south, and the south one quickly bends west
+          around the boulders.
+      short: 'You''re in Slab Room.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [SOUTH], action: [goto, LOC_WESTEND]},
+      {verbs: [UPWAR, CLIMB], action: [goto, LOC_SECRET1]},
+      {verbs: [NORTH], action: [goto, LOC_BEDQUILT]},
+    ]
+- LOC_SECRET1:
+    description:
+      long: 'You are in a secret n/s canyon above a large room.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [DOWN, SLAB], action: [goto, LOC_SLAB]},
+      {verbs: [SOUTH], cond: [not, DRAGON, DRAGON_BARS],
+                         action: [goto, LOC_SECRET5]},
+      {verbs: [SOUTH], action: [goto, LOC_SECRET4]},
+      {verbs: [NORTH], action: [goto, LOC_MIRRORCANYON]},
+      {verbs: [RESER], action: [goto, LOC_RESERVOIR]},
+    ]
+- LOC_SECRET2:
+    description:
+      long: 'You are in a secret n/s canyon above a sizable passage.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [NORTH], action: [goto, LOC_THREEJUNCTION]},
+      {verbs: [DOWN, PASSA], action: [goto, LOC_BEDQUILT]},
+      {verbs: [SOUTH], action: [goto, LOC_TOPSTALACTITE]},
+    ]
+- LOC_THREEJUNCTION:
+    description:
+      long: |-
+          You are in a secret canyon at a junction of three canyons, bearing
+          north, south, and se.  The north one is as tall as the other two
+          combined.
+      short: 'You''re at junction of three secret canyons.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [SE], action: [goto, LOC_BEDQUILT]},
+      {verbs: [SOUTH], action: [goto, LOC_SECRET2]},
+      {verbs: [NORTH], action: [goto, LOC_WINDOW2]},
+    ]
+- LOC_LOWROOM:
+    description:
+      long: 'You are in a large low room.  Crawls lead north, se, and sw.'
+      short: 'You''re in large low room.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [BEDQU], action: [goto, LOC_BEDQUILT]},
+      {verbs: [SW], action: [goto, LOC_WINDING]},
+      {verbs: [NORTH], action: [goto, LOC_DEADCRAWL]},
+      {verbs: [SE, ORIEN], action: [goto, LOC_ORIENTAL]},
+    ]
+- LOC_DEADCRAWL:
+    description:
+      long: 'Dead end crawl.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [SOUTH, CRAWL, OUT], action: [goto, LOC_LOWROOM]},
+    ]
+- LOC_SECRET3:
+    description:
+      long: |-
+          You are in a secret canyon which here runs e/w.  It crosses over a
+          very tight canyon 15 feet below.  If you go down you may not be able
+          to get back up.
+      short: 'You''re in secret e/w canyon above tight canyon.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [EAST], action: [goto, LOC_KINGHALL]},
+      {verbs: [WEST], cond: [not, DRAGON, DRAGON_BARS], action: [goto, LOC_SECRET5]},
+      {verbs: [WEST], action: [goto, LOC_SECRET6]},
+      {verbs: [DOWN], action: [goto, LOC_WIDEPLACE]},
+    ]
+- LOC_WIDEPLACE:
+    description:
+      long: 'You are at a wide place in a very tight n/s canyon.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [SOUTH], action: [goto, LOC_TIGHTPLACE]},
+      {verbs: [NORTH], action: [goto, LOC_TALL]},
+    ]
+- LOC_TIGHTPLACE:
+    description:
+      long: 'The canyon here becomes too tight to go further south.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [NORTH], action: [goto, LOC_WIDEPLACE]},
+    ]
+- LOC_TALL:
+    description:
+      long: |-
+          You are in a tall e/w canyon.  A low tight crawl goes 3 feet north and
+          seems to open up.
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [EAST], action: [goto, LOC_WIDEPLACE]},
+      {verbs: [WEST], action: [goto, LOC_BOULDERS1]},
+      {verbs: [NORTH, CRAWL], action: [goto, LOC_SWISSCHEESE]},
+    ]
+- LOC_BOULDERS1:
+    description:
+      long: 'The canyon runs into a mass of boulders -- dead end.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [SOUTH], action: [goto, LOC_TALL]},
+    ]
+- LOC_SEWER:
+    description:
+      long: |-
+          The stream flows out through a pair of 1 foot diameter sewer pipes.
+          It would be advisable to use the exit.
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [], action: [goto, LOC_BUILDING]},
+    ]
+- LOC_ALIKE11:
+    description:
+      long: 'You are in a maze of twisty little passages, all alike.'
+      short: !!null
+    conditions: {DEEP: true, NOBACK: true}
+    hints: [*maze]
+    travel: [
+      {verbs: [NORTH], action: [goto, LOC_ALIKE1]},
+      {verbs: [WEST], action: [goto, LOC_ALIKE11]},
+      {verbs: [SOUTH], action: [goto, LOC_ALIKE11]},
+      {verbs: [EAST], action: [goto, LOC_DEADEND8]},
+    ]
+- LOC_DEADEND8:
+    description:
+      long: 'Dead end'
+      short: !!null
+    conditions: {DEEP: true}
+    hints: [*maze]
+    travel: [
+      {verbs: [WEST, OUT], action: [goto, LOC_ALIKE11]},
+    ]
+- LOC_DEADEND9:
+    description:
+      long: 'Dead end'
+      short: !!null
+    conditions: {DEEP: true, NOARRR: true}
+    hints: [*maze]
+    travel: [
+      {verbs: [SOUTH, OUT], action: [goto, LOC_ALIKE3]},
+    ]
+- LOC_ALIKE12:
+    description:
+      long: 'You are in a maze of twisty little passages, all alike.'
+      short: !!null
+    conditions: {DEEP: true, NOBACK: true}
+    travel: [
+      {verbs: [SOUTH], action: [goto, LOC_PITBRINK]},
+      {verbs: [EAST], action: [goto, LOC_ALIKE13]},
+      {verbs: [WEST], action: [goto, LOC_DEADEND10]},
+    ]
+- LOC_ALIKE13:
+    description:
+      long: 'You are in a maze of twisty little passages, all alike.'
+      short: !!null
+    conditions: {DEEP: true, NOBACK: true}
+    travel: [
+      {verbs: [NORTH], action: [goto, LOC_PITBRINK]},
+      {verbs: [WEST], action: [goto, LOC_ALIKE12]},
+      {verbs: [NW], action: [goto, LOC_DEADEND12]},
+    ]
+- LOC_DEADEND10:
+    description:
+      long: 'Dead end'
+      short: !!null
+    conditions: {NOARRR: true, DEEP: true}
+    travel: [
+      {verbs: [EAST, OUT], action: [goto, LOC_ALIKE12]},
+    ]
+- LOC_DEADEND11:
+    description:
+      long: 'Dead end'
+      short: !!null
+    conditions: {DEEP: true, NOARRR: true}
+    hints: [*maze]
+    travel: [
+      {verbs: [UPWAR, OUT], action: [goto, LOC_ALIKE8]},
+    ]
+- LOC_ALIKE14:
+    description:
+      long: 'You are in a maze of twisty little passages, all alike.'
+      short: !!null
+    conditions: {DEEP: true, NOBACK: true}
+    hints: [*maze]
+    travel: [
+      {verbs: [UPWAR, DOWN], action: [goto, LOC_ALIKE4]},
+    ]
+- LOC_NARROW:
+    description:
+      long: |-
+          You are in a long, narrow corridor stretching out of sight to the
+          west.  At the eastern end is a hole through which you can see a
+          profusion of leaves.
+      short: 'You''re in narrow corridor.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [DOWN, CLIMB, EAST], action: [goto, LOC_WESTPIT]},
+      {verbs: [JUMP], action: [goto, LOC_NECKBROKE]},
+      {verbs: [WEST, GIANT], action: [goto, LOC_GIANTROOM]},
+    ]
+- LOC_NOCLIMB:
+    description:
+      long: 'There is nothing here to climb.  Use "up" or "out" to leave the pit.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [], action: [goto, LOC_WESTPIT]},
+    ]
+- LOC_PLANTTOP:
+    description:
+      long: 'You have climbed up the plant and out of the pit.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [], action: [goto, LOC_WESTEND]},
+    ]
+- LOC_INCLINE:
+    description:
+      long: |-
+          You are at the top of a steep incline above a large room.  You could
+          climb down here, but you would not be able to climb up.  There is a
+          passage leading back to the north.
+      short: 'You''re at steep incline above large room.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [NORTH, CAVER, PASSA], action: [goto, LOC_WATERFALL]},
+      {verbs: [DOWN, CLIMB], action: [goto, LOC_LOWROOM]},
+    ]
+- LOC_GIANTROOM:
+    description:
+      long: |-
+          You are in the Giant Room.  The ceiling here is too high up for your
+          lamp to show it.  Cavernous passages lead east, north, and south.  On
+          the west wall is scrawled the inscription, "FEE FIE FOE FOO" [sic].
+      short: 'You''re in Giant Room.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [SOUTH], action: [goto, LOC_NARROW]},
+      {verbs: [EAST], action: [goto, LOC_CAVEIN]},
+      {verbs: [NORTH], action: [goto, LOC_IMMENSE]},
+    ]
+- LOC_CAVEIN:
+    description:
+      long: 'The passage here is blocked by a recent cave-in.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [SOUTH, GIANT, OUT], action: [goto, LOC_GIANTROOM]},
+    ]
+- LOC_IMMENSE:
+    description:
+      long: 'You are at one end of an immense north/south passage.'
+      short: !!null
+    conditions: {DEEP: true}
+    sound: WIND_WHISTLES
+    travel: [
+      {verbs: [SOUTH, GIANT, PASSA], action: [goto, LOC_GIANTROOM]},
+      {verbs: [NORTH, ENTER, CAVER], cond: [not, DOOR, DOOR_RUSTED],
+                                     action: [goto, LOC_WATERFALL]},
+      {verbs: [NORTH], action: [speak, RUSTY_DOOR]},
+    ]
+- LOC_WATERFALL:
+    description:
+      long: |-
+          You are in a magnificent cavern with a rushing stream, which cascades
+          over a sparkling waterfall into a roaring whirlpool which disappears
+          through a hole in the floor.  Passages exit to the south and west.
+      short: 'You''re in cavern with waterfall.'
+    conditions: {FLUID: true, DEEP: true}
+    sound: STREAM_SPLASHES
+    travel: [
+      {verbs: [SOUTH, OUT], action: [goto, LOC_IMMENSE]},
+      {verbs: [GIANT], action: [goto, LOC_GIANTROOM]},
+      {verbs: [WEST], action: [goto, LOC_INCLINE]},
+    ]
+- LOC_SOFTROOM:
+    description:
+      long: |-
+          You are in the Soft Room.  The walls are covered with heavy curtains,
+          the floor with a thick pile carpet.  Moss covers the ceiling.
+      short: 'You''re in Soft Room.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [WEST, OUT], action: [goto, LOC_SWISSCHEESE]},
+    ]
+- LOC_ORIENTAL:
+    description:
+      long: |-
+          This is the Oriental Room.  Ancient oriental cave drawings cover the
+          walls.  A gently sloping passage leads upward to the north, another
+          passage leads se, and a hands and knees crawl leads west.
+      short: 'You''re in Oriental Room.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [SE], action: [goto, LOC_SWISSCHEESE]},
+      {verbs: [WEST, CRAWL], action: [goto, LOC_LOWROOM]},
+      {verbs: [UPWAR, NORTH, CAVER], action: [goto, LOC_MISTY]},
+    ]
+- LOC_MISTY:
+    description:
+      long: |-
+          You are following a wide path around the outer edge of a large cavern.
+          Far below, through a heavy white mist, strange splashing noises can be
+          heard.  The mist rises up through a fissure in the ceiling.  The path
+          exits to the south and west.
+      short: 'You''re in misty cavern.'
+    conditions: {DEEP: true}
+    sound: NO_MEANING
+    travel: [
+      {verbs: [SOUTH, ORIEN], action: [goto, LOC_ORIENTAL]},
+      {verbs: [WEST], action: [goto, LOC_ALCOVE]},
+    ]
+- LOC_ALCOVE:
+    description:
+      long: |-
+          You are in an alcove.  A small nw path seems to widen after a short
+          distance.  An extremely tight tunnel leads east.  It looks like a very
+          tight squeeze.  An eerie light can be seen at the other end.
+      short: 'You''re in alcove.'
+    conditions: {DEEP: true}
+    hints: [*dark]
+    travel: [
+      {verbs: [NW, CAVER], action: [goto, LOC_MISTY]},
+      {verbs: [EAST, PASSA], action: ["special", 1]},
+      {verbs: [EAST], action: [goto, LOC_PLOVER]},
+    ]
+- LOC_PLOVER:
+    description:
+      long: |-
+          You're in a small chamber lit by an eerie green light.  An extremely
+          narrow tunnel exits to the west.  A dark corridor leads ne.
+      short: 'You''re in Plover Room.'
+    conditions: {DEEP: true, LIT: true}
+    hints: [*dark]
+    travel: [
+      {verbs: [WEST, PASSA, OUT], action: ["special", 1]},
+      {verbs: [WEST], action: [goto, LOC_ALCOVE]},
+      {verbs: [PLOVE], cond: [carry, EMERALD], action: ["special", 2]},
+      {verbs: [PLOVE], action: [goto, LOC_FOOF6]},
+      {verbs: [NE, DARK], action: [goto, LOC_DARKROOM]},
+    ]
+- LOC_DARKROOM:
+    description:
+      long: 'You''re in the dark-room.  A corridor leading south is the only exit.'
+      short: 'You''re in dark-room.'
+    conditions: {DEEP: true}
+    hints: [*dark]
+    travel: [
+      {verbs: [SOUTH, PLOVE, OUT], action: [goto, LOC_PLOVER]},
+    ]
+- LOC_ARCHED:
+    description:
+      long: |-
+          You are in an arched hall.  A coral passage once continued up and east
+          from here, but is now blocked by debris.  The air smells of sea water.
+      short: 'You''re in arched hall.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [DOWN, SHELL, OUT], action: [goto, LOC_SHELLROOM]},
+    ]
+- LOC_SHELLROOM:
+    description:
+      long: |-
+          You're in a large room carved out of sedimentary rock.  The floor and
+          walls are littered with bits of shells imbedded in the stone.  A
+          shallow passage proceeds downward, and a somewhat steeper one leads
+          up.  A low hands and knees passage enters from the south.
+      short: 'You''re in Shell Room.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [UPWAR, HALL], action: [goto, LOC_ARCHED]},
+      {verbs: [DOWN], action: [goto, LOC_SLOPING1]},
+      {verbs: [SOUTH], cond: [carry, CLAM],
+                         action: [speak, CLAM_BLOCKER]},
+      {verbs: [SOUTH], cond: [carry, OYSTER],
+                         action: [speak, OYSTER_BLOCKER]},
+      {verbs: [SOUTH], action: [goto, LOC_COMPLEX]},
+    ]
+- LOC_SLOPING1:
+    description:
+      long: 'You are in a long sloping corridor with ragged sharp walls.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [UPWAR, SHELL], action: [goto, LOC_SHELLROOM]},
+      {verbs: [DOWN], action: [goto, LOC_CULDESAC]},
+    ]
+- LOC_CULDESAC:
+    description:
+      long: 'You are in a cul-de-sac about eight feet across.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [UPWAR, OUT], action: [goto, LOC_SLOPING1]},
+      {verbs: [SHELL], action: [goto, LOC_SHELLROOM]},
+    ]
+- LOC_ANTEROOM:
+    description:
+      long: |-
+          You are in an anteroom leading to a large passage to the east.  Small
+          passages go west and up.  The remnants of recent digging are evident.
+          A sign in midair here says "Cave under construction beyond this point.
+          Proceed at own risk.  [Witt Construction Company]"
+      short: 'You''re in anteroom.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [UPWAR], action: [goto, LOC_COMPLEX]},
+      {verbs: [WEST], action: [goto, LOC_BEDQUILT]},
+      {verbs: [EAST], action: [goto, LOC_WITTSEND]},
+    ]
+- LOC_DIFFERENT1:
+    description:
+      long: 'You are in a maze of twisty little passages, all different.'
+      short: !!null
+    conditions: {DEEP: true, NOBACK: true}
+    travel: [
+      {verbs: [SOUTH], action: [goto, LOC_DIFFERENT3]},
+      {verbs: [SW], action: [goto, LOC_DIFFERENT4]},
+      {verbs: [NE], action: [goto, LOC_DIFFERENT5]},
+      {verbs: [SE], action: [goto, LOC_DIFFERENT6]},
+      {verbs: [UPWAR], action: [goto, LOC_DIFFERENT7]},
+      {verbs: [NW], action: [goto, LOC_DIFFERENT8]},
+      {verbs: [EAST], action: [goto, LOC_DIFFERENT9]},
+      {verbs: [WEST], action: [goto, LOC_DIFFERENT10]},
+      {verbs: [NORTH], action: [goto, LOC_DIFFERENT11]},
+      {verbs: [DOWN], action: [goto, LOC_LONGWEST]},
+    ]
+- LOC_WITTSEND:
+    description:
+      long: 'You are at Witt''s End.  Passages lead off in *ALL* directions.'
+      short: 'You''re at Witt''s End.'
+    conditions: {DEEP: true, NOBACK: true}
+    hints: [*witt]
+    travel: [
+      {verbs: [EAST, NORTH, SOUTH, NE, SE, SW, NW, UPWAR, DOWN],
+              cond: [pct, 95], action: [speak, FUTILE_CRAWL]},
+      {verbs: [EAST], action: [goto, LOC_ANTEROOM]},
+      {verbs: [WEST], action: [speak, WAY_BLOCKED]},
+    ]
+- LOC_MIRRORCANYON:
+    description:
+      long: |-
+          You are in a north/south canyon about 25 feet across.  The floor is
+          covered by white mist seeping in from the north.  The walls extend
+          upward for well over 100 feet.  Suspended from some unseen point far
+          above you, an enormous two-sided mirror is hanging parallel to and
+          midway between the canyon walls.  (The mirror is obviously provided
+          for the use of the dwarves who, as you know, are extremely vain.)  A
+          small window can be seen in either wall, some fifty feet up.
+      short: 'You''re in Mirror Canyon.'
+    conditions: {DEEP: true}
+    hints: [*jade]
+    sound: WIND_WHISTLES
+    travel: [
+      {verbs: [SOUTH], action: [goto, LOC_SECRET1]},
+      {verbs: [NORTH, RESER], action: [goto, LOC_RESERVOIR]},
+    ]
+- LOC_WINDOW2:
+    description:
+      long: |-
+          You're at a low window overlooking a huge pit, which extends up out of
+          sight.  A floor is indistinctly visible over 50 feet below.  Traces of
+          white mist cover the floor of the pit, becoming thicker to the left.
+          Marks in the dust around the window would seem to indicate that
+          someone has been here recently.  Directly across the pit from you and
+          25 feet away there is a similar window looking into a lighted room.  A
+          shadowy figure can be seen there peering back at you.
+      short: 'You''re at window on pit.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [WEST], action: [goto, LOC_THREEJUNCTION]},
+      {verbs: [JUMP], action: [goto, LOC_NECKBROKE]},
+    ]
+- LOC_TOPSTALACTITE:
+    description:
+      long: |-
+          A large stalactite extends from the roof and almost reaches the floor
+          below.  You could climb down it, and jump from it to the floor, but
+          having done so you would be unable to reach it to climb back up.
+      short: 'You''re at top of stalactite.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [NORTH], action: [goto, LOC_SECRET2]},
+      {verbs: [DOWN, JUMP, CLIMB], cond: [pct, 40],
+                                      action: [goto, LOC_ALIKE6]},
+      {verbs: [DOWN], cond: [pct, 50], action: [goto, LOC_ALIKE9]},
+      {verbs: [DOWN], action: [goto, LOC_ALIKE4]},
+    ]
+- LOC_DIFFERENT2:
+    description:
+      long: 'You are in a little maze of twisting passages, all different.'
+      short: !!null
+    conditions: {DEEP: true, NOBACK: true}
+    travel: [
+      {verbs: [SW], action: [goto, LOC_DIFFERENT3]},
+      {verbs: [NORTH], action: [goto, LOC_DIFFERENT4]},
+      {verbs: [EAST], action: [goto, LOC_DIFFERENT5]},
+      {verbs: [NW], action: [goto, LOC_DIFFERENT6]},
+      {verbs: [SE], action: [goto, LOC_DIFFERENT7]},
+      {verbs: [NE], action: [goto, LOC_DIFFERENT8]},
+      {verbs: [WEST], action: [goto, LOC_DIFFERENT9]},
+      {verbs: [DOWN], action: [goto, LOC_DIFFERENT10]},
+      {verbs: [UPWAR], action: [goto, LOC_DIFFERENT11]},
+      {verbs: [SOUTH], action: [goto, LOC_DEADEND13]},
+    ]
+- LOC_RESERVOIR:
+    description:
+      long: |-
+          You are at the edge of a large underground reservoir.  An opaque cloud
+          of white mist fills the room and rises rapidly upward.  The lake is
+          fed by a stream, which tumbles out of a hole in the wall about 10 feet
+          overhead and splashes noisily into the water somewhere within the
+          mist.  There is a passage going back toward the south.
+      short: 'You''re at reservoir.'
+    conditions: {FLUID: true, DEEP: true}
+    sound: STREAM_SPLASHES
+    travel: [
+      {verbs: [SOUTH, OUT], action: [goto, LOC_MIRRORCANYON]},
+      {verbs: [NORTH, ACROS, CROSS], cond: [not, RESER, WATERS_PARTED], action: [speak, BAD_DIRECTION]},
+      {verbs: [NORTH], action: [goto, LOC_RESBOTTOM]},
+    ]
+- LOC_DEADEND12:
+    description:
+      long: 'Dead end'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [SE], action: [goto, LOC_ALIKE13]},
+    ]
+- LOC_NE:
+    description:
+      long: |-
+          You are at the northeast end of an immense room, even larger than the
+          Giant Room.  It appears to be a repository for the "Adventure"
+          program.  Massive torches far overhead bathe the room with smoky
+          yellow light.  Scattered about you can be seen a pile of bottles (all
+          of them empty), a nursery of young beanstalks murmuring quietly, a bed
+          of oysters, a bundle of black rods with rusty stars on their ends, and
+          a collection of brass lanterns.  Off to one side a great many dwarves
+          are sleeping on the floor, snoring loudly.  A notice nearby reads: "Do
+          not disturb the dwarves!"  An immense mirror is hanging against one
+          wall, and stretches to the other end of the room, where various other
+          sundry objects can be glimpsed dimly in the distance.
+      short: 'You''re at ne end.'
+    conditions: {DEEP: true, LIT: true}
+    sound: MURMURING_SNORING
+    travel: [
+      {verbs: [SW], action: [goto, LOC_SW]},
+    ]
+- LOC_SW:
+    description:
+      long: |-
+          You are at the southwest end of the repository.  To one side is a pit
+          full of fierce green snakes.  On the other side is a row of small
+          wicker cages, each of which contains a little sulking bird.  In one
+          corner is a bundle of black rods with rusty marks on their ends.  A
+          large number of velvet pillows are scattered about on the floor.  A
+          vast mirror stretches off to the northeast.  At your feet is a large
+          steel grate, next to which is a sign that reads, "Treasure Vault.
+          Keys in main office."
+      short: 'You''re at sw end.'
+    conditions: {DEEP: true, LIT: true}
+    sound: SNAKES_HISSING
+    travel: [
+      {verbs: [NE], action: [goto, LOC_NE]},
+      {verbs: [DOWN], action: [speak, GRATE_NOWAY]},
+    ]
+- LOC_SWCHASM:
+    description:
+      long: |-
+          You are on one side of a large, deep chasm.  A heavy white mist rising
+          up from below obscures all view of the far side.  A sw path leads away
+          from the chasm into a winding corridor.
+      short: 'You''re on sw side of chasm.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [SW], action: [goto, LOC_WINDING]},
+      {verbs: [OVER, ACROS, CROSS, NE], cond: [with, TROLL],
+                                                action: [speak, TROLL_BLOCKS]},
+      {verbs: [OVER], cond: [not, CHASM, TROLL_BRIDGE],
+                        action: [speak, BRIDGE_GONE]},
+      {verbs: [OVER], action: ["special", 3]},
+      {verbs: [JUMP], cond: [not, CHASM, TROLL_BRIDGE],
+                        action: [goto, LOC_NOMAKE]},
+      {verbs: [JUMP], action: [speak, CROSS_BRIDGE]},
+    ]
+- LOC_WINDING:
+    description:
+      long: |-
+          You are in a long winding corridor sloping out of sight in both
+          directions.
+      short: 'You''re in sloping corridor.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [DOWN], action: [goto, LOC_LOWROOM]},
+      {verbs: [UPWAR], action: [goto, LOC_SWCHASM]},
+    ]
+  # Following three rooms are where the dragon lives.  The code has a
+  # wired-in assumption that the dragon corpse goes to LOC_SECRET5,
+- LOC_SECRET4:
+    description:
+      long: 'You are in a secret canyon which exits to the north and east.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [NORTH, OUT], action: [goto, LOC_SECRET1]},
+      {verbs: [EAST, FORWA], action: [speak, NASTY_DRAGON]},
+    ]
+- LOC_SECRET5:
+    description:
+      long: 'You are in a secret canyon which exits to the north and east.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [NORTH], action: [goto, LOC_SECRET1]},
+      {verbs: [EAST], action: [goto, LOC_SECRET3]},
+    ]
+- LOC_SECRET6:
+    description:
+      long: 'You are in a secret canyon which exits to the north and east.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [EAST, OUT], action: [goto, LOC_SECRET3]},
+      {verbs: [NORTH, FORWA], action: [speak, NASTY_DRAGON]},
+    ]
+- LOC_NECHASM:
+    description:
+      long: |-
+           You are on the far side of the chasm.  A ne path leads away from the
+           chasm on this side.
+      short: 'You''re on ne side of chasm.'
+    conditions: {NOARRR: true, DEEP: true}
+    travel: [
+      {verbs: [NE], action: [goto, LOC_CORRIDOR]},
+      {verbs: [OVER, ACROS, CROSS, SW], cond: [with, TROLL], action: [speak, TROLL_BLOCKS]},
+      {verbs: [OVER], action: ["special", 3]},
+      {verbs: [JUMP], action: [speak, CROSS_BRIDGE]},
+      {verbs: [FORK], action: [goto, LOC_FORK]},
+      {verbs: [VIEW], action: [goto, LOC_BREATHTAKING]},
+      {verbs: [BARRE], action: [goto, LOC_BARRENFRONT]},
+    ]
+- LOC_CORRIDOR:
+    description:
+      long: |-
+          You're in a long east/west corridor.  A faint rumbling noise can be
+          heard in the distance.
+      short: 'You''re in corridor.'
+    conditions: {NOARRR: true, DEEP: true}
+    sound: DULL_RUMBLING
+    travel: [
+      {verbs: [WEST], action: [goto, LOC_NECHASM]},
+      {verbs: [EAST, FORK], action: [goto, LOC_FORK]},
+      {verbs: [VIEW], action: [goto, LOC_BREATHTAKING]},
+      {verbs: [BARRE], action: [goto, LOC_BARRENFRONT]},
+    ]
+- LOC_FORK:
+    description:
+      long: |-
+          The path forks here.  The left fork leads northeast.  A dull rumbling
+          seems to get louder in that direction.  The right fork leads southeast
+          down a gentle slope.  The main corridor enters from the west.
+      short: 'You''re at fork in path.'
+    conditions: {NOARRR: true, DEEP: true}
+    sound: DULL_RUMBLING
+    travel: [
+      {verbs: [WEST], action: [goto, LOC_CORRIDOR]},
+      {verbs: [NE, LEFT], action: [goto, LOC_WARMWALLS]},
+      {verbs: [SE, RIGHT, DOWN], action: [goto, LOC_LIMESTONE]},
+      {verbs: [VIEW], action: [goto, LOC_BREATHTAKING]},
+      {verbs: [BARRE], action: [goto, LOC_BARRENFRONT]},
+    ]
+- LOC_WARMWALLS:
+    description:
+      long: |-
+          The walls are quite warm here.  From the north can be heard a steady
+          roar, so loud that the entire cave seems to be trembling.  Another
+          passage leads south, and a low crawl goes east.
+      short: 'You''re at junction with warm walls.'
+    conditions: {NOARRR: true, DEEP: true}
+    sound: LOUD_ROAR
+    travel: [
+      {verbs: [SOUTH, FORK], action: [goto, LOC_FORK]},
+      {verbs: [NORTH, VIEW], action: [goto, LOC_BREATHTAKING]},
+      {verbs: [EAST, CRAWL], action: [goto, LOC_BOULDERS2]},
+    ]
+- LOC_BREATHTAKING:
+    description:
+      long: |-
+          You are on the edge of a breath-taking view.  Far below you is an
+          active volcano, from which great gouts of molten lava come surging
+          out, cascading back down into the depths.  The glowing rock fills the
+          farthest reaches of the cavern with a blood-red glare, giving every-
+          thing an eerie, macabre appearance.  The air is filled with flickering
+          sparks of ash and a heavy smell of brimstone.  The walls are hot to
+          the touch, and the thundering of the volcano drowns out all other
+          sounds.  Embedded in the jagged roof far overhead are myriad twisted
+          formations composed of pure white alabaster, which scatter the murky
+          light into sinister apparitions upon the walls.  To one side is a deep
+          gorge, filled with a bizarre chaos of tortured rock which seems to
+          have been crafted by the devil himself.  An immense river of fire
+          crashes out from the depths of the volcano, burns its way through the
+          gorge, and plummets into a bottomless pit far off to your left.  To
+          the right, an immense geyser of blistering steam erupts continuously
+          from a barren island in the center of a sulfurous lake, which bubbles
+          ominously.  The far right wall is aflame with an incandescence of its
+          own, which lends an additional infernal splendor to the already
+          hellish scene.  A dark, foreboding passage exits to the south.
+      short: 'You''re at breath-taking view.'
+    conditions: {NOARRR: true, LIT: true, DEEP: true}
+    hints: [*jade]
+    sound: TOTAL_ROAR
+    loud: true
+    travel: [
+      {verbs: [SOUTH, PASSA, OUT], action: [goto, LOC_WARMWALLS]},
+      {verbs: [FORK], action: [goto, LOC_FORK]},
+      {verbs: [DOWN], action: [speak, RIDICULOUS_ATTEMPT]},
+      {verbs: [JUMP], action: [goto, LOC_GRUESOME]},
+    ]
+- LOC_BOULDERS2:
+    description:
+      long: |-
+          You are in a small chamber filled with large boulders.  The walls are
+          very warm, causing the air in the room to be almost stifling from the
+          heat.  The only exit is a crawl heading west, through which is coming
+          a low rumbling.
+      short: 'You''re in Chamber of Boulders.'
+    conditions: {NOARRR: true, DEEP: true}
+    sound: DULL_RUMBLING
+    travel: [
+      {verbs: [WEST, OUT, CRAWL], action: [goto, LOC_WARMWALLS]},
+      {verbs: [FORK], action: [goto, LOC_FORK]},
+      {verbs: [VIEW], action: [goto, LOC_BREATHTAKING]},
+    ]
+- LOC_LIMESTONE:
+    description:
+      long:
+          You are walking along a gently sloping north/south passage lined with
+          oddly shaped limestone formations.
+      short: 'You''re in limestone passage.'
+    conditions: {NOARRR: true, DEEP: true}
+    travel: [
+      {verbs: [NORTH, UPWAR, FORK], action: [goto, LOC_FORK]},
+      {verbs: [SOUTH, DOWN, BARRE], action: [goto, LOC_BARRENFRONT]},
+      {verbs: [VIEW], action: [goto, LOC_BREATHTAKING]},
+    ]
+- LOC_BARRENFRONT:
+    description:
+      long: |-
+          You are standing at the entrance to a large, barren room.  A notice
+          above the entrance reads:  "Caution!  Bear in room!"
+      short: 'You''re in front of Barren Room.'
+    conditions: {NOARRR: true, DEEP: true}
+    travel: [
+      {verbs: [WEST, UPWAR], action: [goto, LOC_LIMESTONE]},
+      {verbs: [FORK], action: [goto, LOC_FORK]},
+      {verbs: [EAST, INWAR, BARRE, ENTER], action: [goto, LOC_BARRENROOM]},
+      {verbs: [VIEW], action: [goto, LOC_BREATHTAKING]},
+    ]
+- LOC_BARRENROOM:
+    description:
+      long: |-
+          You are inside a barren room.  The center of the room is completely
+          empty except for some dust.  Marks in the dust lead away toward the
+          far end of the room.  The only exit is the way you came in.
+      short: 'You''re in Barren Room.'
+    conditions: {NOARRR: true, DEEP: true}
+    travel: [
+      {verbs: [WEST, OUT], action: [goto, LOC_BARRENFRONT]},
+      {verbs: [FORK], action: [goto, LOC_FORK]},
+      {verbs: [VIEW], action: [goto, LOC_BREATHTAKING]},
+    ]
+- LOC_DIFFERENT3:
+    description:
+      long: 'You are in a maze of twisting little passages, all different.'
+      short: !!null
+    conditions: {DEEP: true, NOBACK: true}
+    travel: [
+      {verbs: [WEST], action: [goto, LOC_DIFFERENT1]},
+      {verbs: [SE], action: [goto, LOC_DIFFERENT4]},
+      {verbs: [NW], action: [goto, LOC_DIFFERENT5]},
+      {verbs: [SW], action: [goto, LOC_DIFFERENT6]},
+      {verbs: [NE], action: [goto, LOC_DIFFERENT7]},
+      {verbs: [UPWAR], action: [goto, LOC_DIFFERENT8]},
+      {verbs: [DOWN], action: [goto, LOC_DIFFERENT9]},
+      {verbs: [NORTH], action: [goto, LOC_DIFFERENT10]},
+      {verbs: [SOUTH], action: [goto, LOC_DIFFERENT11]},
+      {verbs: [EAST], action: [goto, LOC_DIFFERENT2]},
+    ]
+- LOC_DIFFERENT4:
+    description:
+      long: 'You are in a little maze of twisty passages, all different.'
+      short: !!null
+    conditions: {DEEP: true, NOBACK: true}
+    travel: [
+      {verbs: [NW], action: [goto, LOC_DIFFERENT1]},
+      {verbs: [UPWAR], action: [goto, LOC_DIFFERENT3]},
+      {verbs: [NORTH], action: [goto, LOC_DIFFERENT5]},
+      {verbs: [SOUTH], action: [goto, LOC_DIFFERENT6]},
+      {verbs: [WEST], action: [goto, LOC_DIFFERENT7]},
+      {verbs: [SW], action: [goto, LOC_DIFFERENT8]},
+      {verbs: [NE], action: [goto, LOC_DIFFERENT9]},
+      {verbs: [EAST], action: [goto, LOC_DIFFERENT10]},
+      {verbs: [DOWN], action: [goto, LOC_DIFFERENT11]},
+      {verbs: [SE], action: [goto, LOC_DIFFERENT2]},
+    ]
+- LOC_DIFFERENT5:
+    description:
+      long: 'You are in a twisting maze of little passages, all different.'
+      short: !!null
+    conditions: {DEEP: true, NOBACK: true}
+    travel: [
+      {verbs: [UPWAR], action: [goto, LOC_DIFFERENT1]},
+      {verbs: [DOWN], action: [goto, LOC_DIFFERENT3]},
+      {verbs: [WEST], action: [goto, LOC_DIFFERENT4]},
+      {verbs: [NE], action: [goto, LOC_DIFFERENT6]},
+      {verbs: [SW], action: [goto, LOC_DIFFERENT7]},
+      {verbs: [EAST], action: [goto, LOC_DIFFERENT8]},
+      {verbs: [NORTH], action: [goto, LOC_DIFFERENT9]},
+      {verbs: [NW], action: [goto, LOC_DIFFERENT10]},
+      {verbs: [SE], action: [goto, LOC_DIFFERENT11]},
+      {verbs: [SOUTH], action: [goto, LOC_DIFFERENT2]},
+    ]
+- LOC_DIFFERENT6:
+    description:
+      long: 'You are in a twisting little maze of passages, all different.'
+      short: !!null
+    conditions: {DEEP: true, NOBACK: true}
+    travel: [
+      {verbs: [NE], action: [goto, LOC_DIFFERENT1]},
+      {verbs: [NORTH], action: [goto, LOC_DIFFERENT3]},
+      {verbs: [NW], action: [goto, LOC_DIFFERENT4]},
+      {verbs: [SE], action: [goto, LOC_DIFFERENT5]},
+      {verbs: [EAST], action: [goto, LOC_DIFFERENT7]},
+      {verbs: [DOWN], action: [goto, LOC_DIFFERENT8]},
+      {verbs: [SOUTH], action: [goto, LOC_DIFFERENT9]},
+      {verbs: [UPWAR], action: [goto, LOC_DIFFERENT10]},
+      {verbs: [WEST], action: [goto, LOC_DIFFERENT11]},
+      {verbs: [SW], action: [goto, LOC_DIFFERENT2]},
+    ]
+- LOC_DIFFERENT7:
+    description:
+      long: 'You are in a twisty little maze of passages, all different.'
+      short: !!null
+    conditions: {DEEP: true, NOBACK: true}
+    travel: [
+      {verbs: [NORTH], action: [goto, LOC_DIFFERENT1]},
+      {verbs: [SE], action: [goto, LOC_DIFFERENT3]},
+      {verbs: [DOWN], action: [goto, LOC_DIFFERENT4]},
+      {verbs: [SOUTH], action: [goto, LOC_DIFFERENT5]},
+      {verbs: [EAST], action: [goto, LOC_DIFFERENT6]},
+      {verbs: [WEST], action: [goto, LOC_DIFFERENT8]},
+      {verbs: [SW], action: [goto, LOC_DIFFERENT9]},
+      {verbs: [NE], action: [goto, LOC_DIFFERENT10]},
+      {verbs: [NW], action: [goto, LOC_DIFFERENT11]},
+      {verbs: [UPWAR], action: [goto, LOC_DIFFERENT2]},
+    ]
+- LOC_DIFFERENT8:
+    description:
+      long: 'You are in a twisty maze of little passages, all different.'
+      short: !!null
+    conditions: {DEEP: true, NOBACK: true}
+    travel: [
+      {verbs: [EAST], action: [goto, LOC_DIFFERENT1]},
+      {verbs: [WEST], action: [goto, LOC_DIFFERENT3]},
+      {verbs: [UPWAR], action: [goto, LOC_DIFFERENT4]},
+      {verbs: [SW], action: [goto, LOC_DIFFERENT5]},
+      {verbs: [DOWN], action: [goto, LOC_DIFFERENT6]},
+      {verbs: [SOUTH], action: [goto, LOC_DIFFERENT7]},
+      {verbs: [NW], action: [goto, LOC_DIFFERENT9]},
+      {verbs: [SE], action: [goto, LOC_DIFFERENT10]},
+      {verbs: [NE], action: [goto, LOC_DIFFERENT11]},
+      {verbs: [NORTH], action: [goto, LOC_DIFFERENT2]},
+    ]
+- LOC_DIFFERENT9:
+    description:
+      long: 'You are in a little twisty maze of passages, all different.'
+      short: !!null
+    conditions: {DEEP: true, NOBACK: true}
+    travel: [
+      {verbs: [SE], action: [goto, LOC_DIFFERENT1]},
+      {verbs: [NE], action: [goto, LOC_DIFFERENT3]},
+      {verbs: [SOUTH], action: [goto, LOC_DIFFERENT4]},
+      {verbs: [DOWN], action: [goto, LOC_DIFFERENT5]},
+      {verbs: [UPWAR], action: [goto, LOC_DIFFERENT6]},
+      {verbs: [NW], action: [goto, LOC_DIFFERENT7]},
+      {verbs: [NORTH], action: [goto, LOC_DIFFERENT8]},
+      {verbs: [SW], action: [goto, LOC_DIFFERENT10]},
+      {verbs: [EAST], action: [goto, LOC_DIFFERENT11]},
+      {verbs: [WEST], action: [goto, LOC_DIFFERENT2]},
+    ]
+- LOC_DIFFERENT10:
+    description:
+      long: 'You are in a maze of little twisting passages, all different.'
+      short: !!null
+    conditions: {DEEP: true, NOBACK: true}
+    travel: [
+      {verbs: [DOWN], action: [goto, LOC_DIFFERENT1]},
+      {verbs: [EAST], action: [goto, LOC_DIFFERENT3]},
+      {verbs: [NE], action: [goto, LOC_DIFFERENT4]},
+      {verbs: [UPWAR], action: [goto, LOC_DIFFERENT5]},
+      {verbs: [WEST], action: [goto, LOC_DIFFERENT6]},
+      {verbs: [NORTH], action: [goto, LOC_DIFFERENT7]},
+      {verbs: [SOUTH], action: [goto, LOC_DIFFERENT8]},
+      {verbs: [SE], action: [goto, LOC_DIFFERENT9]},
+      {verbs: [SW], action: [goto, LOC_DIFFERENT11]},
+      {verbs: [NW], action: [goto, LOC_DIFFERENT2]},
+    ]
+- LOC_DIFFERENT11:
+    description:
+      long: 'You are in a maze of little twisty passages, all different.'
+      short: !!null
+    conditions: {DEEP: true, NOBACK: true}
+    travel: [
+      {verbs: [SW], action: [goto, LOC_DIFFERENT1]},
+      {verbs: [NW], action: [goto, LOC_DIFFERENT3]},
+      {verbs: [EAST], action: [goto, LOC_DIFFERENT4]},
+      {verbs: [WEST], action: [goto, LOC_DIFFERENT5]},
+      {verbs: [NORTH], action: [goto, LOC_DIFFERENT6]},
+      {verbs: [DOWN], action: [goto, LOC_DIFFERENT7]},
+      {verbs: [SE], action: [goto, LOC_DIFFERENT8]},
+      {verbs: [UPWAR], action: [goto, LOC_DIFFERENT9]},
+      {verbs: [SOUTH], action: [goto, LOC_DIFFERENT10]},
+      {verbs: [NE], action: [goto, LOC_DIFFERENT2]},
+    ]
+- LOC_DEADEND13:
+    description:
+      long: 'Dead end'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [NORTH, OUT], action: [goto, LOC_DIFFERENT2]},
+      {verbs: [SOUTH], cond: [not, VEND, VEND_BLOCKS], action: [goto, LOC_ROUGHHEWN]},
+      {verbs: [SOUTH], action: [goto, LOC_BADDIRECTION]},
+    ]
+- LOC_ROUGHHEWN:
+    description:
+      long: 'You are in a long, rough-hewn, north/south corridor.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [NORTH], action: [goto, LOC_DEADEND13]},
+      {verbs: [SOUTH], action: [goto, LOC_LARGE]},
+    ]
+- LOC_BADDIRECTION:
+    description:
+      long: 'There is no way to go that direction.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [], action: [goto, LOC_DEADEND13]},
+    ]
+- LOC_LARGE:
+    description:
+      long: 'You are in a large chamber with passages to the west and north.'
+      short: !!null
+    conditions: {DEEP: true}
+    hints: [*ogre]
+    travel: [
+      {verbs: [WEST], action: [goto, LOC_ROUGHHEWN]},
+      {verbs: [NORTH], cond: [with, OGRE], action: [speak, OGRE_SNARL]},
+      {verbs: [NORTH], action: [goto, LOC_STOREROOM]},
+    ]
+- LOC_STOREROOM:
+    description:
+      long: 'You are in the ogre''s storeroom.  The only exit is to the south.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [SOUTH, OUT], action: [goto, LOC_LARGE]},
+    ]
+- LOC_FOREST1:
+    description:
+      long: 'You are wandering aimlessly through the forest.'
+      short: !!null
+    conditions: {FOREST: true, NOBACK: true, LIT: true}
+    hints: [*forest]
+    travel: [
+      {verbs: [EAST], action: [goto, LOC_START]},
+      {verbs: [WEST], action: [goto, LOC_FOREST13]},
+      {verbs: [NORTH], action: [goto, LOC_FOREST2]},
+      {verbs: [SOUTH], action: [goto, LOC_FOREST3]},
+    ]
+- LOC_FOREST2:
+    description:
+      long: 'You are wandering aimlessly through the forest.'
+      short: !!null
+    conditions: {FOREST: true, NOBACK: true, LIT: true}
+    hints: [*forest]
+    travel: [
+      {verbs: [EAST], action: [goto, LOC_FOREST1]},
+      {verbs: [WEST], action: [goto, LOC_FOREST19]},
+      {verbs: [NORTH], action: [goto, LOC_FOREST3]},
+      {verbs: [SOUTH], action: [goto, LOC_FOREST18]},
+    ]
+- LOC_FOREST3:
+    description:
+      long: 'You are wandering aimlessly through the forest.'
+      short: !!null
+    conditions: {FOREST: true, NOBACK: true, LIT: true}
+    hints: [*forest]
+    travel: [
+      {verbs: [EAST, WEST], action: [goto, LOC_FOREST4]},
+      {verbs: [NORTH], action: [goto, LOC_FOREST2]},
+      {verbs: [SOUTH], action: [goto, LOC_FOREST1]},
+    ]
+- LOC_FOREST4:
+    description:
+      long: 'You are wandering aimlessly through the forest.'
+      short: !!null
+    conditions: {FOREST: true, NOBACK: true, LIT: true}
+    hints: [*forest]
+    travel: [
+      {verbs: [EAST, NORTH], action: [goto, LOC_FOREST3]},
+      {verbs: [WEST, SOUTH], action: [goto, LOC_FOREST5]},
+    ]
+- LOC_FOREST5:
+    description:
+      long: 'You are wandering aimlessly through the forest.'
+      short: !!null
+    conditions: {FOREST: true, NOBACK: true, LIT: true}
+    hints: [*forest]
+    travel: [
+      {verbs: [EAST, NORTH], action: [goto, LOC_FOREST4]},
+      {verbs: [WEST], action: [goto, LOC_FOREST7]},
+      {verbs: [SOUTH], action: [goto, LOC_FOREST6]},
+    ]
+- LOC_FOREST6:
+    description:
+      long: 'You are wandering aimlessly through the forest.'
+      short: !!null
+    conditions: {FOREST: true, NOBACK: true, LIT: true}
+    hints: [*forest]
+    travel: [
+      {verbs: [EAST], action: [goto, LOC_FOREST5]},
+      {verbs: [WEST], action: [goto, LOC_FOREST7]},
+      {verbs: [NORTH], action: [goto, LOC_VALLEY]},
+      {verbs: [SOUTH], action: [goto, LOC_SLIT]},
+    ]
+- LOC_FOREST7:
+    description:
+      long: 'You are wandering aimlessly through the forest.'
+      short: !!null
+    conditions: {FOREST: true, NOBACK: true, LIT: true}
+    hints: [*forest]
+    travel: [
+      {verbs: [EAST], action: [goto, LOC_FOREST5]},
+      {verbs: [WEST], action: [goto, LOC_FOREST6]},
+      {verbs: [NORTH], action: [goto, LOC_GRATE]},
+      {verbs: [SOUTH], action: [goto, LOC_FOREST8]},
+    ]
+- LOC_FOREST8:
+    description:
+      long: 'You are wandering aimlessly through the forest.'
+      short: !!null
+    conditions: {FOREST: true, NOBACK: true, LIT: true}
+    hints: [*forest]
+    travel: [
+      {verbs: [EAST], action: [goto, LOC_FOREST9]},
+      {verbs: [WEST], action: [goto, LOC_FOREST11]},
+      {verbs: [NORTH], action: [goto, LOC_FOREST22]},
+      {verbs: [SOUTH], action: [goto, LOC_FOREST7]},
+    ]
+- LOC_FOREST9:
+    description:
+      long: 'You are wandering aimlessly through the forest.'
+      short: !!null
+    conditions: {FOREST: true, NOBACK: true, LIT: true}
+    hints: [*forest]
+    travel: [
+      {verbs: [EAST], action: [goto, LOC_FOREST11]},
+      {verbs: [WEST], action: [goto, LOC_FOREST8]},
+      {verbs: [NORTH], action: [goto, LOC_FOREST10]},
+      {verbs: [SOUTH], action: [goto, LOC_GRATE]},
+    ]
+- LOC_FOREST10:
+    description:
+      long: 'You are wandering aimlessly through the forest.'
+      short: !!null
+    conditions: {FOREST: true, NOBACK: true, LIT: true}
+    hints: [*forest]
+    travel: [
+      {verbs: [EAST], action: [goto, LOC_SLIT]},
+      {verbs: [WEST], action: [goto, LOC_FOREST11]},
+      {verbs: [NORTH], action: [goto, LOC_FOREST9]},
+      {verbs: [SOUTH], action: [goto, LOC_GRATE]},
+    ]
+- LOC_FOREST11:
+    description:
+      long: 'You are wandering aimlessly through the forest.'
+      short: !!null
+    conditions: {FOREST: true, NOBACK: true, LIT: true}
+    hints: [*forest]
+    travel: [
+      {verbs: [EAST], action: [goto, LOC_FOREST10]},
+      {verbs: [WEST], action: [goto, LOC_FOREST8]},
+      {verbs: [NORTH], action: [goto, LOC_FOREST22]},
+      {verbs: [SOUTH], action: [goto, LOC_FOREST9]},
+    ]
+- LOC_FOREST12:
+    description:
+      long: 'You are wandering aimlessly through the forest.'
+      short: !!null
+    conditions: {FOREST: true, NOBACK: true, LIT: true}
+    hints: [*forest]
+    travel: [
+      {verbs: [EAST], action: [goto, LOC_FOREST13]},
+      {verbs: [WEST], action: [goto, LOC_FOREST14]},
+      {verbs: [NORTH], action: [goto, LOC_FOREST22]},
+      {verbs: [SOUTH], action: [goto, LOC_VALLEY]},
+    ]
+- LOC_FOREST13:
+    description:
+      long: 'You are wandering aimlessly through the forest.'
+      short: !!null
+    conditions: {FOREST: true, NOBACK: true, LIT: true}
+    hints: [*forest]
+    travel: [
+      {verbs: [EAST], action: [goto, LOC_FOREST1]},
+      {verbs: [WEST], action: [goto, LOC_FOREST12]},
+      {verbs: [NORTH], action: [goto, LOC_FOREST20]},
+      {verbs: [SOUTH], action: [goto, LOC_HILL]},
+    ]
+- LOC_FOREST14:
+    description:
+      long: 'You are wandering aimlessly through the forest.'
+      short: !!null
+    conditions: {FOREST: true, NOBACK: true, LIT: true}
+    hints: [*forest]
+    travel: [
+      {verbs: [EAST], action: [goto, LOC_ROADEND]},
+      {verbs: [WEST], action: [goto, LOC_FOREST16]},
+      {verbs: [NORTH], action: [goto, LOC_FOREST15]},
+      {verbs: [SOUTH], action: [goto, LOC_FOREST12]},
+    ]
+- LOC_FOREST15:
+    description:
+      long: 'You are wandering aimlessly through the forest.'
+      short: !!null
+    conditions: {FOREST: true, NOBACK: true, LIT: true}
+    hints: [*forest]
+    travel: [
+      {verbs: [EAST], action: [goto, LOC_FOREST16]},
+      {verbs: [WEST], action: [goto, LOC_FOREST22]},
+      {verbs: [NORTH], action: [goto, LOC_ROADEND]},
+      {verbs: [SOUTH], action: [goto, LOC_FOREST14]},
+    ]
+- LOC_FOREST16:
+    description:
+      long: 'You are wandering aimlessly through the forest.'
+      short: !!null
+    conditions: {FOREST: true, NOBACK: true, LIT: true}
+    hints: [*forest]
+    travel: [
+      {verbs: [EAST, NORTH], action: [goto, LOC_FOREST17]},
+      {verbs: [WEST], action: [goto, LOC_FOREST14]},
+      {verbs: [SOUTH], action: [goto, LOC_FOREST15]},
+    ]
+- LOC_FOREST17:
+    description:
+      long: 'You are wandering aimlessly through the forest.'
+      short: !!null
+    conditions: {FOREST: true, NOBACK: true, LIT: true}
+    hints: [*forest]
+    travel: [
+      {verbs: [EAST], action: [goto, LOC_FOREST18]},
+      {verbs: [WEST, SOUTH], action: [goto, LOC_FOREST16]},
+      {verbs: [NORTH], action: [goto, LOC_CLIFF]},
+    ]
+- LOC_FOREST18:
+    description:
+      long: 'You are wandering aimlessly through the forest.'
+      short: !!null
+    conditions: {FOREST: true, NOBACK: true, LIT: true}
+    hints: [*forest]
+    travel: [
+      {verbs: [EAST], action: [goto, LOC_FOREST19]},
+      {verbs: [WEST], action: [goto, LOC_FOREST17]},
+      {verbs: [NORTH], action: [goto, LOC_FOREST2]},
+      {verbs: [SOUTH], action: [goto, LOC_FOREST21]},
+    ]
+- LOC_FOREST19:
+    description:
+      long: 'You are wandering aimlessly through the forest.'
+      short: !!null
+    conditions: {FOREST: true, NOBACK: true, LIT: true}
+    hints: [*forest]
+    travel: [
+      {verbs: [EAST], action: [goto, LOC_FOREST2]},
+      {verbs: [WEST], action: [goto, LOC_FOREST18]},
+      {verbs: [NORTH], action: [goto, LOC_CLIFF]},
+      {verbs: [SOUTH], action: [goto, LOC_FOREST20]},
+    ]
+- LOC_FOREST20:
+    description:
+      long: 'You are wandering aimlessly through the forest.'
+      short: !!null
+    conditions: {FOREST: true, NOBACK: true, LIT: true}
+    hints: [*forest]
+    travel: [
+      {verbs: [EAST], action: [goto, LOC_HILL]},
+      {verbs: [WEST], action: [goto, LOC_FOREST21]},
+      {verbs: [NORTH], action: [goto, LOC_FOREST19]},
+      {verbs: [SOUTH], action: [goto, LOC_FOREST13]},
+    ]
+- LOC_FOREST21:
+    description:
+      long: 'You are wandering aimlessly through the forest.'
+      short: !!null
+    conditions: {FOREST: true, NOBACK: true, LIT: true}
+    hints: [*forest]
+    travel: [
+      {verbs: [EAST], action: [goto, LOC_FOREST20]},
+      {verbs: [WEST], action: [goto, LOC_ROADEND]},
+      {verbs: [NORTH], action: [goto, LOC_FOREST18]},
+      {verbs: [SOUTH], action: [goto, LOC_FOREST21]},
+    ]
+- LOC_FOREST22:
+    description:
+      long: 'You are wandering aimlessly through the forest.'
+      short: !!null
+    conditions: {FOREST: true, NOBACK: true, LIT: true}
+    hints: [*forest]
+    travel: [
+      {verbs: [EAST], action: [goto, LOC_FOREST8]},
+      {verbs: [WEST], action: [goto, LOC_FOREST11]},
+      {verbs: [NORTH], action: [goto, LOC_FOREST15]},
+      {verbs: [SOUTH], action: [goto, LOC_FOREST12]},
+    ]
+- LOC_LEDGE:
+    description:
+      long: |-
+          You are on a small ledge on one face of a sheer cliff.  There are no
+          paths away from the ledge.  Across the chasm is a small clearing
+          surrounded by forest.
+      short: 'You''re on ledge.'
+    conditions: {ABOVE: true, LIT: true}
+    travel: [
+      {verbs: [JUMP], action: [goto, LOC_NOMAKE]},
+    ]
+- LOC_RESBOTTOM:
+    description:
+      long: |-
+          You are walking across the bottom of the reservoir.  Walls of water
+          rear up on either side.  The roar of the water cascading past is
+          nearly deafening, and the mist is so thick you can barely see.
+      short: 'You''re at bottom of reservoir.'
+    conditions: {FLUID: true, DEEP: true}
+    sound: TOTAL_ROAR
+    loud: true
+    travel: [
+      {verbs: [NORTH], action: [goto, LOC_RESNORTH]},
+      {verbs: [SOUTH], action: [goto, LOC_RESERVOIR]},
+    ]
+- LOC_RESNORTH:
+    description:
+      long: |-
+          You are at the northern edge of the reservoir.  A northwest passage
+          leads sharply up from here.
+      short: 'You''re north of reservoir.'
+    conditions: {FLUID: true, DEEP: true}
+    sound: WATERS_CRASHING
+    travel: [
+      {verbs: [SOUTH, ACROS, CROSS],
+              cond: [not, RESER, WATERS_PARTED], action: [speak, BAD_DIRECTION]},
+      {verbs: [SOUTH], action: [goto, LOC_RESBOTTOM]},
+      {verbs: [NW, UPWAR, OUT], action: [goto, LOC_TREACHEROUS]},
+    ]
+- LOC_TREACHEROUS:
+    description:
+      long: 'You are scrambling along a treacherously steep, rocky passage.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [UPWAR, NW], action: [goto, LOC_STEEP]},
+      {verbs: [DOWN, SE], action: [goto, LOC_RESNORTH]},
+    ]
+- LOC_STEEP:
+    description:
+      long: 'You are on a very steep incline, which widens at it goes upward.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [DOWN, SE], action: [goto, LOC_TREACHEROUS]},
+      {verbs: [UPWAR, NW], action: [goto, LOC_CLIFFBASE]},
+    ]
+- LOC_CLIFFBASE:
+    description:
+      long: |-
+          You are at the base of a nearly vertical cliff.  There are some
+          slim footholds which would enable you to climb up, but it looks
+          extremely dangerous.  Here at the base of the cliff lie the remains
+          of several earlier adventurers who apparently failed to make it.
+      short: 'You''re at base of cliff.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [DOWN, SE], action: [goto, LOC_STEEP]},
+      {verbs: [UPWAR, CLIMB], action: [goto, LOC_CLIFFACE]},
+    ]
+- LOC_CLIFFACE:
+    description:
+      long: 'You are climbing along a nearly vertical cliff.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [DOWN], action: [goto, LOC_CLIFFBASE]},
+      {verbs: [UPWAR], cond: [carry, OBJ_46], action: [goto, LOC_CLIFFTOP]},
+      {verbs: [UPWAR], action: [goto, LOC_FOOTSLIP]},
+    ]
+- LOC_FOOTSLIP:
+    description:
+      long: |-
+          Just as you reach the top, your foot slips on a loose rock and you
+          tumble several hundred feet to join the other unlucky adventurers.
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [], action: [goto, LOC_NOWHERE]},
+    ]
+- LOC_CLIFFTOP:
+    description:
+      long: |-
+          Just as you reach the top, your foot slips on a loose rock and you
+          make one last desperate grab.  Your luck holds, as does your grip.
+          With an enormous heave, you lift yourself to the ledge above.
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [], action: [goto, LOC_CLIFFLEDGE]},
+    ]
+- LOC_CLIFFLEDGE:
+    description:
+      long: |-
+          You are on a small ledge at the top of a nearly vertical cliff.
+          There is a low crawl leading off to the northeast.
+      short: 'You''re at top of cliff.'
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [CLIMB, DOWN], action: [goto, LOC_CLIFFACE]},
+      {verbs: [NE, CRAWL], action: [goto, LOC_REACHDEAD]},
+    ]
+- LOC_REACHDEAD:
+    description:
+      long: 'You have reached a dead end.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [SW, OUT, CRAWL], action: [goto, LOC_CLIFFLEDGE]},
+    ]
+- LOC_GRUESOME:
+    description:
+      long: 'There is now one more gruesome aspect to the spectacular vista.'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [], action: [goto, LOC_NOWHERE]},
+    ]
+- LOC_FOOF1:
+    description:
+      long: '>>Foof!<<'
+      short: !!null
+    conditions: {}
+    travel: [
+      {verbs: [], action: [goto, LOC_DEBRIS]},
+    ]
+- LOC_FOOF2:
+    description:
+      long: '>>Foof!<<'
+      short: !!null
+    conditions: {ABOVE: true}
+    travel: [
+      {verbs: [], action: [goto, LOC_BUILDING]},
+    ]
+- LOC_FOOF3:
+    description:
+      long: '>>Foof!<<'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [], action: [goto, LOC_Y2]},
+    ]
+- LOC_FOOF4:
+    description:
+      long: '>>Foof!<<'
+      short: !!null
+    conditions: {ABOVE: true}
+    travel: [
+      {verbs: [], action: [goto, LOC_BUILDING]},
+    ]
+- LOC_FOOF5:
+    description:
+      long: '>>Foof!<<'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [], action: [goto, LOC_PLOVER]},
+    ]
+- LOC_FOOF6:
+    description:
+      long: '>>Foof!<<'
+      short: !!null
+    conditions: {DEEP: true}
+    travel: [
+      {verbs: [], action: [goto, LOC_Y2]},
+    ]
+
+arbitrary_messages:  !!omap
+- NO_MESSAGE: !!null
+- CAVE_NEARBY: |-
+      Somewhere nearby is Colossal Cave, where others have found fortunes in
+      treasure and gold, though it is rumored that some who enter are never
+      seen again.  Magic is said to work in the cave.  I will be your eyes
+      and hands.  Direct me with commands of 1 or 2 words.  I should warn
+      you that I look at only the first five letters of each word, so you'll
+      have to enter "northeast" as "ne" to distinguish it from "north".
+      You can type "help" for some general hints.  For information on how
+      to end your adventure, scoring, etc., type "info".
+      \t\t\t      - - -
+      This program was originally developed by Willie Crowther.  Most of the
+      features of the current program were added by Don Woods.
+- DWARF_BLOCK: 'A little dwarf with a big knife blocks your way.'
+- DWARF_RAN: |-
+      A little dwarf just walked around a corner, saw you, threw a little
+      axe at you which missed, cursed, and ran away.
+- DWARF_PACK: 'There are %d threatening little dwarves in the room with you.'
+- DWARF_SINGLE: 'There is a threatening little dwarf in the room with you!'
+- KNIFE_THROWN: 'One sharp nasty knife is thrown at you!'
+- SAYS_PLUGH: 'A hollow voice says "PLUGH".'
+- GETS_YOU: 'It gets you!'
+- MISSES_YOU: 'It misses!'
+- UNSURE_FACING: 'I am unsure how you are facing.  Use compass points or nearby objects.'
+- NO_INOUT_HERE: |-
+    I don't know in from out here.  Use compass points or name something
+    in the general direction you want to go.
+- CANT_APPLY: 'I don''t know how to apply that word here.'
+- AM_GAME: &am_game 'I''m game.  Would you care to explain how?'
+- NO_MORE_DETAIL: |-
+      Sorry, but I am not allowed to give more detail.  I will repeat the
+      long description of your location.
+- PITCH_DARK: 'It is now pitch dark.  If you proceed you will likely fall into a pit.'
+- W_IS_WEST: 'If you prefer, simply type w rather than west.'
+- REALLY_QUIT: 'Do you really want to quit now?'
+- PIT_FALL: 'You fell into a pit and broke every bone in your body!'
+- ALREADY_CARRYING: &already_carrying 'You are already carrying it!'
+- YOU_JOKING: 'You can''t be serious!'
+- BIRD_EVADES: |-
+    The bird seemed unafraid at first, but as you approach it becomes
+    disturbed and you cannot catch it.
+- CANNOT_CARRY: 'You can catch the bird, but you cannot carry it.'
+- NOTHING_LOCKED: 'There is nothing here with a lock!'
+- ARENT_CARRYING: &arent_carrying 'You aren''t carrying it!'
+- BIRD_ATTACKS: |-
+    The little bird attacks the green snake, and in an astounding flurry
+    drives the snake away.
+- NO_KEYS: 'You have no keys!'
+- NO_LOCK: 'It has no lock.'
+- NOT_LOCKABLE: &not_lockable 'I don''t know how to lock or unlock such a thing.'
+- ALREADY_LOCKED: 'It was already locked.'
+- ALREADY_UNLOCKED: 'It was already unlocked.'
+- BEAR_BLOCKS: |-
+    There is no way to get past the bear to unlock the chain, which is
+    probably just as well.
+- NOTHING_HAPPENS: &nothing_happens 'Nothing happens.'
+- WHERE_QUERY: &where_query 'Where?'
+- NO_TARGET: 'There is nothing here to attack.'
+- BIRD_DEAD: 'The little bird is now dead.  Its body disappears.'
+- SNAKE_WARNING: 'Attacking the snake both doesn''t work and is very dangerous.'
+- KILLED_DWARF: 'You killed a little dwarf.'
+- DWARF_DODGES: 'You attack a little dwarf, but he dodges out of the way.'
+- BARE_HANDS_QUERY: 'With what?  Your bare hands?'
+- BAD_DIRECTION: 'There is no way to go that direction.'
+- TWO_WORDS: 'Please stick to 1- and 2-word commands.'
+- OK_MAN: &ok_man 'OK'
+- CANNOT_UNLOCK: 'You can''t unlock the keys.'
+- FUTILE_CRAWL: |-
+    You have crawled around in some little holes and wound up back in the
+    main passage.
+- FOLLOW_STREAM: |-
+      I don't know where the cave is, but hereabouts no stream can run on
+      the surface for long.  I would try the stream.
+- NEED_DETAIL: 'I need more detailed instructions to do that.'
+- NEARBY: &nearby |-
+      I can only tell you what you see as you move about and manipulate
+      things.  I cannot tell you where remote things are.
+- OGRE_SNARL: 'The ogre snarls and shoves you back.'
+- HUH_MAN: &huh_man 'Huh?'
+- WELCOME_YOU: 'Welcome to Adventure!!  Would you like instructions?'
+- REQUIRES_DYNAMITE: &requires_dynamite 'Blasting requires dynamite.'
+- FEET_WET: 'Your feet are now wet.'
+- LOST_APPETITE: 'I think I just lost my appetite.'
+- THANKS_DELICIOUS: 'Thank you, it was delicious!'
+- PECULIAR_NOTHING: 'Peculiar.  Nothing unexpected happens.'
+- GROUND_WET: 'Your bottle is empty and the ground is wet.'
+- CANT_POUR: 'You can''t pour that.'
+- WHICH_WAY: 'Which way?'
+- FORGOT_PATH: 'Sorry, but I no longer seem to remember how it was you got here.'
+- CARRY_LIMIT: 'You can''t carry anything more.  You''ll have to drop something first.'
+- GRATE_NOWAY: 'You can''t go through a locked steel grate!'
+- YOU_HAVEIT: 'I believe what you want is right here with you.'
+- DONT_FIT: 'You don''t fit through a two-inch slit!'
+- CROSS_BRIDGE: 'I respectfully suggest you go across the bridge instead of jumping.'
+- NO_CROSS: 'There is no way across the fissure.'
+- NO_CARRY: 'You''re not carrying anything.'
+- NOW_HOLDING: 'You are currently holding the following:'
+- BIRD_PINING: |-
+    It's not hungry (it's merely pinin' for the fjords).  Besides, you
+    have no bird seed.
+- BIRD_DEVOURED: 'The snake has now devoured your bird.'
+- NOTHING_EDIBLE: 'There''s nothing here it wants to eat (except perhaps you).'
+- REALLY_MAD: 'You fool, dwarves eat only coal!  Now you''ve made him *REALLY* mad!!'
+- NO_CONTAINER: 'You have nothing in which to carry it.'
+- BOTTLE_FULL: 'Your bottle is already full.'
+- NO_LIQUID: 'There is nothing here with which to fill the bottle.'
+- RIDICULOUS_ATTEMPT: &ridiculous_attempt 'Don''t be ridiculous!'
+- RUSTY_DOOR: 'The door is extremely rusty and refuses to open.'
+- SHAKING_LEAVES: 'The plant indignantly shakes the oil off its leaves and asks, "Water?"'
+- DEEP_ROOTS: 'The plant has exceptionally deep roots and cannot be pulled free.'
+- KNIVES_VANISH: 'The dwarves'' knives vanish as they strike the walls of the cave.'
+- MUST_DROP: |-
+    Something you're carrying won't fit through the tunnel with you.
+    You'd best take inventory and drop something.
+- CLAM_BLOCKER: 'You can''t fit this five-foot clam through that little passage!'
+- OYSTER_BLOCKER: 'You can''t fit this five-foot oyster through that little passage!'
+#- DROP_CLAM: 'I advise you to put down the clam before opening it.  >STRAIN!<'
+- DROP_OYSTER: 'I advise you to put down the oyster before opening it.  >WRENCH!<'
+- CLAM_OPENER: 'You don''t have anything strong enough to open the clam.'
+- OYSTER_OPENER: 'You don''t have anything strong enough to open the oyster.'
+- PEARL_FALLS: |-
+    A glistening pearl falls out of the clam and rolls away.  Goodness,
+    this must really be an oyster.  (I never was very good at identifying
+    bivalves.)  Whatever it is, it has now snapped shut again.
+- OYSTER_OPENS: |-
+    The oyster creaks open, revealing nothing but oyster inside.  It
+    promptly snaps shut again.
+- WAY_BLOCKED: |-
+    You have crawled around in some little holes and found your way
+    blocked by a recent cave-in.  You are now back in the main passage.
+- PIRATE_RUSTLES: 'There are faint rustling noises from the darkness behind you.'
+- PIRATE_POUNCES: |-
+    Out from the shadows behind you pounces a bearded pirate!  "Har, har,"
+    he chortles, "I'll just take all this booty and hide it away with me
+    chest deep in the maze!"  He snatches your treasure and vanishes into
+    the gloom.
+- CAVE_CLOSING: |-
+    A sepulchral voice reverberating through the cave, says, "Cave closing
+    soon.  All adventurers exit immediately through main office."
+- EXIT_CLOSED: |-
+    A mysterious recorded voice groans into life and announces:
+       "This exit is closed.  Please leave via main office."
+- DEATH_CLOSING: |-
+    It looks as though you're dead.  Well, seeing as how it's so close to
+    closing time anyway, I think we'll just call it a day.
+- CAVE_CLOSED: |-
+    The sepulchral voice intones, "The cave is now closed."  As the echoes
+    fade, there is a blinding flash of light (and a small puff of orange
+    smoke). . . .    As your eyes refocus, you look around and find...
+- VICTORY_MESSAGE: |-
+    There is a loud explosion, and a twenty-foot hole appears in the far
+    wall, burying the dwarves in the rubble.  You march through the hole
+    and find yourself in the main office, where a cheering band of
+    friendly elves carry the conquering adventurer off into the sunset.
+- DEFEAT_MESSAGE: |-
+    There is a loud explosion, and a twenty-foot hole appears in the far
+    wall, burying the snakes in the rubble.  A river of molten lava pours
+    in through the hole, destroying everything in its path, including you!
+- SPLATTER_MESSAGE: |-
+    There is a loud explosion, and you are suddenly splashed across the
+    walls of the room.
+- DWARVES_AWAKEN: |-
+    The resulting ruckus has awakened the dwarves.  There are now several
+    threatening little dwarves in the room with you!  Most of them throw
+    knives at you!  All of them get you!
+- UNHAPPY_BIRD: 'Oh, leave the poor unhappy bird alone.'
+- NEEDED_NEARBY: 'I daresay whatever you want is around here somewhere.'
+- NOT_CONNECTED: 'You can''t get there from here.'
+- TAME_BEAR: 'You are being followed by a very large, tame bear.'
+- WITHOUT_SUSPENDS: 'Now let''s see you do it without suspending in mid-Adventure.'
+- FILL_INVALID: 'There is nothing here with which to fill it.'
+- SHATTER_VASE: 'The sudden change in temperature has delicately shattered the vase.'
+- BEYOND_POWER: &beyond_power 'It is beyond your power to do that.'
+- NOT_KNOWHOW: &not_knowhow 'I don''t know how.'
+- TOO_FAR: 'It is too far up for you to reach.'
+- DWARF_SMOKE: |-
+      You killed a little dwarf.  The body vanishes in a cloud of greasy
+      black smoke.
+- SHELL_IMPERVIOUS: 'The shell is very strong and is impervious to attack.'
+- START_OVER: 'What''s the matter, can''t you read?  Now you''d best start over.'
+- WELL_POINTLESS: 'Well, that was remarkably pointless.'
+- DRAGON_SCALES: 'The axe bounces harmlessly off the dragon''s thick scales.'
+- NASTY_DRAGON: 'The dragon looks rather nasty.  You''d best not try to get by.'
+- BIRD_BURNT: |-
+    The little bird attacks the green dragon, and in an astounding flurry
+    gets burnt to a cinder.  The ashes blow away.
+- BRIEF_CONFIRM: |-
+    Okay, from now on I'll only describe a place in full the first time
+    you come to it.  To get the full description, say "look".
+- ROCKY_TROLL: |-
+    Trolls are close relatives with the rocks and have skin as tough as
+    that of a rhinoceros.  The troll fends off your blows effortlessly.
+- TROLL_RETURNS: |-
+    The troll deftly catches the axe, examines it carefully, and tosses it
+    back, declaring, "Good workmanship, but it's not valuable enough."
+- TROLL_SATISFIED: 'The troll catches your treasure and scurries away out of sight.'
+- TROLL_BLOCKS: 'The troll refuses to let you cross.'
+- BRIDGE_GONE: 'There is no longer any way across the chasm.'
+- BEAR_HANDS: 'With what?  Your bare hands?  Against *HIS* bear hands??'
+- BEAR_CONFUSED: 'The bear is confused; he only wants to be your friend.'
+- ALREADY_DEAD: 'For crying out loud, the poor thing is already dead!'
+- BEAR_CHAINED: 'The bear is still chained to the wall.'
+- STILL_LOCKED: 'The chain is still locked.'
+- CHAIN_UNLOCKED: 'The chain is now unlocked.'
+- CHAIN_LOCKED: 'The chain is now locked.'
+- NO_LOCKSITE: 'There is nothing here to which the chain can be locked.'
+- WANT_HINT: 'Do you want the hint?'
+- TROLL_VICES: 'Gluttony is not one of the troll''s vices.  Avarice, however, is.'
+- LAMP_DIM: |-
+    Your lamp is getting dim.  You'd best start wrapping this up, unless
+    you can find some fresh batteries.  I seem to recall there's a vending
+    machine in the maze.  Bring some coins with you.
+- LAMP_OUT: 'Your lamp has run out of power.'
+- PLEASE_ANSWER: 'Please answer the question.'
+- PIRATE_SPOTTED: |-
+    There are faint rustling noises from the darkness behind you.  As you
+    turn toward them, the beam of your lamp falls across a bearded pirate.
+    He is carrying a large chest.  "Shiver me timbers!" he cries, "I've
+    been spotted!  I'd best hie meself off to the maze to hide me chest!"
+    With that, he vanishes into the gloom.
+- GET_BATTERIES: 'Your lamp is getting dim.  You''d best go back for those batteries.'
+- REPLACE_BATTERIES: |-
+    Your lamp is getting dim.  I'm taking the liberty of replacing the
+    batteries.
+- MISSING_BATTERIES: |-
+    Your lamp is getting dim, and you're out of spare batteries.  You'd
+    best start wrapping this up.
+- REMOVE_MESSAGE: |-
+    You sift your fingers through the dust, but succeed only in
+    obliterating the cryptic message.
+- CLUE_QUERY: |-
+    Hmmm, this looks like a clue, which means it'll cost you 10 points to
+    read it.  Should I go ahead and read it anyway?
+- WAYOUT_CLUE: |-
+    It says, "There is a way out of this place.  Do you need any more
+    information to escape?  Sorry, but this initial hint is all you get."
+- DONT_UNDERSTAND: &dont_understand 'I''m afraid I don''t understand.'
+- HAND_PASSTHROUGH: 'Your hand passes through it as though it weren''t there.'
+- PROD_DWARF: |-
+    You prod the nearest dwarf, who wakes up grumpily, takes one look at
+    you, curses, and grabs for his axe.
+- THIS_ACCEPTABLE: 'Is this acceptable?'
+# This message is not currently used
+#- ALREADY_OVER: |-
+#    This adventure is already over.  To start a new adventure, or to
+#    resume an earlier adventure, please run a fresh copy of the program.
+- OGRE_FULL: 'The ogre doesn''t appear to be hungry.'
+- OGRE_DODGE: |-
+    The ogre, who despite his bulk is quite agile, easily dodges your
+    attack.  He seems almost amused by your puny effort.
+- OGRE_PANIC1: |-
+    The ogre, distracted by your rush, is struck by the knife.  With a
+    blood-curdling yell he turns and bounds after the dwarves, who flee
+    in panic.  You are left alone in the room.
+- OGRE_PANIC2: |-
+    The ogre, distracted by your rush, is struck by the knife.  With a
+    blood-curdling yell he turns and bounds after the dwarf, who flees
+    in panic.  You are left alone in the room.
+- FREE_FLY: 'The bird flies about agitatedly for a moment.'
+- CAGE_FLY: 'The bird flies agitatedly about the cage.'
+- NECKLACE_FLY: |-
+    The bird flies about agitatedly for a moment, then disappears through
+    the crack.  It reappears shortly, carrying in its beak a jade
+    necklace, which it drops at your feet.
+- WATER_URN: |-
+    You empty the bottle into the urn, which promptly ejects the water
+    with uncanny accuracy, squirting you directly between the eyes.
+- OIL_URN: 'Your bottle is now empty and the urn is full of oil.'
+- FULL_URN: 'The urn is already full of oil.'
+- URN_NOPOUR: 'There''s no way to get the oil out of the urn.'
+- URN_NOBUDGE: 'The urn is far too firmly embedded for your puny strength to budge it.'
+- URN_GENIES: |-
+    As you rub the urn, there is a flash of light and a genie appears.
+    His aspect is stern as he advises: "One who wouldst traffic in
+    precious stones must first learn to recognize the signals thereof."
+    He wrests the urn from the stone, leaving a small cavity.  Turning to
+    face you again, he fixes you with a steely eye and intones: "Caution!"
+    Genie and urn vanish in a cloud of amber smoke.  The smoke condenses
+    to form a rare amber gemstone, resting in the cavity in the rock.
+- DOUGHNUT_HOLES: 'I suppose you collect doughnut holes, too?'
+- GEM_FITS: 'The gem fits easily into the cavity.'
+- RUG_RISES: 'The persian rug stiffens and rises a foot or so off the ground.'
+- RUG_WIGGLES: |-
+    The persian rug draped over your shoulder seems to wriggle for a
+    moment, but then subsides.
+- RUG_SETTLES: 'The persian rug settles gently to the ground.'
+- RUG_HOVERS: 'The rug hovers stubbornly where it is.'
+- RUG_NOTHING1: 'The rug does not appear inclined to cooperate.'
+- RUG_NOTHING2: |-
+    If you mean to use the persian rug, it does not appear inclined to
+    cooperate.
+- FLAP_ARMS: 'Though you flap your arms furiously, it is to no avail.'
+- RUG_GOES: |-
+    You board the persian rug, which promptly whisks you across the chasm.
+    You have time for a fleeting glimpse of a two thousand foot drop to a
+    mighty river; then you find yourself on the other side.
+- RUG_RETURNS: 'The rug ferries you back across the chasm.'
+- ALL_SILENT: 'All is silent.'
+- STREAM_GURGLES: 'The stream is gurgling placidly.'
+- WIND_WHISTLES: 'The wind whistles coldly past your ears.'
+- STREAM_SPLASHES: 'The stream splashes loudly into the pool.'
+- NO_MEANING: 'You are unable to make anything of the splashing noise.'
+- MURMURING_SNORING: |-
+    You can hear the murmuring of the beanstalks and the snoring of the
+    dwarves.
+- SNAKES_HISSING: 'A loud hissing emanates from the snake pit.'
+- DULL_RUMBLING: 'The air is filled with a dull rumbling sound.'
+- LOUD_ROAR: 'The roar is quite loud here.'
+- TOTAL_ROAR: 'The roaring is so loud that it drowns out all other sound.'
+- BIRD_CRAP: |-
+    The bird eyes you suspiciously and flutters away.  A moment later you
+    feel something wet land on your head, but upon looking up you can see
+    no sign of the culprit.
+- FEW_DROPS: 'There are only a few drops--not enough to carry.'
+- NOT_BRIGHT: '(Uh, y''know, that wasn''t very bright.)'
+- TOOK_LONG: 'It''s a pity you took so long about it.'
+- UPSTREAM_DOWNSTREAM: 'Upstream or downstream?'
+- FOREST_QUERY: !!null
+- WATERS_CRASHING: 'The waters are crashing loudly against the shore.'
+- THROWN_KNIVES: '%d of them throw knives at you!'
+- MULTIPLE_HITS: '%d of them get you!'
+- ONE_HIT: 'One of them gets you!'
+- NONE_HIT: 'None of them hits you!'
+- DONT_KNOW: 'Sorry, I don''t know the word "%s".'
+- WHAT_DO: 'What do you want to do with the %s?'
+- NO_SEE: 'I see no %s here.'
+- DO_WHAT: '%s what?'
+- OKEY_DOKEY: 'Okay, "%s".'
+- GARNERED_POINTS: 'You have garnered %d out of a possible %d points, using %d turn%S.'
+- SUSPEND_WARNING: |-
+    I can suspend your Adventure for you so that you can resume later, but
+    it will cost you 5 points.
+- HINT_COST: 'I am prepared to give you a hint, but it will cost you %d point%S.'
+- TOTAL_SCORE: 'You scored %d out of a possible %d, using %d turn%S.'
+- NEXT_HIGHER: 'To achieve the next higher rating, you need %d more point%S.'
+- NO_HIGHER: |-
+    To achieve the next higher rating would be a neat trick!
+    Congratulations!!
+- OFF_SCALE: 'You just went off my scale!!'
+- RESUME_HELP: 'To resume your Adventure, start a new game and then say "RESUME".'
+# This message is not currently used
+#- TABLE_SPACE: |-
+#    Table space used:
+#    %d of %d words of messages   %d of %d travel options
+#    %d of %d vocabulary words    %d of %d locations
+#    %d of %d objects             %d of %d action verbs
+#    %d of %d "random" messages   %d of %d "class" messages
+#    %d of %d hints               %d of %d turn threshholds'
+- RESUME_ABANDON: 'To resume an earlier Adventure, you must abandon the current one.'
+- VERSION_SKEW: |-
+    I'm sorry, but that Adventure was begun using Version %d.%d of the
+    save file format, and this program uses Version %d.%d.  You must find an instance
+    using that other version in order to resume that Adventure.
+# This message is not currently used
+#- SAVE_TAMPERING: |-
+#    A dark fog creeps in to surround you.  From somewhere in the fog you
+#    hear a stern voice.  "This Adventure has been tampered with!  You have
+#    been dabbling in magic, knowing not the havoc you might cause thereby.
+#    Leave at once, before you do irrevocable harm!"  The fog thickens,
+#    until at last you can see nothing at all.  Your vision then clears,
+#    and you find yourself back in The Real World.
+- TWIST_TURN: |-
+    Sorry, but the path twisted and turned so much that I can't figure
+    out which way to go to get back.
+- GO_UNNEEDED: |-
+    You don't have to say "go" every time; just specify a direction or, if
+    it's nearby, name the place to which you wish to move.
+- NUMERIC_REQUIRED:
+    This command requires a numeric argument. 
+
+classes: 
+- threshold: 0
+  message: !!null
+- threshold: 45
+  message: 'You are obviously a rank amateur.  Better luck next time.'
+- threshold: 120
+  message: 'Your score qualifies you as a novice class adventurer.'
+- threshold: 170
+  message: 'You have achieved the rating: "Experienced Adventurer".'
+- threshold: 250
+  message: 'You may now consider yourself a "Seasoned Adventurer".'
+- threshold: 320
+  message: 'You have reached "Junior Master" status.'
+- threshold: 375
+  message: 'Your score puts you in Master Adventurer Class C.'
+- threshold: 410
+  message: 'Your score puts you in Master Adventurer Class B.'
+- threshold: 426
+  message: 'Your score puts you in Master Adventurer Class A.'
+- threshold: 429
+  message: 'All of Adventuredom gives tribute to you, Adventurer Grandmaster!'
+- threshold: 9999
+  message: |-
+    'Adventuredom stands in awe -- you have now joined the ranks of the
+           W O R L D   C H A M P I O N   A D V E N T U R E R S !
+    It may interest you to know that the Dungeon-Master himself has, to
+    my knowledge, never achieved this threshhold in fewer than 330 turns.'
+
+turn_thresholds:
+- threshold: 350
+  point_loss: 2
+  message: |-
+    Tsk!  A wizard wouldn't have to take 350 turns.  This is going to cost
+    you a couple of points.
+- threshold: 500
+  point_loss: 3
+  message: '500 turns?  That''s another few points you''ve lost.'
+- threshold: 1000
+  point_loss: 5
+  message: 'Are you still at it?  Five points off for exceeding 1000 turns!'
+- threshold: 2500
+  point_loss: 10
+  message: |-
+    Good grief, don't you *EVER* give up?  Do you realize you've spent
+    over 2500 turns at this?  That's another ten points off, a total of
+    twenty points lost for taking so long.
+  
+objects: !!omap
+- NO_OBJECT:
+    inventory: !!null
+    descriptions: !!null
+- KEYS:
+    words: ['keys', 'key']
+    inventory: 'Set of keys'
+    locations: LOC_BUILDING
+    descriptions:
+    - 'There are some keys on the ground here.'
+- LAMP:
+    words: ['lamp', 'lante']
+    inventory: 'Brass lantern'
+    locations: LOC_BUILDING
+    states: [LAMP_DARK, LAMP_BRIGHT]
+    descriptions:
+    - 'There is a shiny brass lamp nearby.'
+    - 'There is a lamp shining nearby.'
+    changes:
+    - 'Your lamp is now off.'
+    - 'Your lamp is now on.'
+- GRATE:
+    words: ['grate']
+    inventory: '*grate'
+    locations: [LOC_GRATE, LOC_BELOWGRATE]
+    immovable: true
+    states: [GRATE_CLOSED, GRATE_OPEN]  
+    descriptions:
+    - 'The grate is locked.'
+    - 'The grate is open.'
+    changes:
+    - 'The grate is now locked.'
+    - 'The grate is now unlocked.'
+- CAGE:
+    words: ['cage']
+    inventory: 'Wicker cage'
+    locations: LOC_COBBLE
+    descriptions:
+    - 'There is a small wicker cage discarded nearby.'
+- ROD:
+    words: ['rod']
+    inventory: 'Black rod'
+    locations: LOC_DEBRIS
+    descriptions:
+    - 'A three foot black rod with a rusty star on an end lies nearby.'
+- ROD2:
+    words: ['rod']
+    inventory: 'Black rod'
+    locations: LOC_NOWHERE
+    descriptions:
+    - 'A three foot black rod with a rusty mark on an end lies nearby.'
+- STEPS:
+    words: ['steps']
+    inventory: '*steps'
+    locations: [LOC_PITTOP, LOC_MISTHALL]
+    immovable: true
+    states: [STEPS_DOWN, STEPS_UP]
+    descriptions:
+    - 'Rough stone steps lead down the pit.'
+    - 'Rough stone steps lead up the dome.'
+- BIRD:
+    words: ['bird']
+    inventory: 'Little bird in cage'
+    locations: LOC_BIRD
+    states: [BIRD_UNCAGED, BIRD_CAGED, BIRD_FOREST_UNCAGED]
+    descriptions:
+    - 'A cheerful little bird is sitting here singing.'
+    - 'There is a little bird in the cage.'
+    - 'A cheerful little bird is sitting here singing.'
+    sounds:
+    - 'The bird''s singing is quite melodious.'
+    - 'The bird does not seem inclined to sing while in the cage.'
+    - 'It almost seems as though the bird is trying to tell you something.'
+    - |-
+      To your surprise, you can understand the bird''s chirping; it is
+      singing about the joys of its forest home.
+    - 'The bird does not seem inclined to sing while in the cage.'
+    - |- 
+      The bird is singing to you in gratitude for your having returned it to
+      its home.  In return, it informs you of a magic word which it thinks
+      you may find useful somewhere near the Hall of Mists.  The magic word
+      changes frequently, but for now the bird believes it is "%s".  You
+      thank the bird for this information, and it flies off into the forest.
+- DOOR:
+    words: ['door']
+    inventory: '*rusty door'
+    locations: LOC_IMMENSE
+    immovable: true
+    states: [DOOR_RUSTED, DOOR_UNRUSTED]
+    descriptions:
+    - 'The way north is barred by a massive, rusty, iron door.'
+    - 'The way north leads through a massive, rusty, iron door.'
+    changes:
+    - 'The hinges are quite thoroughly rusted now and won''t budge.'
+    - |-
+      The oil has freed up the hinges so that the door will now move,
+      although it requires some effort.
+- PILLOW:
+    words: ['pillo', 'velve']
+    inventory: 'Velvet pillow'
+    locations: LOC_SOFTROOM
+    descriptions:
+    - 'A small velvet pillow lies on the floor.'
+- SNAKE:
+    words: ['snake']
+    inventory: '*snake'
+    locations: LOC_KINGHALL
+    immovable: true
+    states: [SNAKE_BLOCKS, SNAKE_CHASED]
+    descriptions:
+    - 'A huge green fierce snake bars the way!'
+    - '' # chased away
+    sounds:
+    - 'The snake is hissing venomously.'
+    - ''
+- FISSURE:
+    words: ['fissu']
+    inventory: '*fissure'
+    locations: [LOC_EASTBANK, LOC_WESTBANK]
+    immovable: true
+    states: [UNBRIDGED, BRIDGED]
+    descriptions:
+    - ''
+    - 'A crystal bridge spans the fissure.'
+    changes:
+    - 'The crystal bridge has vanished!'
+    - 'A crystal bridge now spans the fissure.'
+- OBJ_13:
+    words: ['table']
+    inventory: '*stone tablet'
+    locations: LOC_DARKROOM
+    immovable: true
+    descriptions:
+    - |-
+      A massive stone tablet imbedded in the wall reads:
+      "Congratulations on bringing light into the dark-room!"
+    texts:
+    - '"Congratulations on bringing light into the dark-room!"'
+- CLAM:
+    words: ['clam']
+    inventory: 'Giant clam  >GRUNT!<'
+    locations: LOC_SHELLROOM
+    descriptions:
+    - 'There is an enormous clam here with its shell tightly closed.'
+    sounds:
+    - 'The clam is as tight-mouthed as a, er, clam.'
+- OYSTER:
+    words: ['oyste']
+    inventory: 'Giant oyster  >GROAN!<'
+    locations: LOC_NOWHERE
+    descriptions:
+    - 'There is an enormous oyster here with its shell tightly closed.'
+    - 'Interesting.  There seems to be something written on the underside of\nthe oyster.'
+    sounds:
+    - 'Even though it''s an oyster, the critter''s as tight-mouthed as a clam.'
+    - 'It says the same thing it did before.  Hm, maybe it''s a pun?'
+- MAGAZINE:
+    words: ['magaz', 'issue', 'spelu', '"spel']
+    inventory: '"Spelunker Today"'
+    locations: LOC_ANTEROOM
+    descriptions:
+    - 'There are a few recent issues of "Spelunker Today" magazine here.'
+    texts:
+    - |-
+      I'm afraid the magazine is written in dwarvish.  But pencilled on one
+      cover you see, "Please leave the magazines at the construction site."
+- DWARF:
+    words: ['dwarf', 'dwarv']
+    inventory: !!null
+    locations: LOC_NOWHERE
+    immovable: true
+    descriptions: !!null
+- KNIFE:
+    words: ['knife', 'knive']
+    inventory: !!null
+    locations: LOC_NOWHERE
+    descriptions: !!null
+- FOOD:
+    words: ['food', 'ratio']
+    inventory: 'Tasty food'
+    locations: LOC_BUILDING
+    descriptions:
+    - 'There is food here.'
+- BOTTLE:
+    words: ['bottl', 'jar']
+    inventory: 'Small bottle'
+    locations: LOC_BUILDING
+    states: [WATER_BOTTLE, EMPTY_BOTTLE, OIL_BOTTLE]
+    descriptions: 
+    - 'There is a bottle of water here.'
+    - 'There is an empty bottle here.'
+    - 'There is a bottle of oil here.'
+    changes:
+    - 'Your bottle is now full of water.'
+    - 'The bottle of water is now empty.'
+    - 'Your bottle is now full of oil.'
+- WATER:
+    words: ['water', 'h2o']
+    inventory: 'Water in the bottle'
+    locations: LOC_NOWHERE
+    descriptions: !!null
+- OIL:
+    words: ['oil']
+    inventory: 'Oil in the bottle'
+    locations: LOC_NOWHERE
+    descriptions: !!null
+- MIRROR:
+    words: ['mirro']
+    inventory: '*mirror'
+    locations: LOC_MIRRORCANYON
+    immovable: true
+    states: [MIRROR_UNBROKEN, MIRROR_BROKEN]
+    descriptions:
+    - ''
+    - ''
+    changes:
+    - ''
+    - |-
+        You strike the mirror a resounding blow, whereupon it shatters into a
+        myriad tiny fragments.
+- PLANT:
+    words: ['plant', 'beans']
+    inventory: '*plant'
+    locations: LOC_WESTPIT
+    immovable: true
+    states: [PLANT_THIRSTY, PLANT_BELLOWING, PLANT_GROWN]
+    descriptions:
+    - 'There is a tiny little plant in the pit, murmuring "water, water, ..."'
+    - 'There is a 12-foot-tall beanstalk stretching up out of the pit,\nbellowing "WATER!! WATER!!"'
+    - 'There is a gigantic beanstalk stretching all the way up to the hole.'
+    changes:
+    - 'You''ve over-watered the plant!  It''s shriveling up!  And now . . .'
+    - 'The plant spurts into furious growth for a few seconds.'
+    - 'The plant grows explosively, almost filling the bottom of the pit.'
+    sounds:
+    - 'The plant continues to ask plaintively for water.'
+    - 'The plant continues to demand water.'
+    - 'The plant now maintains a contented silence.'
+- PLANT2:
+    words: ['plant']
+    inventory: '*phony plant' # seen in Twopit Room only when tall enough
+    locations: [LOC_WESTEND, LOC_EASTEND]
+    immovable: true
+    descriptions:
+    - ''
+    - 'The top of a 12-foot-tall beanstalk is poking out of the west pit.'
+    - 'There is a huge beanstalk growing out of the west pit up to the hole.'
+- OBJ_26:
+    words: ['stala']
+    inventory: '*stalactite'
+    locations: LOC_TOPSTALACTITE
+    immovable: true
+    descriptions:
+    - ''
+- OBJ_27:
+    words: ['shado', 'figur', 'windo']
+    inventory: '*shadowy figure and/or window'
+    locations: [LOC_WINDOW1, LOC_WINDOW2]
+    immovable: true
+    descriptions:
+    - 'The shadowy figure seems to be trying to attract your attention.'
+- AXE:
+    words: ['axe']
+    inventory: 'Dwarf''s axe'
+    locations: LOC_NOWHERE
+    states: [AXE_HERE, AXE_LOST]
+    descriptions:
+    - 'There is a little axe here.'
+    - 'There is a little axe lying beside the bear.'
+    changes:
+    - ''
+    - 'The axe misses and lands near the bear where you can''t get at it.'
+- OBJ_29:
+    words: ['drawi']
+    inventory: '*cave drawings'
+    locations: LOC_ORIENTAL
+    immovable: true
+    descriptions: !!null
+- OBJ_30:
+    words: ['pirat', 'genie', 'djinn']
+    inventory: '*pirate/genie'
+    locations: LOC_NOWHERE
+    immovable: true
+    descriptions: !!null # never present
+- DRAGON:
+    words: ['drago']
+    inventory: '*dragon'
+    locations: [LOC_SECRET4, LOC_SECRET6]
+    immovable: true
+    states: [DRAGON_BARS, DRAGON_DEAD, DRAGON_BLOODLESS]
+    descriptions:
+    - 'A huge green fierce dragon bars the way!'
+    - 'The blood-specked body of a huge green dead dragon lies to one side.'
+    - 'The body of a huge green dead dragon is lying off to one side.'
+    changes:
+    - ''
+    - |-
+        Congratulations!  You have just vanquished a dragon with your bare
+        hands!  (Unbelievable, isn't it?)
+    - 'Your head buzzes strangely for a moment.'
+    sounds:
+    - 'The dragon''s ominous hissing does not bode well for you.'
+    - 'The dragon is, not surprisingly, silent.'
+    - 'The dragon is, not surprisingly, silent.'
+- CHASM:
+    words: ['chasm']
+    inventory: '*chasm'
+    locations: [LOC_SWCHASM, LOC_NECHASM]
+    immovable: true
+    states: [TROLL_BRIDGE, BRIDGE_WRECKED]
+    descriptions:
+    - 'A rickety wooden bridge extends across the chasm, vanishing into the\nmist.  A notice posted on the bridge reads, "Stop! Pay troll!"'
+    - 'The wreckage of a bridge (and a dead bear) can be seen at the bottom\nof the chasm.'
+    changes:
+    - ''
+    - |- 
+        Just as you reach the other side, the bridge buckles beneath the
+        weight of the bear, which was still following you around.  You
+        scrabble desperately for support, but as the bridge collapses you
+        stumble back and fall into the chasm.
+- TROLL:
+    words: ['troll']
+    inventory: '*troll'
+    locations: [LOC_SWCHASM, LOC_NECHASM]
+    immovable: true
+    states: [TROLL_UNPAID, TROLL_PAIDONCE, TROLL_GONE]
+    descriptions: 
+    - 'A burly troll stands by the bridge and insists you throw him a\ntreasure before you may cross.'
+    - 'The troll steps out from beneath the bridge and blocks your way.'
+    - '' # chased away
+    changes:
+    - ''
+    - ''
+    - |-
+        The bear lumbers toward the troll, who lets out a startled shriek and
+        scurries away.  The bear soon gives up the pursuit and wanders back.
+    sounds:
+    - 'The troll sounds quite adamant in his demand for a treasure.'
+    - 'The troll sounds quite adamant in his demand for a treasure.'
+    - ''
+- TROLL2:
+    words: ['troll']
+    inventory: '*phony troll'
+    locations: [LOC_NOWHERE, LOC_NOWHERE]
+    immovable: true
+    descriptions:
+    - 'The troll is nowhere to be seen.'
+- BEAR:
+    words: ['bear']
+    inventory: !!null
+    locations: LOC_BARRENROOM
+    immovable: true
+    states: [UNTAMED_BEAR, SITTING_BEAR, CONTENTED_BEAR, BEAR_DEAD]
+    descriptions:
+    - 'There is a ferocious cave bear eying you from the far end of the room!'
+    - 'There is a gentle cave bear sitting placidly in one corner.'
+    - 'There is a contented-looking bear wandering about nearby.'
+    - ''
+    changes:
+    - ''
+    - 'The bear eagerly wolfs down your food, after which he seems to calm\ndown considerably and even becomes rather friendly.'
+    - ''
+    - ''
+- MESSAG:
+    words: ['messa']
+    inventory: '*message in second maze'
+    locations: LOC_NOWHERE
+    immovable: true
+    descriptions:
+    - |-
+        There is a message scrawled in the dust in a flowery script, reading:
+        "This is not the maze where the pirate leaves his treasure chest."
+    texts:
+    - '"This is not the maze where the pirate leaves his treasure chest."'
+- VOLCANO:
+    words: ['volca', 'geyse']
+    inventory: '*volcano and/or geyser'
+    locations: LOC_BREATHTAKING
+    immovable: true
+    descriptions: !!null
+- VEND:
+    words: ['machi', 'vendi']
+    inventory: '*vending machine'
+    locations: LOC_DEADEND13
+    immovable: true
+    states: [VEND_BLOCKS, VEND_UNBLOCKS]
+    descriptions:
+    - |-
+        There is a massive and somewhat battered vending machine here.  The
+        instructions on it read: "Drop coins here to receive fresh batteries."
+    - |-
+        There is a massive vending machine here, swung back to reveal a
+        southward passage.
+    changes:
+    - 'The vending machine swings back to block the passage.'
+    - 'As you strike the vending machine, it pivots backward along with a\nsection of wall, revealing a dark passage leading south.'
+    texts:
+    - '"Drop coins here to receive fresh batteries."'
+    - '"Drop coins here to receive fresh batteries."'
+- BATTERY:
+    words: ['batte']
+    inventory: 'Batteries'
+    locations: LOC_NOWHERE
+    states: [FRESH_BATTERIES, DEAD_BATTERIES]
+    descriptions:
+    - 'There are fresh batteries here.'
+    - 'Some worn-out batteries have been discarded nearby.'
+- OBJ_40:
+    words: ['carpe', 'moss']
+    inventory: '*carpet and/or moss and/or curtains'
+    locations: LOC_SOFTROOM
+    immovable: true
+    descriptions: !!null
+- OGRE:
+    words: ['ogre']
+    inventory: '*ogre'
+    locations: LOC_LARGE
+    immovable: true
+    descriptions:
+    - 'A formidable ogre bars the northern exit.'
+    sounds:
+    - 'The ogre is apparently the strong, silent type.'
+- URN:
+    words: ['urn']
+    inventory: '*urn'
+    locations: LOC_CLIFF
+    immovable: true
+    states: [URN_EMPTY, URN_DARK, URN_LIT]
+    descriptions:
+    - 'A small urn is embedded in the rock.'
+    - 'A small urn full of oil is embedded in the rock.'
+    - 'A small oil flame extrudes from an urn embedded in the rock.'
+    changes:
+    - 'The urn is empty and will not light.'
+    - 'The urn is now dark.'
+    - 'The urn is now lit.'
+- CAVITY:
+    words: ['cavit']
+    inventory: '*cavity'
+    locations: LOC_NOWHERE
+    immovable: true
+    states: [CAVITY_FULL, CAVITY_EMPTY]
+    descriptions:
+    - '' # something in it
+    - 'There is a small urn-shaped cavity in the rock.'
+- BLOOD:
+    words: ['blood']
+    inventory: '*blood'
+    locations: LOC_NOWHERE
+    immovable: true
+    descriptions:
+    - '' # described with dragon
+- RESER:
+    words: ['reser']
+    inventory: '*reservoir'
+    locations: [LOC_RESERVOIR, LOC_RESNORTH]
+    immovable: true
+    states: [WATERS_UNPARTED, WATERS_PARTED]
+    descriptions:
+    - ''
+    - 'The waters have parted to form a narrow path across the reservoir.'
+    changes:
+    - 'The waters crash together again.'
+    - 'The waters have parted to form a narrow path across the reservoir.'
+- OBJ_46:
+    words: ['appen', 'lepor']
+    inventory: 'Leporine appendage'
+    locations: LOC_FOREST22
+    descriptions:
+    - 'Your keen eye spots a severed leporine appendage lying on the ground.'
+- OBJ_47:
+    words: ['mud']
+    inventory: '*mud'
+    locations: LOC_DEBRIS
+    immovable: true
+    descriptions:
+    - ''
+    texts:
+    - '"MAGIC WORD XYZZY"'
+- OBJ_48:
+    words: ['note']
+    inventory: '*note'
+    locations: LOC_NUGGET
+    immovable: true
+    descriptions:
+    - ''
+    texts:
+    - '"You won''t get it up the steps"'
+- SIGN:
+    words: ['sign']
+    inventory: '*sign'
+    locations: LOC_ANTEROOM
+    immovable: true
+    states: [INGAME_SIGN, ENDGAME_SIGN]
+    descriptions:
+    - ''
+    - ''
+    texts:
+    - |-
+      Cave under construction beyond this point.
+                 Proceed at own risk.
+             [Witt Construction Company]
+    - '"Treasure Vault.  Keys in main office."'
+- NUGGET:
+    words: ['gold', 'nugge']
+    inventory: 'Large gold nugget'
+    locations: LOC_NUGGET
+    treasure: true
+    descriptions:
+    - 'There is a large sparkling nugget of gold here!'
+- OBJ_51:
+    words: ['diamo']
+    inventory: 'Several diamonds'
+    locations: LOC_WESTBANK
+    treasure: true
+    descriptions:
+    - 'There are diamonds here!'
+- OBJ_52:
+    words: ['silve', 'bars']
+    inventory: 'Bars of silver'
+    locations: LOC_FLOORHOLE
+    treasure: true
+    descriptions:
+    - 'There are bars of silver here!'
+- OBJ_53:
+    words: ['jewel']
+    inventory: 'Precious jewelry'
+    locations: LOC_SOUTHSIDE
+    treasure: true
+    descriptions:
+    - 'There is precious jewelry here!'
+- COINS:
+    words: ['coins']
+    inventory: 'Rare coins'
+    locations: LOC_WESTSIDE
+    treasure: true
+    descriptions:
+    - 'There are many coins here!'
+- CHEST:
+    words: ['chest', 'box', 'treas']
+    inventory: 'Treasure chest'
+    locations: LOC_NOWHERE
+    treasure: true
+    descriptions:
+    - 'The pirate''s treasure chest is here!'
+- EGGS:
+    words: ['eggs', 'egg', 'nest']
+    inventory: 'Golden eggs'
+    locations: LOC_GIANTROOM
+    treasure: true
+    states: [EGGS_HERE, EGGS_VANISHED, EGGS_DONE]
+    descriptions:
+    - 'There is a large nest here, full of golden eggs!'
+    - 'The nest of golden eggs has vanished!'
+    - 'Done!'
+- TRIDENT:
+    words: ['tride']
+    inventory: 'Jeweled trident'
+    locations: LOC_WATERFALL
+    treasure: true
+    descriptions:
+    - 'There is a jewel-encrusted trident here!'
+- VASE:
+    words: ['vase', 'ming', 'shard', 'potte']
+    inventory: 'Ming vase'
+    locations: LOC_ORIENTAL
+    treasure: true
+    states: [VASE_WHOLE, VASE_DROPPED, VASE_BROKEN]
+    descriptions:
+    - 'There is a delicate, precious, ming vase here!'
+    - 'The floor is littered with worthless shards of pottery.'
+    - 'The floor is littered with worthless shards of pottery.'
+    changes:
+    - 'The vase is now resting, delicately, on a velvet pillow.'
+    - 'The ming vase drops with a delicate crash.'
+    - 'You have taken the vase and hurled it delicately to the ground.'
+- EMERALD:
+    words: ['emera']
+    inventory: 'Egg-sized emerald'
+    locations: LOC_PLOVER
+    treasure: true
+    descriptions:
+    - 'There is an emerald here the size of a plover''s egg!'
+    - 'There is an emerald resting in a small cavity in the rock!'
+- PYRAMID:
+    words: ['plati', 'pyram']
+    inventory: 'Platinum pyramid'
+    locations: LOC_DARKROOM
+    treasure: true
+    descriptions:
+    - 'There is a platinum pyramid here, 8 inches on a side!'
+- PEARL:
+    words: ['pearl']
+    inventory: 'Glistening pearl'
+    locations: LOC_NOWHERE
+    treasure: true
+    descriptions:
+    - 'Off to one side lies a glistening pearl!'
+- RUG:
+    words: ['rug', 'persi']
+    inventory: 'Persian rug'
+    locations: [LOC_SECRET4, LOC_SECRET6]
+    immovable: true
+    treasure: true
+    states: [RUG_FLOOR, RUG_DRAGON, RUG_HOVER]
+    descriptions:
+    - 'There is a persian rug spread out on the floor!'
+    - 'The dragon is sprawled out on a persian rug!!'
+    - 'There is a persian rug here, hovering in mid-air!'
+- OBJ_63:
+    words: ['spice']
+    inventory: 'Rare spices'
+    locations: LOC_BOULDERS2
+    treasure: true
+    descriptions:
+    - 'There are rare spices here!'
+- CHAIN:
+    words: ['chain']
+    inventory: 'Golden chain'
+    locations: LOC_BARRENROOM
+    immovable: true
+    treasure: true
+    states: [CHAIN_HEAP, CHAINING_BEAR, CHAIN_FIXED]
+    descriptions:
+    - 'There is a golden chain lying in a heap on the floor!'
+    - 'The bear is locked to the wall with a golden chain!'
+    - 'There is a golden chain locked to the wall!'
+- RUBY:
+    words: ['ruby']
+    inventory: 'Giant ruby'
+    locations: LOC_STOREROOM
+    treasure: true
+    descriptions:
+    - 'There is an enormous ruby here!'
+    - 'There is a ruby resting in a small cavity in the rock!'
+- JADE:
+    words: ['jade', 'neckl']
+    inventory: 'Jade necklace'
+    locations: LOC_NOWHERE
+    treasure: true
+    descriptions:
+    - 'A precious jade necklace has been dropped here!'
+- AMBER:
+    words: ['amber', 'gemst']
+    inventory: 'Amber gemstone'
+    locations: LOC_NOWHERE
+    treasure: true
+    states: [AMBER_IN_URN, AMBER_IN_ROCK]
+    descriptions:
+    - 'There is a rare amber gemstone here!'
+    - 'There is an amber gemstone resting in a small cavity in the rock!'
+- SAPPH:
+    words: ['sapph']
+    inventory: 'Star sapphire'
+    locations: LOC_LEDGE
+    treasure: true
+    descriptions:
+    - 'A brilliant blue star sapphire is here!'
+    - 'There is a star sapphire resting in a small cavity in the rock!'
+- OBJ_69:
+    words: ['ebony', 'statu']
+    inventory: 'Ebony statuette'
+    locations: LOC_REACHDEAD
+    treasure: true
+    descriptions:
+    - 'There is a richly-carved ebony statuette here!'
+
+obituaries:
+  - query: |-
+        Oh dear, you seem to have gotten yourself killed.  I might be able to
+        help you out, but I've never really done this before.  Do you want me
+        to try to reincarnate you?
+    yes_response: |-
+        All right.  But don't blame me if something goes wr......
+                            --- POOF!! ---
+        You are engulfed in a cloud of orange smoke.  Coughing and gasping,
+        you emerge from the smoke and find....
+  - query: |-
+        You clumsy oaf, you've done it again!  I don't know how long I can
+        keep this up.  Do you want me to try reincarnating you again?
+    yes_response: |-
+        Okay, now where did I put my orange smoke?....  >POOF!<
+        Everything disappears in a dense cloud of orange smoke.
+  - query: |-
+        Now you've really done it!  I'm out of orange smoke!  You don't expect
+        me to do a decent reincarnation without any orange smoke, do you?
+    yes_response: 'Okay, if you''re so smart, do it yourself!  I''m leaving!'
+
+actions: !!omap
+- ACT_NULL:
+    message: !!null
+    words: !!null
+- CARRY:
+    message: *already_carrying
+    words: ['g', 'carry', 'take', 'keep', 'catch',
+            'steal', 'captu', 'get', 'tote', 'snarf']
+    oldstyle: false
+- DROP:
+    message: *arent_carrying
+    words: ['drop', 'relea', 'free', 'disca', 'dump']
+- SAY:
+    message: NO_MESSAGE
+    words: ['say', 'chant', 'sing', 'utter', 'mumbl']
+- UNLOCK:
+    message: *not_lockable
+    words: ['unloc', 'open']
+- NOTHING:
+    message: NO_MESSAGE
+    words: ['z', 'nothi']
+    oldstyle: false
+- LOCK:
+    message: *not_lockable
+    words: ['lock', 'close']
+- LIGHT:
+    message: *dont_understand
+    words: ['light', 'on']
+- EXTINGUISH:
+    message: *dont_understand
+    words: ['extin', 'off']
+- WAVE:
+    message: *nothing_happens
+    words: ['wave', 'shake', 'swing']
+- TAME:
+    message: *am_game
+    words: ['calm', 'placa', 'tame']
+- GO:
+    message: *where_query
+    words: ['walk', 'run', 'trave', 'go', 'proce',
+            'conti', 'explo', 'follo', 'turn']
+- ATTACK:
+    message: *ridiculous_attempt
+    words: ['attac', 'kill', 'fight', 'hit', 'strik', 'slay']
+- POUR:
+    message: *arent_carrying
+    words: ['pour']
+- EAT:
+    message: *ridiculous_attempt
+    words: ['eat', 'devou']
+- DRINK:
+    message: |-
+      You have taken a drink from the stream.  The water tastes strongly of
+      minerals, but is not unpleasant.  It is extremely cold.
+    words: ['drink']
+- RUB:
+    message: |-
+      Rubbing the electric lamp is not particularly rewarding.  Anyway,
+      nothing exciting happens.
+    words: ['rub']
+- THROW:
+    message: *arent_carrying
+    words: ['throw', 'toss']
+- QUIT:
+    message: *huh_man
+    words: ['quit']
+- FIND:
+    message: *nearby
+    words: ['find', 'where']
+- INVENTORY:
+    message: *nearby
+    words: ['i', 'inven']
+    oldstyle: false
+- FEED:
+    message: 'There is nothing here to eat.'
+    words: ['feed']
+- FILL:
+    message: 'You can''t fill that.'
+    words: ['fill']
+- BLAST:
+    message: *requires_dynamite
+    words: ['blast', 'deton', 'ignit', 'blowu']
+- SCORE:
+    message: *huh_man
+    words: ['score']
+- FEE:
+    message: *not_knowhow
+    words: ['fee']
+- FIE:
+    message: *not_knowhow
+    words: ['fie']
+- FOE:
+    message: *not_knowhow
+    words: ['foe']
+- FOO:
+    message: *not_knowhow
+    words: ['foo']
+- FUM:
+    message: *not_knowhow
+    words: ['fum']
+- BRIEF:
+    message: 'On what?'
+    words: ['brief']
+- READ:
+    message: *dont_understand
+    words: ['read', 'perus']
+- BREAK:
+    message: *beyond_power
+    words: ['break', 'shatt', 'smash']
+- WAKE:
+    message: *ridiculous_attempt
+    words: ['wake', 'distu']
+- SAVE:
+    message: *huh_man
+    words: ['suspe', 'pause', 'save']
+- RESUME:
+    message: *huh_man
+    words: ['resum', 'resta']
+- FLY:
+    message: *am_game
+    words: ['fly']
+- LISTEN:
+    message: *dont_understand
+    words: ['liste']
+- PART:
+    message: *nothing_happens
+    words: ['z''zzz']
+- SEED:
+    message: 'Seed set to %d'
+    words: ['seed']
+- WASTE:
+    message: 'Game limit is now %d'
+    words: ['waste']
+- ACT_UNKNOWN:
+    message: *huh_man
+    words: !!null
+- THANKYOU:
+    message: 'You''re quite welcome.'
+    words: ['thank']
+    noaction: true
+- INVALIDMAGIC:
+    message: 'Good try, but that is an old worn-out magic word.'
+    words: ['sesam', 'opens', 'abra', 'abrac', 'shaza', 'hocus', 'pocus']
+    noaction: true
+- HELP:
+    message: |-
+      I know of places, actions, and things.  Most of my vocabulary
+      describes places and is used to move you there.  To move, try words
+      like forest, building, downstream, enter, east, west, north, south,
+      up, or down.  I know about a few special objects, like a black rod
+      hidden in the cave.  These objects can be manipulated using some of
+      the action words that I know.  Usually you will need to give both the
+      object and action words (in either order), but sometimes I can infer
+      the object from the verb alone.  Some objects also imply verbs; in
+      particular, "inventory" implies "take inventory", which causes me to
+      give you a list of what you're carrying.  Some objects have unexpected
+      effects; the effects are not always desirable!  Usually people having
+      trouble moving just need to try a few more words.  Usually people
+      trying unsuccessfully to manipulate an object are attempting something
+      beyond their (or my!) capabilities and should try a completely
+      different tack.  One point often confusing to beginners is that, when
+      there are several ways to go in a certain direction (e.g., if there
+      are several holes in a wall), choosing that direction in effect
+      chooses one of the ways at random; often, though, by specifying the
+      place you want to reach you can guarantee choosing the right path.
+      Also, to speed the game you can sometimes move long distances with a
+      single word.  For example, "building" usually gets you to the building
+      from anywhere above ground except when lost in the forest.  Also, note
+      that cave passages and forest paths turn a lot, so leaving one place
+      heading north doesn't guarantee entering the next from the south.
+      However (another important point), except when you've used a "long
+      distance" word such as "building", there is always a way to go back
+      where you just came from unless I warn you to the contrary, even
+      though the direction that takes you back might not be the reverse of
+      what got you here.  Good luck, and have fun!
+    words: ['help', '?']
+    noaction: true
+- NO:
+    message: *ok_man
+    words: ['no']
+    noaction: true
+- TREE:
+    message: |-
+      The trees of the forest are large hardwood oak and maple, with an
+      occasional grove of pine or spruce.  There is quite a bit of under-
+      growth, largely birch and ash saplings plus nondescript bushes of
+      various sorts.  This time of year visibility is quite restricted by
+      all the leaves, but travel is quite easy if you detour around the
+      spruce and berry bushes.
+    words: ['tree', 'trees']
+    noaction: true
+- DIG:
+    message: |-
+      Digging without a shovel is quite impractical.  Even with a shovel
+      progress is unlikely.
+    words: ['dig', 'excav']
+    noaction: true
+- LOST:
+    message: 'I''m as confused as you are.'
+    words: ['lost']
+    noaction: true
+- MIST:
+    message: |-
+      Mist is a white vapor, usually water, seen from time to time in
+      caverns.  It can be found anywhere but is frequently a sign of a deep
+      pit leading down to water.'
+    words: ['mist']
+    noaction: true
+- FBOMB:
+    message: 'Watch it!'
+    words: ['fuck']
+    noaction: true
+- STOP:
+    message: 'I don''t know the word "stop".  Use "quit" if you want to give up.'
+    words: ['stop']
+    noaction: true
+- INFO:
+    message: |-
+      For a summary of the most recent changes to the game, say "news".
+      If you want to end your adventure early, say "quit".  To suspend your
+      adventure such that you can continue later, say "suspend" (or "pause"
+      or "save").  To see how well you're doing, say "score".  To get full
+      credit for a treasure, you must have left it safely in the building,
+      though you get partial credit just for locating it.  You lose points
+      for getting killed, or for quitting, though the former costs you more.
+      There are also points based on how much (if any) of the cave you've
+      managed to explore; in particular, there is a large bonus just for
+      getting in (to distinguish the beginners from the rest of the pack),
+      and there are other ways to determine whether you've been through some
+      of the more harrowing sections.  If you think you've found all the
+      treasures, just keep exploring for a while.  If nothing interesting
+      happens, you haven't found them all yet.  If something interesting
+      *DOES* happen (incidentally, there *ARE* ways to hasten things along),
+      it means you're getting a bonus and have an opportunity to garner many
+      more points in the Master's section.  I may occasionally offer hints
+      if you seem to be having trouble.  If I do, I'll warn you in advance
+      how much it will affect your score to accept the hints.  Finally, to
+      save time, you may specify "brief", which tells me never to repeat the
+      full description of a place unless you explicitly ask me to.
+    words: ['info', 'infor']
+    noaction: true
+- SWIM:
+    message: *not_knowhow
+    words: ['swim']
+    noaction: true
+- WIZARD:
+    message: 'Wizards are not to be disturbed by such as you.'
+    words: ['wizar']
+    noaction: true
+- "YES":
+    message: 'Guess again.'
+    words: ['yes']
+    noaction: true
+- NEWS:
+    message: |-
+      Open Adventure is an author-approved open-source release of
+      Version 2.5 with, as yet, no gameplay changes.
+      Version 2.5 was essentially the same as Version II; the cave and the
+      hazards therein are unchanged, and top score is still 430 points.
+      There are a few more hints, especially for some of the more obscure
+      puzzles.  There are a few minor bugfixes and cosmetic changes.  You
+      can now save a game and resume it at once (formerly you had to wait a
+      while first), but it now costs you a few points each time you save the
+      game.  Saved games are now stored in much smaller files than before.
+    words: ['news']
+    noaction: true
+- ACT_VERSION:
+    message: |-
+      There is a puff of orange smoke; within it, fiery runes spell out:
+      
+      \tOpen Adventure %V - http://www.catb.org/esr/open-adventure/
+    words: ['versi']
+    noaction: true
+
+# end

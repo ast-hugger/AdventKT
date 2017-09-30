@@ -20,4 +20,9 @@ interface ItemOwner {
     fun privateAddItem(item: Item)
 
     fun privateRemoveItem(item: Item)
+
+    fun approveMoveTo(newOwner: ItemOwner, item: Item) = true
+
+    fun approveMoveFrom(owner: ItemOwner, item: Item) = true
+
 }

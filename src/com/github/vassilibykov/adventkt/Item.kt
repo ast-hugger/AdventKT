@@ -50,8 +50,9 @@ open class Item(
         return verb
     }
 
-    fun vicinityVerb(vararg words: String, action: LocalVerb.()->Unit): ItemVerb {
-        val verb = ItemVerb(this, listOf(*words), action = action)
+    fun vicinityVerb(vararg words: String, action: ItemVerb.()->Unit): ItemVerb {
+        @Suppress("UNCHECKED_CAST")
+        val verb = ItemVerb(this, listOf(*words), action = action as LocalVerb.() -> Unit)
         verb.addTo(vicinityVocabulary)
         return verb
     }
@@ -59,6 +60,23 @@ open class Item(
     fun findVerb(word: String) = vocabulary[word]
 
     fun findVicinityVerb(word: String) = vicinityVocabulary[word]
+
+    open fun approveMove(newOwner: ItemOwner) = true
+
+    fun moveTo(newOwner: ItemOwner) {
+        if (approveMove(newOwner)
+                && owner.approveMoveTo(newOwner, this)
+                && newOwner.approveMoveFrom(owner, this))
+        {
+            uncheckedMoveTo(newOwner)
+        }
+    }
+
+    fun uncheckedMoveTo(newOwner: ItemOwner) {
+        owner.privateRemoveItem(this)
+        owner = newOwner
+        newOwner.privateAddItem(this)
+    }
 
     companion object {
         val LIMBO = object : ItemOwner {

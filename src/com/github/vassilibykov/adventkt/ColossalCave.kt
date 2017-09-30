@@ -47,16 +47,36 @@ class ColossalCave: World() {
             in the rock.  Downstream the streambed is bare rock.""",
             "You're at slit in streambed.")
 
-    val outsideGrate = Room(
+    // strangely, need this explicit type to avoid a type checker recursive loop
+    val outsideGrate: Room = object : Room(
             """You are in a 20-foot depression floored with bare dirt.  Set into the
             dirt is a strong steel grate mounted in concrete.  A dry streambed
             leads into the depression.""",
             "You're outside grate.")
+    {
+        override fun approvePlayerMoveTo(newRoom: Room): Boolean {
+            if (newRoom == belowGrate && !grate.isOpen.isOn) {
+                say("The grate is closed.")
+                return false
+            }
+            return true
+        }
+    }
 
-    val belowGrate = Room(
+    val belowGrate: Room = object : Room(
             """You are in a small chamber beneath a 3x3 steel grate to the surface.
             A low crawl over cobbles leads inward to the west.""",
             "You're below the grate.")
+    {
+        override fun approvePlayerMoveTo(newRoom: Room): Boolean {
+            if (newRoom == outsideGrate && !grate.isOpen.isOn) {
+                say("The grate is closed.")
+                return false
+            }
+            return true
+        }
+    }
+
 
     val cobble = Room(
             """You are crawling over cobbles in a low passage.  There is a dim light
@@ -130,15 +150,9 @@ class ColossalCave: World() {
      */
 
     inner class Grate : Item("grate", "door") {
-        val isLocked = Toggle(true,
-                turnOnMessage = "The grate is now locked.",
-                turnOffMessage = "The grate is now unlocked.",
-                alreadyOnMessage = "The grate is already locked.",
-                alreadyOffMessage = "The grate is already unlocked.")
-
         val isOpen = Toggle(false,
-                turnOnMessage = "You open the grate.",
-                turnOffMessage = "You close the grate.",
+                turnOnMessage = "You unlock and open the grate.",
+                turnOffMessage = "You close and lock the grate.",
                 alreadyOnMessage = "The grate is already open.",
                 alreadyOffMessage = "The grate is already closed.")
 
@@ -147,14 +161,9 @@ class ColossalCave: World() {
         override fun canBeTaken() = false // the player can't pick this up
 
         init {
-            vicinityVerb("unlock") { isLocked.turnOff() }
-                    .guardedBy({ player has keys }, "You don't have a key.")
-
-            vicinityVerb("lock") { isLocked.turnOn() }
-                    .guardedBy({ player has keys }, "You don't have a key.")
-
             vicinityVerb("open") { isOpen.turnOn() }
-                    .guardedBy({ !isLocked.isOn }, "The grate is locked.")
+                    .guardedBy({ !isOpen.isOn && !(player has keys) },
+                            "The grate is locked and you don't have the key.")
 
             vicinityVerb("close") { isOpen.turnOff() }
         }
@@ -171,18 +180,19 @@ class ColossalCave: World() {
 
     val bird = object : Item("bird",
             owned = "- bird (in error) ",
-            dropped = "A cheerful little bird is sitting here singing.") {
+            dropped = "A cheerful little bird is sitting here singing.")
+    {
         init {
-            verb("take", "get", "catch") {
-                if (referringTo(item)) {
+            vicinityVerb("take", "get", "catch") {
+                if (referringTo(this.item)) {
                     when {
                         player has rod ->
                             say("""The bird was unafraid when you entered, but as you approach it becomes
                                 disturbed and you cannot catch it.""")
                         player has cage -> {
-                            Item.LIMBO.ownItem(cage)
-                            Item.LIMBO.ownItem(item)
-                            player.ownItem(cagedBird)
+                            cage.uncheckedMoveTo(Item.LIMBO)
+                            this.item.uncheckedMoveTo(Item.LIMBO)
+                            cagedBird.uncheckedMoveTo(player)
                             say("OK")
                         }
                         else -> say("You can catch the bird, but you cannot carry it.")
@@ -191,6 +201,15 @@ class ColossalCave: World() {
                     pass()
                 }
             }
+        }
+
+        override fun approveMove(newOwner: ItemOwner): Boolean {
+            if (newOwner == player &&  player has rod) {
+                say("""The bird was unafraid when you entered, but as you approach it becomes
+                    disturbed and you cannot catch it.""")
+                return false
+            }
+            return true
         }
     }
 
@@ -254,14 +273,12 @@ class ColossalCave: World() {
 
         with (outsideGrate) {
             item(grate)
-            verb("down", "in") { player.moveTo(belowGrate)}
-                    .guardedBy({ grate.isOpen.isOn }, "The grate is closed.")
+            twoWay(belowGrate, DOWN, IN)  // guarded by outsideGrate
         }
 
         with (belowGrate) {
+            unownedItem(grate) // the official owner is outsideGrate, but also visible here
             twoWay(cobble, WEST)
-            verb("up", "out") { player.moveTo(outsideGrate) }
-                    .guardedBy({ grate.isOpen.isOn }, "The grate is closed.")
         }
 
         with (cobble) {

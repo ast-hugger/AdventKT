@@ -11,6 +11,12 @@ class Player(private var _room: Room) : ItemOwner {
         get() = _room
 
     fun moveTo(anotherRoom: Room) {
+        if (room.approvePlayerMoveTo(anotherRoom) && anotherRoom.approvePlayerMoveFrom(room)) {
+            uncheckedMoveTo(anotherRoom)
+        }
+    }
+
+    fun uncheckedMoveTo(anotherRoom: Room) {
         _room = anotherRoom
     }
 

@@ -11,4 +11,6 @@ abstract class World {
     abstract val lantern: Lantern
 
     fun findVerb(word: String): Verb? = vocabulary[word]
+
+    class VetoException : RuntimeException()
 }

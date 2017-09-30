@@ -36,6 +36,10 @@ open class Room(_description: String, private val _shortDescription: String) : I
         }
     }
 
+    open fun approvePlayerMoveTo(newRoom: Room) = true
+
+    open fun approvePlayerMoveFrom(oldRoom: Room) = true
+
     fun findVerb(word: String): Verb? = vocabulary[word]
 
     fun twoWay(target: Room, vararg directions: Direction) {
@@ -51,7 +55,11 @@ open class Room(_description: String, private val _shortDescription: String) : I
         }
     }
 
-    fun item(item: Item) = ownItem(item)
+    fun item(item: Item) = item.uncheckedMoveTo(this)
+
+    fun unownedItem(item: Item) {
+        items.add(item)
+    }
 
     fun verb(vararg words: String, action: LocalVerb.()->Unit): LocalVerb {
         val verb = LocalVerb(listOf(*words), action = action)
@@ -72,5 +80,7 @@ open class Room(_description: String, private val _shortDescription: String) : I
     override fun privateRemoveItem(item: Item) {
         items.remove(item)
     }
+
+    override fun toString() = shortDescription
 }
 

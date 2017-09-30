@@ -19,7 +19,7 @@ fun globalVocabulary(): Map<String, Verb> {
 
 class DirectionVerb(word: String) : MovementVerb(word) {
     override fun act(subjects: List<String>) {
-        movePlayer(words[0], cave)
+        movePlayer(words[0])
     }
 }
 
@@ -30,8 +30,8 @@ class Drop: Verb("drop") {
             say("You don't have that.")
             return
         }
+        item.moveTo(player.room)
         say("OK")
-        player.room.ownItem(item)
     }
 }
 
@@ -41,7 +41,7 @@ class Go: MovementVerb("go") {
             println("Go where?")
             return
         }
-        movePlayer(subjects[0], cave)
+        movePlayer(subjects[0])
     }
 }
 
@@ -75,7 +75,7 @@ class Quit: Verb("quit", "bye") {
 class Take: Verb("take", "get", "pick") {
     override fun act(subjects: List<String>) {
         if ("all" in subjects) {
-            takeAll(cave)
+            takeAll()
             return
         }
         val item = subjects.map { player.room.findItem(it) }.firstOrNull()
@@ -87,18 +87,17 @@ class Take: Verb("take", "get", "pick") {
             say("You can't pick $item.primaryName up.")
             return
         }
+        item.moveTo(player)
         say("OK")
-        player.ownItem(item)
     }
 
-    private fun takeAll(world: World) {
-        val player = world.player
+    private fun takeAll() {
         // ownItem modifies the item list, so make sure to iterate over a copy
         player.room.items.toList().forEach {
             if (!it.isHidden()) {
                 if (it.canBeTaken()) {
+                    it.moveTo(player)
                     say("The " + it.primaryName + ": taken.")
-                    player.ownItem(it)
                 } else {
                     say("You can't pick that up.")
                 }

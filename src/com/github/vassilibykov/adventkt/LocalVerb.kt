@@ -24,6 +24,9 @@ open class LocalVerb(words: Collection<String>, private var action: LocalVerb.()
         }
     }
 
+    /**
+     * Indicate whether any of the current subject words refer to the [item].
+     */
     fun referringTo(item: Item) = subjects.any { it in item.names }
 
     override fun act(subjects: List<String>) {

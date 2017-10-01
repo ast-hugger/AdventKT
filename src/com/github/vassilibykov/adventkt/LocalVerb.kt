@@ -13,7 +13,7 @@ open class LocalVerb(words: Collection<String>, private var action: LocalVerb.()
     internal var subjects = listOf<String>()
         private set
 
-    fun guardedBy(guard: LocalVerb.()->Boolean, failMessage: String) {
+    fun guardedBy(guard: LocalVerb.()->Boolean, failMessage: String): LocalVerb {
         val originalAction = action
         action = {
             if (guard()) {
@@ -22,6 +22,7 @@ open class LocalVerb(words: Collection<String>, private var action: LocalVerb.()
                 say(failMessage)
             }
         }
+        return this
     }
 
     /**

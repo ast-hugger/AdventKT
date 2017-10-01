@@ -4,7 +4,7 @@ package com.github.vassilibykov.adventkt
  *
  * @author vassili
  */
-abstract class Room(_description: String, private val _shortDescription: String) : World.Object, ItemOwner {
+abstract class Room(private val _shortDescription: String, _description: String) : World.Object, ItemOwner {
 
     open val description =_description.lines().map{ it.trim() }.joinToString("\n")
     open val shortDescription
@@ -40,6 +40,10 @@ abstract class Room(_description: String, private val _shortDescription: String)
 
     open fun approvePlayerMoveFrom(oldRoom: Room) = true
 
+    open fun noticePlayerMoveTo(newRoom: Room) = Unit
+
+    open fun noticePlayerMoveFrom(oldRoom: Room) = Unit
+
     fun findVerb(word: String): Verb? = vocabulary[word]
 
     fun twoWay(target: Room, vararg directions: Direction) {
@@ -55,7 +59,7 @@ abstract class Room(_description: String, private val _shortDescription: String)
         }
     }
 
-    fun item(item: Item) = item.uncheckedMoveTo(this)
+    fun item(item: Item) = item.quietlyMoveTo(this)
 
     fun unownedItem(item: Item) {
         items.add(item)
@@ -73,13 +77,15 @@ abstract class Room(_description: String, private val _shortDescription: String)
         return items
     }
 
-    override fun privateAddItem(item: Item) {
+    override fun privilegedAddItem(item: Item) {
         items.add(item)
     }
 
-    override fun privateRemoveItem(item: Item) {
+    override fun privilegedRemoveItem(item: Item) {
         items.remove(item)
     }
+
+
 
     override fun toString() = shortDescription
 }

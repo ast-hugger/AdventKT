@@ -1,8 +1,8 @@
 package com.github.vassilibykov.adventkt
 
 /**
- * A simple input parser. Far from Infocom grade, but better
- * than the original.
+ * A simple input parser. Far from Infocom grade, but still better than the
+ * classic Colossal Cave.
  *
  * @author Vassili Bykov
  */

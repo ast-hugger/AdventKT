@@ -11,18 +11,16 @@ interface ItemOwner {
      */
     fun findItem(word: String) = items().find { word in it.names }
 
-    fun ownItem(item: Item) {
-        item.owner.privateRemoveItem(item)
-        item.owner = this
-        privateAddItem(item)
-    }
+    fun approveItemMoveTo(newOwner: ItemOwner, item: Item) = true
 
-    fun privateAddItem(item: Item)
+    fun approveItemMoveFrom(owner: ItemOwner, item: Item) = true
 
-    fun privateRemoveItem(item: Item)
+    fun noticeItemMoveTo(newOwner: ItemOwner, item: Item) = Unit
 
-    fun approveMoveTo(newOwner: ItemOwner, item: Item) = true
+    fun noticeItemMoveFrom(oldOwner: ItemOwner, item: Item) = Unit
 
-    fun approveMoveFrom(owner: ItemOwner, item: Item) = true
+    fun privilegedAddItem(item: Item)
+
+    fun privilegedRemoveItem(item: Item)
 
 }

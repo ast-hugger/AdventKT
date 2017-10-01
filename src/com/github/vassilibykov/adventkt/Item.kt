@@ -23,7 +23,7 @@ open class Item (
     private val vocabulary = emptyVocabulary()
     private val vicinityVocabulary = emptyVocabulary()
 
-    override fun initialize() = Unit
+    override fun setup() = Unit
 
     /**
      * Return a description of the item to display when it's in the player's inventory.
@@ -64,22 +64,39 @@ open class Item (
 
     fun findVicinityVerb(word: String) = vicinityVocabulary[word]
 
-    open fun approveMove(newOwner: ItemOwner) = true
-
+    /**
+     * Move the item to a new owner. This is the standard method of doing so,
+     * invoking approval methods of all parties involved and thus giving them
+     * the chance to veto the move. The parties involved are also notified
+     * once the move is complete.
+     */
     fun moveTo(newOwner: ItemOwner) {
-        if (approveMove(newOwner)
-                && owner.approveMoveTo(newOwner, this)
-                && newOwner.approveMoveFrom(owner, this))
+        val oldOwner = owner
+        if (approveMoveTo(newOwner)
+                && oldOwner.approveItemMoveTo(newOwner, this)
+                && newOwner.approveItemMoveFrom(oldOwner, this))
         {
-            uncheckedMoveTo(newOwner)
+            quietlyMoveTo(newOwner)
         }
     }
 
-    fun uncheckedMoveTo(newOwner: ItemOwner) {
-        owner.privateRemoveItem(this)
+    /**
+     * Unconditionally relocate this item to a new owner, without getting any
+     * associated approvals. Do notify the item and the owners.
+     */
+    fun quietlyMoveTo(newOwner: ItemOwner) {
+        val oldOwner = owner
+        oldOwner.privilegedRemoveItem(this)
         owner = newOwner
-        newOwner.privateAddItem(this)
+        newOwner.privilegedAddItem(this)
+        noticeMove(newOwner, oldOwner)
+        oldOwner.noticeItemMoveTo(newOwner, this)
+        newOwner.noticeItemMoveFrom(oldOwner, this)
     }
+
+    open fun approveMoveTo(newOwner: ItemOwner) = true
+
+    open fun noticeMove(newOwner: ItemOwner, oldOwner: ItemOwner) = Unit
 
     companion object {
         val LIMBO = object : ItemOwner {
@@ -87,11 +104,11 @@ open class Item (
 
             override fun items() = items
 
-            override fun privateAddItem(item: Item) {
+            override fun privilegedAddItem(item: Item) {
                 items.add(item)
             }
 
-            override fun privateRemoveItem(item: Item) {
+            override fun privilegedRemoveItem(item: Item) {
                 items.remove(item)
             }
         }

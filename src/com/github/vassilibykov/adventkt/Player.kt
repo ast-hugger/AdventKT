@@ -10,25 +10,28 @@ class Player(private var _room: Room) : ItemOwner {
     val room
         get() = _room
 
-    fun moveTo(anotherRoom: Room) {
-        if (room.approvePlayerMoveTo(anotherRoom) && anotherRoom.approvePlayerMoveFrom(room)) {
-            uncheckedMoveTo(anotherRoom)
+    fun moveTo(newRoom: Room) {
+        if (room.approvePlayerMoveTo(newRoom) && newRoom.approvePlayerMoveFrom(room)) {
+            quietlyMoveTo(newRoom)
         }
     }
 
-    fun uncheckedMoveTo(anotherRoom: Room) {
-        _room = anotherRoom
+    fun quietlyMoveTo(newRoom: Room) {
+        val oldRoom = room
+        _room = newRoom
+        oldRoom.noticePlayerMoveTo(newRoom)
+        newRoom.noticePlayerMoveFrom(oldRoom)
     }
 
     override fun items(): Collection<Item> {
         return inventory
     }
 
-    override fun privateAddItem(item: Item) {
+    override fun privilegedAddItem(item: Item) {
         inventory.add(item)
     }
 
-    override fun privateRemoveItem(item: Item) {
+    override fun privilegedRemoveItem(item: Item) {
         inventory.remove(item)
     }
 }

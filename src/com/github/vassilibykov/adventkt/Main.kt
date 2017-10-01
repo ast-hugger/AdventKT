@@ -5,7 +5,7 @@ package com.github.vassilibykov.adventkt
  * @author vassili
  */
 
-var cave = ColossalCave()
+var cave = ColossalCave.create()
     private set
 var player = cave.player
     private set
@@ -13,7 +13,6 @@ var lantern = cave.lantern
     private set
 
 fun main(args: Array<String>) {
-    cave.runObjectInitializers()
     val commandProcessor = Parser()
     var priorRoom: Room? = null
     try {
@@ -35,8 +34,7 @@ fun main(args: Array<String>) {
 
 // for tests only
 fun reset() {
-    cave = ColossalCave()
-    cave.runObjectInitializers()
+    cave = ColossalCave.create()
     player = cave.player
     lantern = cave.lantern
 }

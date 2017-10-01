@@ -2,21 +2,29 @@ package com.github.vassilibykov.adventkt
 
 import com.github.vassilibykov.adventkt.Direction.*
 
-class ColossalCave: World() {
+class ColossalCave private constructor(): World() {
+
+    companion object {
+        fun create(): ColossalCave {
+            val instance = ColossalCave()
+            instance.runObjectSetup()
+            return instance
+        }
+    }
 
     /*
         Rooms.
 
-        See the Room class documentation for why we use initialize()
+        See the Room class documentation for why we use setup()
         methods instead of regular init{} blocks.
      */
 
     val outsideBuilding = object : Room(
+            "You're in front of building.",
             """You are standing at the end of a road before a small brick building.
             Around you is a forest.  A small stream flows out of the building and
-            down a gully.""",
-            "You're in front of building.") {
-        override fun initialize() {
+            down a gully.""") {
+        override fun setup() {
             twoWay(insideBuilding, IN, EAST)
             twoWay(hill, WEST)
             oneWay(hill, UP)
@@ -27,10 +35,10 @@ class ColossalCave: World() {
     }
 
     val insideBuilding = object : Room(
-            """You are inside a building, a well house for a large spring.""",
-            "You're inside building.")
+            "You're inside building.",
+            """You are inside a building, a well house for a large spring.""")
     {
-        override fun initialize() {
+        override fun setup() {
             item(keys)
             item(lantern)
             item(food)
@@ -47,11 +55,11 @@ class ColossalCave: World() {
     }
 
     val hill = object : Room(
+            "You're at hill in road.",
             """You have walked up a hill, still in the forest.  The road slopes back
-            down the other side of the hill.  There is a building in the distance.""",
-            "You're at hill in road.")
+            down the other side of the hill.  There is a building in the distance.""")
     {
-        override fun initialize() {
+        override fun setup() {
             twoWay(endOfRoad, WEST)
             oneWay(forest, NORTH)
             oneWay(forest, SOUTH)
@@ -60,30 +68,30 @@ class ColossalCave: World() {
     }
 
     val endOfRoad = object : Room(
-            """The road, which approaches from the east, ends here amid the trees.""",
-            "You're at end of road.")
+            "You're at end of road.",
+            """The road, which approaches from the east, ends here amid the trees.""")
     {
-        override fun initialize() {
+        override fun setup() {
             oneWay(forest, NORTH)
             oneWay(forest, SOUTH)
         }
     }
 
     val cliff = object : Room(
+            "You're at cliff.",
             """The forest thins out here to reveal a steep cliff.  There is no way
-            down, but a small ledge can be seen to the west across the chasm.""",
-            "You're at cliff.")
+            down, but a small ledge can be seen to the west across the chasm.""")
     {
-        override fun initialize() {
+        override fun setup() {
         }
     }
 
     val valley = object : Room(
+            "You're in valley.",
             """You are in a valley in the forest beside a stream tumbling along a
-            rocky bed.""",
-            "You're in valley.")
+            rocky bed.""")
     {
-        override fun initialize() {
+        override fun setup() {
             twoWay(slit, DOWN, SOUTH)
             verb("downstream") { player.moveTo(slit) }
         }
@@ -93,7 +101,7 @@ class ColossalCave: World() {
             "You are wandering aimlessly through the forest.",
             "You are wandering aimlessly through the forest.")
     {
-        override fun initialize() {
+        override fun setup() {
             twoWay(this, NORTH)
             twoWay(this, NORTHWEST)
             twoWay(this, WEST)
@@ -103,23 +111,23 @@ class ColossalCave: World() {
     }
 
     val slit = object : Room(
+            "You're at slit in streambed.",
             """At your feet all the water of the stream splashes into a 2-inch slit
-            in the rock.  Downstream the streambed is bare rock.""",
-            "You're at slit in streambed.")
+            in the rock.  Downstream the streambed is bare rock.""")
     {
-        override fun initialize() {
+        override fun setup() {
             twoWay(outsideGrate, SOUTH)
         }
     }
 
     // strangely, need this explicit type to avoid a type checker recursive loop
     val outsideGrate: Room = object : Room(
+            "You're outside grate.",
             """You are in a 20-foot depression floored with bare dirt.  Set into the
             dirt is a strong steel grate mounted in concrete.  A dry streambed
-            leads into the depression.""",
-            "You're outside grate.")
+            leads into the depression.""")
     {
-        override fun initialize() {
+        override fun setup() {
             item(grate)
             twoWay(belowGrate, DOWN, IN)
         }
@@ -131,20 +139,9 @@ class ColossalCave: World() {
             }
             return true
         }
-    }
 
-    val belowGrate: Room = object : Room(
-            """You are in a small chamber beneath a 3x3 steel grate to the surface.
-            A low crawl over cobbles leads inward to the west.""",
-            "You're below the grate.")
-    {
-        override fun initialize() {
-            unownedItem(grate) // the official owner is outsideGrate, but also visible here
-            twoWay(cobble, WEST)
-        }
-
-        override fun approvePlayerMoveTo(newRoom: Room): Boolean {
-            if (newRoom == outsideGrate && !grate.isOpen.isOn) {
+        override fun approvePlayerMoveFrom(oldRoom: Room): Boolean {
+            if (oldRoom == belowGrate && !grate.isOpen.isOn) {
                 say("The grate is closed.")
                 return false
             }
@@ -152,15 +149,27 @@ class ColossalCave: World() {
         }
     }
 
+    val belowGrate: Room = object : Room(
+            "You're below the grate.",
+            """You are in a small chamber beneath a 3x3 steel grate to the surface.
+            A low crawl over cobbles leads inward to the west.""")
+    {
+        override fun setup() {
+            unownedItem(grate) // the official owner is outsideGrate, but also visible here
+            twoWay(cobble, WEST)
+        }
+    }
+
 
     val cobble = object : Room(
+            "You're in cobble crawl.",
             """You are crawling over cobbles in a low passage.  There is a dim light
-            at the east end of the passage.""",
-            "You're in cobble crawl.")
+            at the east end of the passage.""")
     {
-        override fun initialize() {
+        override fun setup() {
             item(cage)
             twoWay(debris, WEST, UP)
+            // EAST: twoWay from belowGrate
         }
     }
 
@@ -171,9 +180,10 @@ class ColossalCave: World() {
             has scrawled, "MAGIC WORD XYZZY".""",
             "You're in debris room.")
     {
-        override fun initialize() {
+        override fun setup() {
             item(rod)
             twoWay(awkwardCanyon, WEST)
+            // EAST, UP: twoWay from cobble
             verb("xyzzy") {
                 say(">>Foof!<<")
                 player.moveTo(insideBuilding)
@@ -185,8 +195,9 @@ class ColossalCave: World() {
             "You are in an awkward sloping east/west canyon.",
             "You are in an awkward sloping east/west canyon.")
     {
-        override fun initialize() {
+        override fun setup() {
             twoWay(birdChamber, WEST)
+            // EAST: twoWay from debris
         }
     }
 
@@ -196,9 +207,10 @@ class ColossalCave: World() {
             from east and west sides of the chamber.""",
             "You're in bird chamber.")
     {
-        override fun initialize() {
+        override fun setup() {
             item(bird)
             twoWay(pitTop, WEST)
+            // EAST: twoWay from awkwardCanyon
         }
     }
 
@@ -207,7 +219,7 @@ class ColossalCave: World() {
             passage ends here except for a small crack leading on.""",
             "You're at top of small pit.")
     {
-        override fun initialize() {
+        override fun setup() {
         }
     }
 
@@ -217,7 +229,7 @@ class ColossalCave: World() {
 
     override val player : Player = Player(outsideBuilding)
 
-    override val lantern = Lantern()
+    val lantern = Lantern()
 
     /*
         Some simple items with no special behavior.
@@ -263,10 +275,12 @@ class ColossalCave: World() {
 
         override fun canBeTaken() = false // the player can't pick this up
 
-        init {
+        override fun setup() {
             vicinityVerb("open", "unlock") { isOpen.turnOn() }
                     .guardedBy({ player has keys },
                             "The grate is locked and you don't have the key.")
+                    .guardedBy({ !isOpen.isOn },
+                            "The grate is already open.")
 
             vicinityVerb("close") { isOpen.turnOff() }
         }
@@ -281,21 +295,21 @@ class ColossalCave: World() {
             owned = "Black rod",
             dropped = "A three foot black rod with a rusty star on an end lies nearby.")
 
-    val bird = object : Item("bird",
+    val bird : Item = object : Item("bird",
             owned = "- bird (in error) ",
             dropped = "A cheerful little bird is sitting here singing.")
     {
-        init {
+        override fun setup() {
             vicinityVerb("take", "get", "catch") {
-                if (referringTo(this.item)) {
+                if (referringTo(bird())) {
                     when {
                         player has rod ->
                             say("""The bird was unafraid when you entered, but as you approach it becomes
                                 disturbed and you cannot catch it.""")
                         player has cage -> {
-                            cage.uncheckedMoveTo(Item.LIMBO)
-                            this.item.uncheckedMoveTo(Item.LIMBO)
-                            cagedBird.uncheckedMoveTo(player)
+                            cage.quietlyMoveTo(Item.LIMBO)
+                            bird().quietlyMoveTo(Item.LIMBO)
+                            cagedBird.quietlyMoveTo(player)
                             say("OK")
                         }
                         else -> say("You can catch the bird, but you cannot carry it.")
@@ -306,7 +320,7 @@ class ColossalCave: World() {
             }
         }
 
-        override fun approveMove(newOwner: ItemOwner): Boolean {
+        override fun approveMoveTo(newOwner: ItemOwner): Boolean {
             if (newOwner == player &&  player has rod) {
                 say("""The bird was unafraid when you entered, but as you approach it becomes
                     disturbed and you cannot catch it.""")
@@ -315,9 +329,22 @@ class ColossalCave: World() {
             return true
         }
     }
+    private fun bird() = bird // can't reference 'bird' from itself directly, so need this
 
-    val cagedBird = Item("bird",
+    private fun cagedBird() = cagedBird // can't reference cagedBird in itself directly. ugh
+    val cagedBird : Item = object : Item("bird", "cage",
             owned = "Little bird in cage",
             dropped = "There is a little bird in the cage.")
+    {
+        override fun setup() {
+            // Allows 'open cage' and 'release bird'.
+            // Also allows 'open bird' and 'release cage' but oh well.
+            verb("open", "release") {
+                cagedBird().quietlyMoveTo(Item.LIMBO)
+                cage.quietlyMoveTo(player)
+                bird.quietlyMoveTo(player.room)
+            }
+        }
+    }
 
 }

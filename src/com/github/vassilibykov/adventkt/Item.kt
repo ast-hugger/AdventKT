@@ -5,10 +5,11 @@ package com.github.vassilibykov.adventkt
  * @author vassili
  */
 
-open class Item(
+open class Item (
         private vararg val _names: String,
         private val owned: String,
         private val dropped: String)
+    : World.Object
 {
     internal constructor(vararg names: String)
             : this(*names, owned = "<no inventoryDescription() for $names[0]>", dropped = "no description() for $names[0]")
@@ -21,6 +22,8 @@ open class Item(
 
     private val vocabulary = emptyVocabulary()
     private val vicinityVocabulary = emptyVocabulary()
+
+    override fun initialize() = Unit
 
     /**
      * Return a description of the item to display when it's in the player's inventory.

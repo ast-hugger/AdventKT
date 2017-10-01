@@ -4,7 +4,7 @@ package com.github.vassilibykov.adventkt
  *
  * @author vassili
  */
-open class Room(_description: String, private val _shortDescription: String) : ItemOwner {
+abstract class Room(_description: String, private val _shortDescription: String) : World.Object, ItemOwner {
 
     open val description =_description.lines().map{ it.trim() }.joinToString("\n")
     open val shortDescription

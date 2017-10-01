@@ -30,7 +30,7 @@ class ColossalCave private constructor(): World() {
             oneWay(hill, UP)
             oneWay(forest, NORTH)
             twoWay(valley, DOWN, SOUTH)
-            verb("downstream") { player.moveTo(valley) }
+            action("downstream") { player.moveTo(valley) }
         }
     }
 
@@ -43,11 +43,11 @@ class ColossalCave private constructor(): World() {
             item(lantern)
             item(food)
             item(water)
-            verb("xyzzy") {
+            action("xyzzy") {
                 say(">>Foof!<<")
                 player.moveTo(debris)
             }
-            verb("down", "downstream") {
+            action("down", "downstream") {
                 say("""The stream flows out through a pair of 1 foot diameter sewer pipes.
                     It would be advisable to use the exit.""")
             }
@@ -63,7 +63,7 @@ class ColossalCave private constructor(): World() {
             twoWay(endOfRoad, WEST)
             oneWay(forest, NORTH)
             oneWay(forest, SOUTH)
-            verb("down") { say("Which way?")}
+            action("down") { say("Which way?")}
         }
     }
 
@@ -93,7 +93,7 @@ class ColossalCave private constructor(): World() {
     {
         override fun setup() {
             twoWay(slit, DOWN, SOUTH)
-            verb("downstream") { player.moveTo(slit) }
+            action("downstream") { player.moveTo(slit) }
         }
     }
 
@@ -184,7 +184,7 @@ class ColossalCave private constructor(): World() {
             item(rod)
             twoWay(awkwardCanyon, WEST)
             // EAST, UP: twoWay from cobble
-            verb("xyzzy") {
+            action("xyzzy") {
                 say(">>Foof!<<")
                 player.moveTo(insideBuilding)
             }
@@ -250,11 +250,11 @@ class ColossalCave private constructor(): World() {
     /*
         The grate is an example of two points: vicinity verbs and guards.
 
-        A regular verb defined for an item is only active when the item is
-        held by the player. A vicinity verb is active when the player is in
+        A regular action defined for an item is only active when the item is
+        held by the player. A vicinity action is active when the player is in
         the room with the item.
 
-        A guard is attached to a verb to only apply it if a guard condition
+        A guard is attached to a action to only apply it if a guard condition
         is met, and print a message otherwise. The grate can only be
         open if it's unlocked, and it can only be unlocked if the player has
         the keys.
@@ -271,18 +271,19 @@ class ColossalCave private constructor(): World() {
                 alreadyOnMessage = "The grate is already open.",
                 alreadyOffMessage = "The grate is already closed.")
 
-        override fun description() = if (isOpen.isOn) "The grate is open." else "The grate is closed."
+        override val description get() = if (isOpen.isOn) "The grate is open." else "The grate is closed."
 
-        override fun canBeTaken() = false // the player can't pick this up
+        override val canBeTaken get() = false
 
         override fun setup() {
-            vicinityVerb("open", "unlock") { isOpen.turnOn() }
+            vicinityAction("open", "unlock") { isOpen.turnOn() }
+                    // Guards are LIFO, so the !isOpen.isOn check is performed first.
                     .guardedBy({ player has keys },
                             "The grate is locked and you don't have the key.")
                     .guardedBy({ !isOpen.isOn },
                             "The grate is already open.")
 
-            vicinityVerb("close") { isOpen.turnOff() }
+            vicinityAction("close") { isOpen.turnOff() }
         }
     }
     val grate = Grate()
@@ -300,16 +301,16 @@ class ColossalCave private constructor(): World() {
             dropped = "A cheerful little bird is sitting here singing.")
     {
         override fun setup() {
-            vicinityVerb("take", "get", "catch") {
+            vicinityAction("take", "get", "catch") {
                 if (referringTo(bird())) {
                     when {
                         player has rod ->
                             say("""The bird was unafraid when you entered, but as you approach it becomes
                                 disturbed and you cannot catch it.""")
                         player has cage -> {
-                            cage.quietlyMoveTo(Item.LIMBO)
-                            bird().quietlyMoveTo(Item.LIMBO)
-                            cagedBird.quietlyMoveTo(player)
+                            cage.moveTo(Item.LIMBO)
+                            bird().moveTo(Item.LIMBO)
+                            cagedBird.moveTo(player)
                             say("OK")
                         }
                         else -> say("You can catch the bird, but you cannot carry it.")
@@ -339,10 +340,10 @@ class ColossalCave private constructor(): World() {
         override fun setup() {
             // Allows 'open cage' and 'release bird'.
             // Also allows 'open bird' and 'release cage' but oh well.
-            verb("open", "release") {
-                cagedBird().quietlyMoveTo(Item.LIMBO)
-                cage.quietlyMoveTo(player)
-                bird.quietlyMoveTo(player.room)
+            action("open", "release") {
+                cagedBird().moveTo(Item.LIMBO)
+                cage.moveTo(player)
+                bird.moveTo(player.room)
             }
         }
     }

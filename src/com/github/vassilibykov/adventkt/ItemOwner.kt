@@ -2,14 +2,17 @@ package com.github.vassilibykov.adventkt
 
 interface ItemOwner {
 
-    fun items(): Collection<Item>
-
-    infix fun has(item: Item) = item in items()
+    val items: Collection<Item>
 
     /**
-     * Return an item identified by the word.
+     * Indicate whether the player currently owns the item.
      */
-    fun findItem(word: String) = items().find { word in it.names }
+    infix fun has(item: Item) = item in items
+
+    /**
+     * If the player has an item identified by the word, return it.
+     */
+    fun findItem(word: String) = items.find { word in it.names }
 
     fun approveItemMoveTo(newOwner: ItemOwner, item: Item) = true
 
@@ -19,8 +22,8 @@ interface ItemOwner {
 
     fun noticeItemMoveFrom(oldOwner: ItemOwner, item: Item) = Unit
 
-    fun privilegedAddItem(item: Item)
+    fun primitiveAddItem(item: Item)
 
-    fun privilegedRemoveItem(item: Item)
+    fun primitiveRemoveItem(item: Item)
 
 }

@@ -11,4 +11,4 @@ fun <T> random(vararg args: T): T {
     return args[Random().nextInt(args.size)]
 }
 
-fun emptyVocabulary() = mutableMapOf<String, Verb>()
+fun emptyVocabulary() = mutableMapOf<String, Action>()

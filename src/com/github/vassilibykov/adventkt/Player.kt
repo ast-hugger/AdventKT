@@ -4,34 +4,38 @@ package com.github.vassilibykov.adventkt
  *
  * @author vassili
  */
-class Player(private var _room: Room) : ItemOwner {
-    val inventory = mutableListOf<Item>()
+class Player(private var room_: Room) : ItemOwner {
 
-    val room
-        get() = _room
+    /**
+     * The items currently owned by the player.
+     */
+    override val items = mutableListOf<Item>()
 
+    /**
+     * The room the player is in.
+     */
+    val room get() = room_
+
+    /**
+     * Relocate the player to a different room. Both rooms involved are asked
+     * for approval. Either room can veto the move, possibly generating some
+     * game output. If the move is approved, the player is relocated and then
+     * both rooms are sent a move notification.
+     */
     fun moveTo(newRoom: Room) {
+        val oldRoom = room
         if (room.approvePlayerMoveTo(newRoom) && newRoom.approvePlayerMoveFrom(room)) {
-            quietlyMoveTo(newRoom)
+            room_ = newRoom
+            oldRoom.noticePlayerMoveTo(newRoom)
+            newRoom.noticePlayerMoveFrom(oldRoom)
         }
     }
 
-    fun quietlyMoveTo(newRoom: Room) {
-        val oldRoom = room
-        _room = newRoom
-        oldRoom.noticePlayerMoveTo(newRoom)
-        newRoom.noticePlayerMoveFrom(oldRoom)
+    override fun primitiveAddItem(item: Item) {
+        items.add(item)
     }
 
-    override fun items(): Collection<Item> {
-        return inventory
-    }
-
-    override fun privilegedAddItem(item: Item) {
-        inventory.add(item)
-    }
-
-    override fun privilegedRemoveItem(item: Item) {
-        inventory.remove(item)
+    override fun primitiveRemoveItem(item: Item) {
+        items.remove(item)
     }
 }

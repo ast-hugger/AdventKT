@@ -9,11 +9,11 @@ package com.github.vassilibykov.adventkt
  * state, producing appropriate messages as the state changes. It is also
  * an example of an item with dynamic descriptions dependent on the state.
  *
- * A lantern defines a local verb which turns it on or off it the player
- * is holding the lantern, in which case the verb is included in the verb
- * lookup sequence. The verb is selected for execution when the command
+ * A lantern defines a local action which turns it on or off it the player
+ * is holding the lantern, in which case the action is included in the action
+ * lookup sequence. The action is selected for execution when the command
  * subjects (words following the first) include one of the item's names.
- * The verb also checks the subjects to see whether to turn the lamp on
+ * The action also checks the subjects to see whether to turn the lamp on
  * or off.
  */
 class Lantern : Item("lamp", "lantern") {
@@ -23,12 +23,12 @@ class Lantern : Item("lamp", "lantern") {
             alreadyOnMessage = "Your lamp is already turned on.",
             alreadyOffMessage = "Your lamp is already turned off.")
 
-    override fun description() = if (light.isOn) "There is a brass lamp nearby." else "There is a brass lamp shining nearby."
+    override val description get() = if (light.isOn) "There is a brass lamp nearby." else "There is a brass lamp shining nearby."
 
-    override fun inventoryDescription() = if (light.isOn) "A lit brass lantern" else "A brass lantern"
+    override val inventoryDescription get() = if (light.isOn) "A lit brass lantern" else "A brass lantern"
 
     init {
-        verb("turn", "switch") {
+        action("turn", "switch") {
             when {
                 "on" in subjects -> {
                     val wasOn = light.isOn

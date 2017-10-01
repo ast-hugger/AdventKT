@@ -26,43 +26,43 @@ open class Item (
     override fun setup() = Unit
 
     /**
-     * Return a description of the item to display when it's in the player's inventory.
+     * The description of the item to display when it's in the player's inventory.
      */
-    open fun inventoryDescription() = owned
+    open val inventoryDescription = owned
 
     /**
-     * Return a description of the item displayed when the item is
-     * NOT owned by the player.
+     * The description of the item displayed when the item is NOT owned by the
+     * player.
      */
-    open fun description(): String = dropped
+    open val description = dropped
 
     /**
-     * Indicate whether to skip the item when printing a full room description.
+     * Whether to skip the item when printing a full room description.
      */
-    open fun isHidden(): Boolean = false
+    open val isHidden = false
 
     /**
-     * Indicate whether the item can be taken by the player.
+     * Whether the item can be taken by the player.
      */
-    open fun canBeTaken(): Boolean = true
+    open val canBeTaken = true
 
-    fun verb(vararg words: String, action: ItemVerb.()->Unit): ItemVerb {
+    fun action(vararg words: String, effect: ItemAction.()->Unit): ItemAction {
         @Suppress("UNCHECKED_CAST")
-        val verb = ItemVerb(this, listOf(*words), action = action as LocalVerb.() -> Unit)
+        val verb = ItemAction(this, listOf(*words), action = effect as LocalAction.() -> Unit)
         verb.addTo(vocabulary)
         return verb
     }
 
-    fun vicinityVerb(vararg words: String, action: ItemVerb.()->Unit): ItemVerb {
+    fun vicinityAction(vararg words: String, effect: ItemAction.()->Unit): ItemAction {
         @Suppress("UNCHECKED_CAST")
-        val verb = ItemVerb(this, listOf(*words), action = action as LocalVerb.() -> Unit)
+        val verb = ItemAction(this, listOf(*words), action = effect as LocalAction.() -> Unit)
         verb.addTo(vicinityVocabulary)
         return verb
     }
 
-    fun findVerb(word: String) = vocabulary[word]
+    fun findAction(word: String) = vocabulary[word]
 
-    fun findVicinityVerb(word: String) = vicinityVocabulary[word]
+    fun findVicinityAction(word: String) = vicinityVocabulary[word]
 
     /**
      * Move the item to a new owner. This is the standard method of doing so,
@@ -76,7 +76,10 @@ open class Item (
                 && oldOwner.approveItemMoveTo(newOwner, this)
                 && newOwner.approveItemMoveFrom(oldOwner, this))
         {
-            quietlyMoveTo(newOwner)
+            primitiveMoveTo(newOwner)
+            noticeMove(newOwner, oldOwner)
+            oldOwner.noticeItemMoveTo(newOwner, this)
+            newOwner.noticeItemMoveFrom(oldOwner, this)
         }
     }
 
@@ -84,14 +87,11 @@ open class Item (
      * Unconditionally relocate this item to a new owner, without getting any
      * associated approvals. Do notify the item and the owners.
      */
-    fun quietlyMoveTo(newOwner: ItemOwner) {
+    fun primitiveMoveTo(newOwner: ItemOwner) {
         val oldOwner = owner
-        oldOwner.privilegedRemoveItem(this)
+        oldOwner.primitiveRemoveItem(this)
         owner = newOwner
-        newOwner.privilegedAddItem(this)
-        noticeMove(newOwner, oldOwner)
-        oldOwner.noticeItemMoveTo(newOwner, this)
-        newOwner.noticeItemMoveFrom(oldOwner, this)
+        newOwner.primitiveAddItem(this)
     }
 
     open fun approveMoveTo(newOwner: ItemOwner) = true
@@ -100,22 +100,16 @@ open class Item (
 
     companion object {
         val LIMBO = object : ItemOwner {
-            val items = mutableListOf<Item>()
+            override val items = mutableListOf<Item>()
 
-            override fun items() = items
-
-            override fun privilegedAddItem(item: Item) {
+            override fun primitiveAddItem(item: Item) {
                 items.add(item)
             }
 
-            override fun privilegedRemoveItem(item: Item) {
+            override fun primitiveRemoveItem(item: Item) {
                 items.remove(item)
             }
         }
 
-        fun nearby(names: Collection<String>): Item? {
-            return player.inventory.find { it.names.intersect(names).isNotEmpty() }
-                ?: player.room.items.find { it.names.intersect(names).isNotEmpty() }
-        }
     }
 }

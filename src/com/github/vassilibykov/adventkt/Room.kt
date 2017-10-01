@@ -10,8 +10,8 @@ abstract class Room(private val _shortDescription: String, _description: String)
     open val shortDescription
         get() = _shortDescription
     val exits = mutableMapOf<Direction, Room>()
-    val items = mutableListOf<Item>()
-    private val vocabulary = mutableMapOf<String, Verb>()
+    override val items = mutableListOf<Item>()
+    private val vocabulary = mutableMapOf<String, Action>()
     var visited = false
 
     /**
@@ -21,8 +21,8 @@ abstract class Room(private val _shortDescription: String, _description: String)
     open fun printDescription() {
         say(if (visited) shortDescription else description)
         items.forEach {
-            if (!it.isHidden()) {
-                say(it.description())
+            if (!it.isHidden) {
+                say(it.description)
             }
         }
     }
@@ -30,8 +30,8 @@ abstract class Room(private val _shortDescription: String, _description: String)
     open fun printFullDescription() {
         say(description)
         items.forEach {
-            if (!it.isHidden()) {
-                say(it.description())
+            if (!it.isHidden) {
+                say(it.description)
             }
         }
     }
@@ -44,7 +44,7 @@ abstract class Room(private val _shortDescription: String, _description: String)
 
     open fun noticePlayerMoveFrom(oldRoom: Room) = Unit
 
-    fun findVerb(word: String): Verb? = vocabulary[word]
+    fun findAction(word: String): Action? = vocabulary[word]
 
     fun twoWay(target: Room, vararg directions: Direction) {
         for (direction in directions) {
@@ -59,34 +59,28 @@ abstract class Room(private val _shortDescription: String, _description: String)
         }
     }
 
-    fun item(item: Item) = item.quietlyMoveTo(this)
+    fun item(item: Item) = item.primitiveMoveTo(this)
 
     fun unownedItem(item: Item) {
         items.add(item)
     }
 
-    fun verb(vararg words: String, action: LocalVerb.()->Unit): LocalVerb {
-        val verb = LocalVerb(listOf(*words), action = action)
+    fun action(vararg words: String, effect: LocalAction.()->Unit): LocalAction {
+        val verb = LocalAction(listOf(*words), effect = effect)
         verb.addTo(vocabulary)
         return verb
     }
 
     private fun addExit(direction: Direction, target: Room) = exits.put(direction, target)
 
-    override fun items(): Collection<Item> {
-        return items
-    }
-
-    override fun privilegedAddItem(item: Item) {
+    override fun primitiveAddItem(item: Item) {
         items.add(item)
     }
 
-    override fun privilegedRemoveItem(item: Item) {
+    override fun primitiveRemoveItem(item: Item) {
         items.remove(item)
     }
 
-
-
-    override fun toString() = shortDescription
+    override fun toString() = "Room: " + shortDescription
 }
 

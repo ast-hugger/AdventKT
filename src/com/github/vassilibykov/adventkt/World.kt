@@ -16,7 +16,7 @@ abstract class World internal constructor() {
 
     abstract val player: Player
 
-    fun findVerb(word: String): Verb? = vocabulary[word]
+    fun findAction(word: String): Action? = vocabulary[word]
 
     /**
      * Run [Object.setup] methods of all properties of this instance which
@@ -45,6 +45,4 @@ abstract class World internal constructor() {
     interface Object {
         fun setup()
     }
-
-    class VetoException : RuntimeException()
 }

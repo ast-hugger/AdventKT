@@ -3901,7 +3901,7 @@ actions: !!omap
       hidden in the cave.  These objects can be manipulated using some of
       the action words that I know.  Usually you will need to give both the
       object and action words (in either order), but sometimes I can infer
-      the object from the verb alone.  Some objects also imply verbs; in
+      the object from the action alone.  Some objects also imply verbs; in
       particular, "inventory" implies "take inventory", which causes me to
       give you a list of what you're carrying.  Some objects have unexpected
       effects; the effects are not always desirable!  Usually people having

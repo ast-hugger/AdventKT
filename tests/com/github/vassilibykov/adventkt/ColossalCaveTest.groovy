@@ -19,7 +19,8 @@ abstract class ColossalCaveTest extends GroovyTestCase {
         MainKt.reset()
         cave = MainKt.cave
         player = MainKt.player
-        parser = new Parser()
+        parser = cave.parser
+        player.moveTo(cave.start) // normally done by World.play()
     }
 
     void play(String... commands) {
@@ -30,5 +31,9 @@ abstract class ColossalCaveTest extends GroovyTestCase {
 
     void getEverythingFromBuilding() {
         play("in", "get all", "out")
+    }
+
+    void teleportToDebris() {
+        play("in", "get all", "xyzzy", "turn on lamp")
     }
 }

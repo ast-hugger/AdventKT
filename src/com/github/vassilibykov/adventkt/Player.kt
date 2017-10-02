@@ -2,9 +2,9 @@ package com.github.vassilibykov.adventkt
 
 /**
  *
- * @author vassili
+ * @author Vassili Bykov
  */
-class Player(private var room_: Room) : ItemOwner {
+class Player : ItemOwner {
 
     /**
      * The items currently owned by the player.
@@ -14,7 +14,8 @@ class Player(private var room_: Room) : ItemOwner {
     /**
      * The room the player is in.
      */
-    val room get() = room_
+    var room = Room.NOWHERE
+        private set
 
     /**
      * Relocate the player to a different room. Both rooms involved are asked
@@ -25,9 +26,21 @@ class Player(private var room_: Room) : ItemOwner {
     fun moveTo(newRoom: Room) {
         val oldRoom = room
         if (room.approvePlayerMoveTo(newRoom) && newRoom.approvePlayerMoveFrom(room)) {
-            room_ = newRoom
+            room = newRoom
             oldRoom.noticePlayerMoveTo(newRoom)
             newRoom.noticePlayerMoveFrom(oldRoom)
+        }
+    }
+
+    override fun noticeItemMoveFrom(oldOwner: ItemOwner, item: Item) {
+        if (oldOwner is Room) {
+            say("You are now carrying the $item.")
+        }
+    }
+
+    override fun noticeItemMoveTo(newOwner: ItemOwner, item: Item) {
+        if (newOwner is Room) {
+            say("You dropped the $item.")
         }
     }
 

@@ -2,7 +2,7 @@ package com.github.vassilibykov.adventkt
 
 /**
  *
- * @author vassili
+ * @author Vassili Bykov
  */
 
 var cave = ColossalCave.create()
@@ -13,23 +13,7 @@ var lantern = cave.lantern
     private set
 
 fun main(args: Array<String>) {
-    val commandProcessor = Parser()
-    var priorRoom: Room? = null
-    try {
-        while (true) {
-            val room = player.room
-            if (room != priorRoom) {
-                room.printDescription()
-                room.visited = true
-                priorRoom = room
-            }
-            print("> ")
-            val command = readLine() ?: "quit"
-            commandProcessor.process(command)
-        }
-    } catch (e: QuitException) {
-        println("Leaving.")
-    }
+   cave.play()
 }
 
 // for tests only
@@ -38,5 +22,3 @@ fun reset() {
     player = cave.player
     lantern = cave.lantern
 }
-
-class QuitException: RuntimeException()

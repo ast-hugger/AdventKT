@@ -1,34 +1,28 @@
 package com.github.vassilibykov.adventkt
 
 /**
+ * An item (or a character). An item can be picked up and carried by the player,
+ * unless the item specifically prohibits that as part of the game logic. An
+ * item can prohibit that by overriding [approveMoveTo], or by inheriting from
+ * [Fixture] instead of this class.
  *
- * @author vassili
+ * @author Vassili Bykov
  */
 
 open class Item (
         private vararg val _names: String,
         private val owned: String,
         private val dropped: String)
-    : World.Object
+    : World.Configurable
 {
     internal constructor(vararg names: String)
             : this(*names, owned = "<no inventoryDescription() for $names[0]>", dropped = "no description() for $names[0]")
 
-    val primaryName
-        get() = _names[0]
-    val names = _names.toSet()
     var owner = LIMBO
         internal set
-
-    private val vocabulary = emptyVocabulary()
-    private val vicinityVocabulary = emptyVocabulary()
-
-    override fun setup() = Unit
-
-    /**
-     * The description of the item to display when it's in the player's inventory.
-     */
-    open val inventoryDescription = owned
+    val names = _names.toSet()
+    val primaryName
+        get() = _names[0]
 
     /**
      * The description of the item displayed when the item is NOT owned by the
@@ -37,14 +31,19 @@ open class Item (
     open val description = dropped
 
     /**
+     * The description of the item to display when it's in the player's inventory.
+     */
+    open val inventoryDescription = owned
+
+    /**
      * Whether to skip the item when printing a full room description.
      */
     open val isHidden = false
 
-    /**
-     * Whether the item can be taken by the player.
-     */
-    open val canBeTaken = true
+    private val vocabulary = emptyVocabulary()
+    private val vicinityVocabulary = emptyVocabulary()
+
+    override fun configure() = Unit
 
     fun action(vararg words: String, effect: ItemAction.()->Unit): ItemAction {
         @Suppress("UNCHECKED_CAST")
@@ -98,9 +97,15 @@ open class Item (
 
     open fun noticeMove(newOwner: ItemOwner, oldOwner: ItemOwner) = Unit
 
+    override fun toString(): String = primaryName
+
     companion object {
+        /**
+         * An [ItemOwner] an item belongs to when it's not in any of the rooms
+         * or the player inventory. Any newly created item is initially in limbo.
+         */
         val LIMBO = object : ItemOwner {
-            override val items = mutableListOf<Item>()
+            override val items = mutableSetOf<Item>()
 
             override fun primitiveAddItem(item: Item) {
                 items.add(item)
@@ -110,6 +115,5 @@ open class Item (
                 items.remove(item)
             }
         }
-
     }
 }

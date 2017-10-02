@@ -6,12 +6,12 @@ package com.github.vassilibykov.adventkt
  */
 abstract class MovementAction(word: String) : Action(word) {
     internal fun movePlayer(where: String) {
-        val direction = Direction.lookup(where)
+        val direction = Direction.named(where)
         if (direction == null) {
             println("You can't go to '$where'")
             return
         }
-        val destination = player.room.exits[direction]
+        val destination = player.room.exitTo(direction)
         if (destination == null) {
             println("You can't go $direction.")
             return

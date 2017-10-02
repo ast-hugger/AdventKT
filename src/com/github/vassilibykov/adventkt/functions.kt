@@ -2,7 +2,7 @@ package com.github.vassilibykov.adventkt
 
 import java.util.*
 
-fun say(message: String) = println(message.lines().map{ it.trim() }.joinToString("\n"))
+fun say(message: String) = println(message.trimMargin())
 
 fun <T> random(vararg args: T): T {
     if (args.isEmpty()) {

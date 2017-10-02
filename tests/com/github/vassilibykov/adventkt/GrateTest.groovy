@@ -6,7 +6,7 @@ class GrateTest extends ColossalCaveTest {
         play("s", "s", "s")
     }
 
-    void testImmovable() {
+    void testFixedInPlace() {
         walkToGrate()
         play("take grate")
         assertFalse(player.has(cave.grate))
@@ -32,14 +32,13 @@ class GrateTest extends ColossalCaveTest {
     void testGrateUnlockingNeedsKey() {
         walkToGrate()
         play("open grate")
-        assertFalse(cave.grate.isOpen().isOn())
+        assertFalse(cave.grate.isOpen.isOn())
     }
 
     void testOpenGrate() {
         getEverythingFromBuilding()
         walkToGrate()
         play("open grate")
-        assertTrue(cave.grate.isOpen().isOn())
+        assertTrue(cave.grate.isOpen.isOn())
     }
-
 }

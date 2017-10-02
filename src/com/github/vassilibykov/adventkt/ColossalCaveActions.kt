@@ -14,7 +14,7 @@ fun globalVocabulary(): Map<String, Action> {
     add(Quit())
     add(Take())
     add(Xyzzy())
-    Direction.directionNames().forEach {vocabulary.put(it, DirectionAction(it))}
+    Direction.directionNames.forEach {vocabulary.put(it, DirectionAction(it))}
     return vocabulary
 }
 
@@ -26,13 +26,12 @@ class DirectionAction(word: String) : MovementAction(word) {
 
 class Drop: Action("drop") {
     override fun act(subjects: List<String>) {
-        val item = subjects.map { player.findItem(it) }.firstOrNull()
+        val item = player.findItem(subjects)
         if (item == null) {
             say("You don't have that.")
             return
         }
         item.moveTo(player.room)
-        say("OK")
     }
 }
 
@@ -69,7 +68,7 @@ class Look: Action("look") {
 
 class Quit: Action("quit", "bye") {
     override fun act(subjects: List<String>) {
-        throw QuitException()
+        throw World.QuitException()
     }
 }
 
@@ -84,27 +83,18 @@ class Take: Action("take", "get", "pick") {
             say("There is no such thing here.")
             return
         }
-        if (!item.canBeTaken) {
-            say("You can't pick $item.primaryName up.")
-            return
-        }
         item.moveTo(player)
-        say("OK")
     }
 
     private fun takeAll() {
         // ownItem modifies the item list, so make sure to iterate over a copy
         player.room.items.toList().forEach {
             if (!it.isHidden) {
-                if (it.canBeTaken) {
-                    it.moveTo(player)
-                    say("The " + it.primaryName + ": taken.")
-                } else {
-                    say("You can't pick that up.")
-                }
+                it.moveTo(player)
             }
         }
     }
+
 }
 
 class Xyzzy : Action("xyzzy") {

@@ -2,7 +2,7 @@ package com.github.vassilibykov.adventkt
 
 /**
  *
- * @author vassili
+ * @author Vassili Bykov
  */
 enum class Direction(val shortcut: String) {
 
@@ -42,14 +42,16 @@ enum class Direction(val shortcut: String) {
             defineOpposites(IN, OUT)
         }
 
+        val directionNames get() = directions.keys
+
+        val compassDirections = setOf(NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST, NORTHWEST)
+
         private fun defineOpposites(dir1: Direction, dir2: Direction) {
             opposites[dir1] = dir2
             opposites[dir2]= dir1
         }
 
-        fun directionNames() = directions.keys
-
-        fun lookup(name: String) = directions[name]
+        fun named(name: String) = directions[name]
     }
 }
 

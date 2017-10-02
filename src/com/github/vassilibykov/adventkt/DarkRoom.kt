@@ -4,7 +4,7 @@ package com.github.vassilibykov.adventkt
  * The superclass of rooms that have no lights and require the player
  * to have a lantern to see things.
  */
-abstract class DarkRoom(description: String, shortDescription: String) : Room(shortDescription, description) {
+abstract class DarkRoom(shortDescription: String, description: String) : Room(shortDescription, description) {
     private val DARK_MESSAGE = "It is now pitch dark. If you proceed you will likely fall into a pit."
 
     override fun printDescription() {

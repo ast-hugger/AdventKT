@@ -2,7 +2,7 @@ package com.github.vassilibykov.adventkt
 
 /**
  *
- * @author vassili
+ * @author Vassili Bykov
  */
 abstract class Action(vararg val words: String) {
 

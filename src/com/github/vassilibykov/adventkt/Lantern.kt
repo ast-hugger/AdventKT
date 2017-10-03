@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2017 Vassili Bykov
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.github.vassilibykov.adventkt
 
 /**
@@ -15,19 +31,21 @@ package com.github.vassilibykov.adventkt
  * subjects (words following the first) include one of the item's names.
  * The action also checks the subjects to see whether to turn the lamp on
  * or off.
+ *
+ * @author Vassili Bykov
  */
 class Lantern : Item("lamp", "lantern") {
     var light = Toggle(false,
-            turnOnMessage = "Your lamp is now turned on.",
-            turnOffMessage = "Your lamp is now turned off.",
+            turnedOnMessage = "Your lamp is now turned on.",
+            turnedOffMessage = "Your lamp is now turned off.",
             alreadyOnMessage = "Your lamp is already turned on.",
             alreadyOffMessage = "Your lamp is already turned off.")
 
-    override val description get() = if (light.isOn) "There is a brass lamp nearby." else "There is a brass lamp shining nearby."
-
-    override val inventoryDescription get() = if (light.isOn) "A lit brass lantern" else "A brass lantern"
-
     init {
+        dynamicDescription =
+                { if (light.isOn) "There is a brass lamp nearby." else "There is a brass lamp shining nearby." }
+        dynamicInventoryDescription =
+                { if (light.isOn) "A lit brass lantern" else "A brass lantern" }
         action("turn", "switch") {
             when {
                 "on" in subjects -> {

@@ -1,23 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="ANALYZE_TEST_SOURCES" value="false" />
+  </component>
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="AdventKT:jar" />
+    </artifacts-to-build>
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="8ecfb6b6-7404-458e-92a3-f1a2a24ad0b1" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Detail.kt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Fixture.kt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/OpenSpace.kt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/UnenterableRoom.kt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/artifacts/AdventKT_jar.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dictionaries/vassili.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/jline.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tests/com/github/vassilibykov/adventkt/ImplementorPrizeTest.groovy" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tests/com/github/vassilibykov/adventkt/NuggetTest.groovy" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tests/com/github/vassilibykov/adventkt/SnakeTest.groovy" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/OpenSpace.kt" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AdventKT.iml" afterPath="$PROJECT_DIR$/AdventKT.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Action.kt" afterPath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Action.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/ColossalCave.kt" afterPath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/ColossalCave.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/ColossalCaveActions.kt" afterPath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/ColossalCaveActions.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/DarkRoom.kt" afterPath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/DarkRoom.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Detail.kt" afterPath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Detail.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Direction.kt" afterPath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Direction.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Fixture.kt" afterPath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Fixture.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Item.kt" afterPath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Item.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/ItemAction.kt" afterPath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/ItemAction.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/ItemOwner.kt" afterPath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/ItemOwner.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Lantern.kt" afterPath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Lantern.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/LocalAction.kt" afterPath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/LocalAction.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Main.kt" afterPath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Main.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/MovementAction.kt" afterPath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/MovementAction.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Parser.kt" afterPath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Parser.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Player.kt" afterPath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Player.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Room.kt" afterPath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Room.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Toggle.kt" afterPath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Toggle.kt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/UnenterableRoom.kt" afterPath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/UnenterableRoom.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/World.kt" afterPath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/World.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/functions.kt" afterPath="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/functions.kt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/com/github/vassilibykov/adventkt/BirdTest.groovy" afterPath="$PROJECT_DIR$/tests/com/github/vassilibykov/adventkt/BirdTest.groovy" />
@@ -33,36 +54,18 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.47680414">
-      <split-first>
-        <leaf>
-          <file leaf-file-name="Detail.kt" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Detail.kt">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="198">
-                  <caret line="11" column="32" lean-forward="false" selection-start-line="11" selection-start-column="32" selection-end-line="11" selection-end-column="32" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf>
-          <file leaf-file-name="ColossalCave.kt" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/ColossalCave.kt">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="381">
-                  <caret line="326" column="33" lean-forward="false" selection-start-line="326" selection-start-column="33" selection-end-line="326" selection-end-column="33" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf>
+      <file leaf-file-name="ItemOwner.kt" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/ItemOwner.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="180">
+              <caret line="24" column="10" lean-forward="false" selection-start-line="24" selection-start-column="10" selection-end-line="24" selection-end-column="10" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -97,6 +100,7 @@
       <find>LOC_CROSSOVER</find>
       <find>MAGIC</find>
       <find>PLOVER</find>
+      <find>class</find>
     </findStrings>
     <replaceStrings>
       <replace>@author Vassili Bykov</replace>
@@ -110,12 +114,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/com/github/newspeakbigot/cavekt/Room.kt" />
-        <option value="$PROJECT_DIR$/src/com/github/newspeakbigot/cavekt/Item.kt" />
-        <option value="$PROJECT_DIR$/src/com/github/newspeakbigot/cavekt/Parser.kt" />
-        <option value="$PROJECT_DIR$/src/com/github/newspeakbigot/cavekt/Verb.kt" />
-        <option value="$PROJECT_DIR$/src/com/github/newspeakbigot/cavekt/LocalVerb.kt" />
-        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/cavekt/MovementVerb.kt" />
         <option value="$PROJECT_DIR$/src/com/github/vassilibykov/cavekt/DarkRoom.kt" />
         <option value="$PROJECT_DIR$/src/com/github/vassilibykov/cavekt/Main.kt" />
         <option value="$PROJECT_DIR$/src/com/github/vassilibykov/cavekt/Parser.kt" />
@@ -139,28 +137,34 @@
         <option value="$PROJECT_DIR$/tests/com/github/vassilibykov/adventkt/MovementTest.groovy" />
         <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Verbs.kt" />
         <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Verb.kt" />
-        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/LocalAction.kt" />
-        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Parser.kt" />
-        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Action.kt" />
-        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/DarkRoom.kt" />
         <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/UnenterableRoom.kt" />
-        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Fixture.kt" />
-        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Direction.kt" />
-        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/MovementAction.kt" />
-        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Item.kt" />
-        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Player.kt" />
         <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/functions.kt" />
         <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/OpenSpace.kt" />
-        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Room.kt" />
-        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Detail.kt" />
-        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Main.kt" />
-        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/ColossalCaveActions.kt" />
-        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/World.kt" />
-        <option value="$PROJECT_DIR$/tests/com/github/vassilibykov/adventkt/GrateTest.groovy" />
-        <option value="$PROJECT_DIR$/tests/com/github/vassilibykov/adventkt/ColossalCaveTest.groovy" />
-        <option value="$PROJECT_DIR$/tests/com/github/vassilibykov/adventkt/BirdTest.groovy" />
         <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/ItemOwner.kt" />
+        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Player.kt" />
+        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Fixture.kt" />
+        <option value="$PROJECT_DIR$/tests/com/github/vassilibykov/adventkt/GrateTest.groovy" />
+        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Toggle.kt" />
+        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Parser.kt" />
+        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/LocalAction.kt" />
+        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Detail.kt" />
+        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Direction.kt" />
+        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Room.kt" />
+        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Item.kt" />
+        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Main.kt" />
+        <option value="$PROJECT_DIR$/tests/com/github/vassilibykov/adventkt/BirdTest.groovy" />
+        <option value="$PROJECT_DIR$/tests/com/github/vassilibykov/adventkt/SnakeTest.groovy" />
+        <option value="$PROJECT_DIR$/tests/com/github/vassilibykov/adventkt/NuggetTest.groovy" />
+        <option value="$PROJECT_DIR$/tests/com/github/vassilibykov/adventkt/ColossalCaveTest.groovy" />
+        <option value="$PROJECT_DIR$/tests/com/github/vassilibykov/adventkt/ImplementorPrizeTest.groovy" />
+        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/World.kt" />
+        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/MovementAction.kt" />
+        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Lantern.kt" />
+        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/ItemAction.kt" />
+        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/DarkRoom.kt" />
+        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/ColossalCaveActions.kt" />
         <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/ColossalCave.kt" />
+        <option value="$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Action.kt" />
       </list>
     </option>
   </component>
@@ -225,13 +229,13 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
-    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="settings.editor.selected.configurable" value="copyright" />
+    <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="SearchEverywhereHistoryKey" value="VetoE&#9;null&#9;null" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="Groovy JUnit" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/junit.jar!/" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/jline-3.5.2-SNAPSHOT.jar!/" />
   </component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.RecentsKey">
@@ -253,16 +257,21 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Kotlin.com.github.vassilibykov.adventkt.MainKt">
-    <configuration name="All in AdventKT" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+  <component name="RunManager" selected="JUnit.com.github.vassilibykov.adventkt in AdventKT">
+    <configuration name="ImplementorPrizeTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.github.vassilibykov.adventkt.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <module name="AdventKT" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" />
+      <option name="PACKAGE_NAME" value="com.github.vassilibykov.adventkt" />
+      <option name="MAIN_CLASS_NAME" value="com.github.vassilibykov.adventkt.ImplementorPrizeTest" />
       <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="package" />
+      <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
@@ -274,7 +283,7 @@
       <envs />
       <patterns />
     </configuration>
-    <configuration name="BirdTest.testBirdIsThere" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="NuggetTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
           <option name="PATTERN" value="com.github.vassilibykov.adventkt.*" />
@@ -285,9 +294,9 @@
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="com.github.vassilibykov.adventkt" />
-      <option name="MAIN_CLASS_NAME" value="com.github.vassilibykov.adventkt.BirdTest" />
-      <option name="METHOD_NAME" value="testBirdIsThere" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="MAIN_CLASS_NAME" value="com.github.vassilibykov.adventkt.NuggetTest" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
@@ -299,7 +308,7 @@
       <envs />
       <patterns />
     </configuration>
-    <configuration name="GrateTest.testGrateUnlockingNeedsKey" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="NuggetTest.testCantBringUpstairs" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
           <option name="PATTERN" value="com.github.vassilibykov.adventkt.*" />
@@ -310,8 +319,8 @@
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="com.github.vassilibykov.adventkt" />
-      <option name="MAIN_CLASS_NAME" value="com.github.vassilibykov.adventkt.GrateTest" />
-      <option name="METHOD_NAME" value="testGrateUnlockingNeedsKey" />
+      <option name="MAIN_CLASS_NAME" value="com.github.vassilibykov.adventkt.NuggetTest" />
+      <option name="METHOD_NAME" value="testCantBringUpstairs" />
       <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
@@ -455,24 +464,27 @@
       <envs />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="JUnit.All in AdventKT" />
-      <item index="1" class="java.lang.String" itemvalue="Kotlin.com.github.vassilibykov.adventkt.MainKt" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.BirdTest.testBirdIsThere" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.GrateTest.testGrateUnlockingNeedsKey" />
+      <item index="0" class="java.lang.String" itemvalue="JUnit.NuggetTest.testCantBringUpstairs" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.NuggetTest" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.ImplementorPrizeTest" />
+      <item index="3" class="java.lang.String" itemvalue="Kotlin.com.github.vassilibykov.adventkt.MainKt" />
       <item index="4" class="java.lang.String" itemvalue="JUnit.com.github.vassilibykov.adventkt in AdventKT" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Kotlin.com.github.vassilibykov.adventkt.MainKt" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.com.github.vassilibykov.adventkt in AdventKT" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.BirdTest.testBirdIsThere" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.All in AdventKT" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.GrateTest.testGrateUnlockingNeedsKey" />
+        <item index="0" class="java.lang.String" itemvalue="JUnit.com.github.vassilibykov.adventkt in AdventKT" />
+        <item index="1" class="java.lang.String" itemvalue="Kotlin.com.github.vassilibykov.adventkt.MainKt" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.ImplementorPrizeTest" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.NuggetTest" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.NuggetTest.testCantBringUpstairs" />
       </list>
     </recent_temporary>
   </component>
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
+  </component>
+  <component name="StructureViewFactory">
+    <option name="ACTIVE_ACTIONS" value=",ALPHA_COMPARATOR" />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -517,59 +529,67 @@
       <option name="project" value="LOCAL" />
       <updated>1506877426405</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Many changes to everything">
+      <created>1506929397773</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1506929397773</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="All_in_AdventKT - 2017.10.01 at 21h 00m 11s.xml">
-      <configuration name="All in AdventKT" configurationId="JUnit" />
+    <history-entry file="ImplementorPrizeTest - 2017.10.02 at 21h 38m 31s.xml">
+      <configuration name="ImplementorPrizeTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="BirdTest_testBirdIsThere - 2017.10.01 at 21h 02m 40s.xml">
-      <configuration name="BirdTest.testBirdIsThere" configurationId="JUnit" />
+    <history-entry file="NuggetTest - 2017.10.02 at 21h 35m 59s.xml">
+      <configuration name="NuggetTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="BirdTest_testBirdIsThere - 2017.10.01 at 21h 02m 51s.xml">
-      <configuration name="BirdTest.testBirdIsThere" configurationId="JUnit" />
+    <history-entry file="NuggetTest_testCantBringUpstairs - 2017.10.02 at 21h 34m 55s.xml">
+      <configuration name="NuggetTest.testCantBringUpstairs" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="GrateTest_testGrateUnlockingNeedsKey - 2017.10.01 at 20h 54m 40s.xml">
-      <configuration name="GrateTest.testGrateUnlockingNeedsKey" configurationId="JUnit" />
+    <history-entry file="NuggetTest_testNugetIsThere - 2017.10.02 at 21h 33m 30s.xml">
+      <configuration name="NuggetTest.testNugetIsThere" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="GrateTest_testGrateUnlockingNeedsKey - 2017.10.01 at 20h 54m 58s.xml">
-      <configuration name="GrateTest.testGrateUnlockingNeedsKey" configurationId="JUnit" />
+    <history-entry file="SnakeTest - 2017.10.02 at 20h 59m 48s.xml">
+      <configuration name="SnakeTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="GrateTest_testGrateUnlockingNeedsKey - 2017.10.01 at 20h 56m 16s.xml">
-      <configuration name="GrateTest.testGrateUnlockingNeedsKey" configurationId="JUnit" />
+    <history-entry file="SnakeTest - 2017.10.02 at 21h 02m 41s.xml">
+      <configuration name="SnakeTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="GrateTest_testGrateUnlockingNeedsKey - 2017.10.01 at 20h 56m 26s.xml">
-      <configuration name="GrateTest.testGrateUnlockingNeedsKey" configurationId="JUnit" />
+    <history-entry file="SnakeTest - 2017.10.02 at 21h 25m 01s.xml">
+      <configuration name="SnakeTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="GrateTest_testGrateUnlockingNeedsKey - 2017.10.01 at 20h 58m 50s.xml">
-      <configuration name="GrateTest.testGrateUnlockingNeedsKey" configurationId="JUnit" />
+    <history-entry file="SnakeTest_testBirdWorks - 2017.10.02 at 21h 17m 52s.xml">
+      <configuration name="SnakeTest.testBirdWorks" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="GrateTest_testOpenGrate - 2017.10.01 at 20h 54m 16s.xml">
-      <configuration name="GrateTest.testOpenGrate" configurationId="JUnit" />
+    <history-entry file="SnakeTest_testSnakeIsThere - 2017.10.02 at 21h 16m 38s.xml">
+      <configuration name="SnakeTest.testSnakeIsThere" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="com_github_vassilibykov_adventkt_in_AdventKT - 2017.10.01 at 22h 33m 53s.xml">
+    <history-entry file="com_github_vassilibykov_adventkt_in_AdventKT - 2017.10.02 at 21h 44m 26s.xml">
       <configuration name="com.github.vassilibykov.adventkt in AdventKT" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="ToolWindowManager">
     <frame x="116" y="26" width="2526" height="1082" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32837301" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.375" sideWeight="0.5020266" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32142857" sideWeight="0.49797335" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.71825397" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25992063" sideWeight="0.49797335" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.49503967" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11309524" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18769841" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35019842" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13531746" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18769841" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.072420634" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.13531746" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39880952" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2361111" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -587,7 +607,8 @@
     <MESSAGE value="Restructured world object initialization to run as a second pass in #initialize() methods" />
     <MESSAGE value="Restructured item definitions, improved item and player movement protocol" />
     <MESSAGE value="Refactorings; libraries required by tests to the project lib/ directory" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactorings; libraries required by tests to the project lib/ directory" />
+    <MESSAGE value="Many changes to everything" />
+    <option name="LAST_COMMIT_MESSAGE" value="Many changes to everything" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -608,40 +629,133 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="kotlin-line">
           <url>file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Parser.kt</url>
-          <line>15</line>
+          <line>69</line>
           <properties />
-          <option name="timeStamp" value="17" />
+          <option name="timeStamp" value="20" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="18" />
+      <option name="time" value="21" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/tests/com/github/vassilibykov/adventkt/ColossalCaveTest.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Main.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="468">
-          <caret line="26" column="32" lean-forward="true" selection-start-line="26" selection-start-column="32" selection-end-line="26" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/ColossalCave.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1260">
           <caret line="70" column="67" lean-forward="false" selection-start-line="70" selection-start-column="67" selection-end-line="70" selection-end-column="67" />
-          <folding />
+          <folding>
+            <marker date="1507006770127" expanded="true" signature="0:601" ph="/ Copyright (c) 2017 Vassili Bykov .../" />
+            <marker date="1507006770127" expanded="true" signature="698:818" ph="/** A definition of a subset of Colossal Cave, with some changes and ...*/" />
+            <marker date="1507006770127" expanded="true" signature="943:20399" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="967:1129" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="1004:1123" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="1135:1279" ph="/ Rooms. .../" />
+            <marker date="1507006770127" expanded="true" signature="1360:1542" ph="&quot;&quot;&quot; You are standing at the end of a road before a small brick building. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="1548:2435" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="2060:2429" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="2108:2419" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="2216:2358" ph="&quot;&quot;&quot; As you $entryWord the well house, a large box appears hovering in the air. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="2549:3108" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="2659:3102" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="2677:3091" ph="&quot;&quot;&quot; The sign says: ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="3462:4169" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="3609:4163" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="3635:3714" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="3720:4153" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="3772:4138" ph="&quot;&quot;&quot; You open the box, releasing a huge cloud of yellow vapor. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="4356:4742" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="4462:4536" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="4574:4736" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="4592:4725" ph="&quot;&quot;&quot; The stream flows out through a pair of 1 foot diameter sewer pipes. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="4807:4966" ph="&quot;&quot;&quot; You have walked up a hill, still in the forest.  The road slopes back ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="4972:5100" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="5248:5289" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="5348:5500" ph="&quot;&quot;&quot; The forest thins out here to reveal a steep cliff.  There is no way ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="5506:5513" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="5574:5670" ph="&quot;&quot;&quot; You are in a valley in the forest beside a stream tumbling along a ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="5676:5831" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="6234:8904" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="6373:6547" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="6431:6493" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="6499:6537" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="6570:6975" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="7001:7401" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="7280:7390" ph="&quot;&quot;&quot; You realize you might never find your way back here ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="7430:8000" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="7497:7833" ph="&quot;&quot;&quot; The bird is singing to you in gratitude for your having returned it to ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="7848:7953" ph="&quot;&quot;&quot; &quot;.  You ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="8051:8732" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="8097:8228" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="8234:8722" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="8378:8506" ph="&quot;&quot;&quot; You think you see your tracks on the forest floor. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="8758:8898" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="8804:8888" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="8986:9138" ph="&quot;&quot;&quot; At your feet all the water of the stream splashes into a 2-inch slit ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="9144:9226" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="9384:9579" ph="&quot;&quot;&quot; You are in a 20-foot depression floored with bare dirt.  Set into the ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="9585:9968" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="9707:9820" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="9849:9962" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="10051:10189" ph="&quot;&quot;&quot; You are in a small chamber beneath a 3x3 steel grate to the surface. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="10195:10315" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="10394:10514" ph="&quot;&quot;&quot; You are crawling over cobbles in a low passage.  There is a dim light ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="10520:10619" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="10704:10992" ph="&quot;&quot;&quot; You are in a debris room filled with stuff washed in from the surface. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="10998:11206" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="11118:11200" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="11372:11449" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="11534:11743" ph="&quot;&quot;&quot; You are in a splendid chamber thirty feet high.  The walls are frozen ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="11749:11847" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="11918:12060" ph="&quot;&quot;&quot; At your feet is a small pit breathing traces of white mist.  An east ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="12066:12158" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="12207:12506" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="12238:12500" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="12553:12677" ph="&quot;&quot;&quot; The crack is far too small for you to follow.  At its widest it is ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="12754:13148" ph="&quot;&quot;&quot; You are at one end of a vast hall stretching forward out of sight to ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="13154:13897" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="13420:13566" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="13438:13515" ph="&quot;&quot;&quot; The cave walls around you become a blur. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="13594:13698" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="13619:13688" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="13727:13891" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="13974:14128" ph="&quot;&quot;&quot; You are on the east bank of a fissure slicing clear across the hall. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="14134:14179" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="14257:14374" ph="&quot;&quot;&quot; This is a low room with a crude note on the wall.  The note says, ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="14380:14452" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="14686:14783" ph="&quot;&quot;&quot; You are in the Hall of the Mountain King, with passages off in all ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="14789:15524" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15131:15249" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15278:15518" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15312:15508" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15334:15452" ph="&quot;&quot;&quot; The little bird attacks the green snake, and in an astounding flurry ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="15586:15728" ph="&quot;&quot;&quot; The passage is blocked by orange safety fencing with a sign saying, ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="15854:15966" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15884:15960" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15972:15996" ph="/ Items .../" />
+            <marker date="1507006770127" expanded="true" signature="16166:16197" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="16782:17320" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17617:17891" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17642:17885" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17685:17789" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17795:17875" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17931:19206" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17962:18230" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="18018:18137" ph="&quot;&quot;&quot; A little bird is sitting here looking sad and lonely. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="18279:19045" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="18318:18991" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="18524:18875" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="18997:19035" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="19075:19200" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="19448:19730" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="19601:19724" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="19835:19872" ph="/ Extra DSLish stuff .../" />
+            <marker date="1507006770127" expanded="true" signature="19974:20179" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="20033:20173" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="20279:20397" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -657,7 +771,116 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3456">
           <caret line="192" column="13" lean-forward="false" selection-start-line="192" selection-start-column="13" selection-end-line="192" selection-end-column="13" />
-          <folding />
+          <folding>
+            <marker date="1507006770127" expanded="true" signature="0:601" ph="/ Copyright (c) 2017 Vassili Bykov .../" />
+            <marker date="1507006770127" expanded="true" signature="698:818" ph="/** A definition of a subset of Colossal Cave, with some changes and ...*/" />
+            <marker date="1507006770127" expanded="true" signature="943:20399" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="967:1129" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="1004:1123" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="1135:1279" ph="/ Rooms. .../" />
+            <marker date="1507006770127" expanded="true" signature="1360:1542" ph="&quot;&quot;&quot; You are standing at the end of a road before a small brick building. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="1548:2435" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="2060:2429" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="2108:2419" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="2216:2358" ph="&quot;&quot;&quot; As you $entryWord the well house, a large box appears hovering in the air. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="2549:3108" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="2659:3102" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="2677:3091" ph="&quot;&quot;&quot; The sign says: ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="3462:4169" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="3609:4163" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="3635:3714" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="3720:4153" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="3772:4138" ph="&quot;&quot;&quot; You open the box, releasing a huge cloud of yellow vapor. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="4356:4742" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="4462:4536" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="4574:4736" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="4592:4725" ph="&quot;&quot;&quot; The stream flows out through a pair of 1 foot diameter sewer pipes. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="4807:4966" ph="&quot;&quot;&quot; You have walked up a hill, still in the forest.  The road slopes back ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="4972:5100" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="5248:5289" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="5348:5500" ph="&quot;&quot;&quot; The forest thins out here to reveal a steep cliff.  There is no way ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="5506:5513" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="5574:5670" ph="&quot;&quot;&quot; You are in a valley in the forest beside a stream tumbling along a ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="5676:5831" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="6234:8904" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="6373:6547" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="6431:6493" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="6499:6537" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="6570:6975" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="7001:7401" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="7280:7390" ph="&quot;&quot;&quot; You realize you might never find your way back here ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="7430:8000" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="7497:7833" ph="&quot;&quot;&quot; The bird is singing to you in gratitude for your having returned it to ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="7848:7953" ph="&quot;&quot;&quot; &quot;.  You ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="8051:8732" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="8097:8228" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="8234:8722" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="8378:8506" ph="&quot;&quot;&quot; You think you see your tracks on the forest floor. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="8758:8898" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="8804:8888" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="8986:9138" ph="&quot;&quot;&quot; At your feet all the water of the stream splashes into a 2-inch slit ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="9144:9226" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="9384:9579" ph="&quot;&quot;&quot; You are in a 20-foot depression floored with bare dirt.  Set into the ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="9585:9968" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="9707:9820" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="9849:9962" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="10051:10189" ph="&quot;&quot;&quot; You are in a small chamber beneath a 3x3 steel grate to the surface. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="10195:10315" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="10394:10514" ph="&quot;&quot;&quot; You are crawling over cobbles in a low passage.  There is a dim light ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="10520:10619" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="10704:10992" ph="&quot;&quot;&quot; You are in a debris room filled with stuff washed in from the surface. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="10998:11206" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="11118:11200" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="11372:11449" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="11534:11743" ph="&quot;&quot;&quot; You are in a splendid chamber thirty feet high.  The walls are frozen ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="11749:11847" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="11918:12060" ph="&quot;&quot;&quot; At your feet is a small pit breathing traces of white mist.  An east ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="12066:12158" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="12207:12506" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="12238:12500" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="12553:12677" ph="&quot;&quot;&quot; The crack is far too small for you to follow.  At its widest it is ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="12754:13148" ph="&quot;&quot;&quot; You are at one end of a vast hall stretching forward out of sight to ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="13154:13897" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="13420:13566" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="13438:13515" ph="&quot;&quot;&quot; The cave walls around you become a blur. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="13594:13698" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="13619:13688" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="13727:13891" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="13974:14128" ph="&quot;&quot;&quot; You are on the east bank of a fissure slicing clear across the hall. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="14134:14179" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="14257:14374" ph="&quot;&quot;&quot; This is a low room with a crude note on the wall.  The note says, ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="14380:14452" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="14686:14783" ph="&quot;&quot;&quot; You are in the Hall of the Mountain King, with passages off in all ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="14789:15524" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15131:15249" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15278:15518" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15312:15508" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15334:15452" ph="&quot;&quot;&quot; The little bird attacks the green snake, and in an astounding flurry ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="15586:15728" ph="&quot;&quot;&quot; The passage is blocked by orange safety fencing with a sign saying, ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="15854:15966" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15884:15960" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15972:15996" ph="/ Items .../" />
+            <marker date="1507006770127" expanded="true" signature="16166:16197" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="16782:17320" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17617:17891" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17642:17885" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17685:17789" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17795:17875" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17931:19206" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17962:18230" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="18018:18137" ph="&quot;&quot;&quot; A little bird is sitting here looking sad and lonely. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="18279:19045" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="18318:18991" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="18524:18875" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="18997:19035" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="19075:19200" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="19448:19730" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="19601:19724" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="19835:19872" ph="/ Extra DSLish stuff .../" />
+            <marker date="1507006770127" expanded="true" signature="19974:20179" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="20033:20173" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="20279:20397" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -672,7 +895,116 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3456">
           <caret line="192" column="13" lean-forward="true" selection-start-line="192" selection-start-column="13" selection-end-line="192" selection-end-column="13" />
-          <folding />
+          <folding>
+            <marker date="1507006770127" expanded="true" signature="0:601" ph="/ Copyright (c) 2017 Vassili Bykov .../" />
+            <marker date="1507006770127" expanded="true" signature="698:818" ph="/** A definition of a subset of Colossal Cave, with some changes and ...*/" />
+            <marker date="1507006770127" expanded="true" signature="943:20399" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="967:1129" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="1004:1123" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="1135:1279" ph="/ Rooms. .../" />
+            <marker date="1507006770127" expanded="true" signature="1360:1542" ph="&quot;&quot;&quot; You are standing at the end of a road before a small brick building. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="1548:2435" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="2060:2429" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="2108:2419" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="2216:2358" ph="&quot;&quot;&quot; As you $entryWord the well house, a large box appears hovering in the air. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="2549:3108" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="2659:3102" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="2677:3091" ph="&quot;&quot;&quot; The sign says: ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="3462:4169" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="3609:4163" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="3635:3714" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="3720:4153" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="3772:4138" ph="&quot;&quot;&quot; You open the box, releasing a huge cloud of yellow vapor. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="4356:4742" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="4462:4536" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="4574:4736" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="4592:4725" ph="&quot;&quot;&quot; The stream flows out through a pair of 1 foot diameter sewer pipes. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="4807:4966" ph="&quot;&quot;&quot; You have walked up a hill, still in the forest.  The road slopes back ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="4972:5100" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="5248:5289" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="5348:5500" ph="&quot;&quot;&quot; The forest thins out here to reveal a steep cliff.  There is no way ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="5506:5513" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="5574:5670" ph="&quot;&quot;&quot; You are in a valley in the forest beside a stream tumbling along a ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="5676:5831" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="6234:8904" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="6373:6547" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="6431:6493" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="6499:6537" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="6570:6975" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="7001:7401" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="7280:7390" ph="&quot;&quot;&quot; You realize you might never find your way back here ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="7430:8000" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="7497:7833" ph="&quot;&quot;&quot; The bird is singing to you in gratitude for your having returned it to ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="7848:7953" ph="&quot;&quot;&quot; &quot;.  You ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="8051:8732" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="8097:8228" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="8234:8722" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="8378:8506" ph="&quot;&quot;&quot; You think you see your tracks on the forest floor. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="8758:8898" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="8804:8888" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="8986:9138" ph="&quot;&quot;&quot; At your feet all the water of the stream splashes into a 2-inch slit ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="9144:9226" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="9384:9579" ph="&quot;&quot;&quot; You are in a 20-foot depression floored with bare dirt.  Set into the ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="9585:9968" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="9707:9820" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="9849:9962" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="10051:10189" ph="&quot;&quot;&quot; You are in a small chamber beneath a 3x3 steel grate to the surface. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="10195:10315" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="10394:10514" ph="&quot;&quot;&quot; You are crawling over cobbles in a low passage.  There is a dim light ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="10520:10619" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="10704:10992" ph="&quot;&quot;&quot; You are in a debris room filled with stuff washed in from the surface. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="10998:11206" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="11118:11200" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="11372:11449" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="11534:11743" ph="&quot;&quot;&quot; You are in a splendid chamber thirty feet high.  The walls are frozen ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="11749:11847" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="11918:12060" ph="&quot;&quot;&quot; At your feet is a small pit breathing traces of white mist.  An east ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="12066:12158" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="12207:12506" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="12238:12500" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="12553:12677" ph="&quot;&quot;&quot; The crack is far too small for you to follow.  At its widest it is ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="12754:13148" ph="&quot;&quot;&quot; You are at one end of a vast hall stretching forward out of sight to ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="13154:13897" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="13420:13566" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="13438:13515" ph="&quot;&quot;&quot; The cave walls around you become a blur. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="13594:13698" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="13619:13688" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="13727:13891" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="13974:14128" ph="&quot;&quot;&quot; You are on the east bank of a fissure slicing clear across the hall. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="14134:14179" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="14257:14374" ph="&quot;&quot;&quot; This is a low room with a crude note on the wall.  The note says, ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="14380:14452" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="14686:14783" ph="&quot;&quot;&quot; You are in the Hall of the Mountain King, with passages off in all ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="14789:15524" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15131:15249" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15278:15518" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15312:15508" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15334:15452" ph="&quot;&quot;&quot; The little bird attacks the green snake, and in an astounding flurry ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="15586:15728" ph="&quot;&quot;&quot; The passage is blocked by orange safety fencing with a sign saying, ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="15854:15966" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15884:15960" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15972:15996" ph="/ Items .../" />
+            <marker date="1507006770127" expanded="true" signature="16166:16197" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="16782:17320" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17617:17891" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17642:17885" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17685:17789" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17795:17875" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17931:19206" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17962:18230" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="18018:18137" ph="&quot;&quot;&quot; A little bird is sitting here looking sad and lonely. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="18279:19045" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="18318:18991" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="18524:18875" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="18997:19035" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="19075:19200" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="19448:19730" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="19601:19724" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="19835:19872" ph="/ Extra DSLish stuff .../" />
+            <marker date="1507006770127" expanded="true" signature="19974:20179" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="20033:20173" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="20279:20397" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -681,20 +1013,23 @@
         <state relative-caret-position="540">
           <caret line="30" column="51" lean-forward="true" selection-start-line="30" selection-start-column="51" selection-end-line="30" selection-end-column="51" />
           <folding>
-            <marker date="1506877144038" expanded="true" signature="42:163" ph="/** A simple input parser. Far from Infocom grade, but better than the ...*/" />
-            <marker date="1506877144038" expanded="true" signature="177:1780" ph="{...}" />
-            <marker date="1506877144038" expanded="true" signature="276:1305" ph="{...}" />
-            <marker date="1506877144038" expanded="true" signature="367:1299" ph="{...}" />
-            <marker date="1506877144038" expanded="true" signature="562:790" ph="{...}" />
-            <marker date="1506877144038" expanded="true" signature="612:691" ph="{...}" />
-            <marker date="1506877144038" expanded="true" signature="697:776" ph="{...}" />
-            <marker date="1506877144038" expanded="true" signature="796:1289" ph="{...}" />
-            <marker date="1506877144038" expanded="true" signature="837:1086" ph="{...}" />
-            <marker date="1506877144038" expanded="true" signature="863:956" ph="{...}" />
-            <marker date="1506877144038" expanded="true" signature="993:1068" ph="{...}" />
-            <marker date="1506877144038" expanded="true" signature="1123:1200" ph="{...}" />
-            <marker date="1506877144038" expanded="true" signature="1206:1275" ph="{...}" />
-            <marker date="1506877144038" expanded="true" signature="1370:1778" ph="{...}" />
+            <marker date="1507006770231" expanded="false" signature="0:601" ph="/ Copyright (c) 2017 Vassili Bykov .../" />
+            <marker date="1507006770231" expanded="true" signature="645:1028" ph="/** A simple user input parser, selecting and running actions applicable to the ...*/" />
+            <marker date="1507006770231" expanded="true" signature="1042:4720" ph="{...}" />
+            <marker date="1507006770231" expanded="true" signature="1049:1134" ph="/** These words are filtered out from the input before it's processed. ...*/" />
+            <marker date="1507006770231" expanded="true" signature="1202:3104" ph="/** Select and invoke the action(s) applicable to the specified user input as ...*/" />
+            <marker date="1507006770231" expanded="true" signature="3136:4228" ph="{...}" />
+            <marker date="1507006770231" expanded="true" signature="3225:4222" ph="{...}" />
+            <marker date="1507006770231" expanded="true" signature="3448:3678" ph="{...}" />
+            <marker date="1507006770231" expanded="true" signature="3500:3581" ph="{...}" />
+            <marker date="1507006770231" expanded="true" signature="3587:3664" ph="{...}" />
+            <marker date="1507006770231" expanded="true" signature="3684:4212" ph="{...}" />
+            <marker date="1507006770231" expanded="true" signature="3734:4001" ph="{...}" />
+            <marker date="1507006770231" expanded="true" signature="3760:3857" ph="{...}" />
+            <marker date="1507006770231" expanded="true" signature="3894:3983" ph="{...}" />
+            <marker date="1507006770231" expanded="true" signature="4042:4121" ph="{...}" />
+            <marker date="1507006770231" expanded="true" signature="4127:4198" ph="{...}" />
+            <marker date="1507006770231" expanded="true" signature="4298:4718" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -703,7 +1038,116 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1782">
           <caret line="99" column="9" lean-forward="true" selection-start-line="99" selection-start-column="9" selection-end-line="99" selection-end-column="9" />
-          <folding />
+          <folding>
+            <marker date="1507006770127" expanded="true" signature="0:601" ph="/ Copyright (c) 2017 Vassili Bykov .../" />
+            <marker date="1507006770127" expanded="true" signature="698:818" ph="/** A definition of a subset of Colossal Cave, with some changes and ...*/" />
+            <marker date="1507006770127" expanded="true" signature="943:20399" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="967:1129" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="1004:1123" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="1135:1279" ph="/ Rooms. .../" />
+            <marker date="1507006770127" expanded="true" signature="1360:1542" ph="&quot;&quot;&quot; You are standing at the end of a road before a small brick building. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="1548:2435" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="2060:2429" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="2108:2419" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="2216:2358" ph="&quot;&quot;&quot; As you $entryWord the well house, a large box appears hovering in the air. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="2549:3108" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="2659:3102" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="2677:3091" ph="&quot;&quot;&quot; The sign says: ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="3462:4169" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="3609:4163" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="3635:3714" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="3720:4153" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="3772:4138" ph="&quot;&quot;&quot; You open the box, releasing a huge cloud of yellow vapor. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="4356:4742" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="4462:4536" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="4574:4736" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="4592:4725" ph="&quot;&quot;&quot; The stream flows out through a pair of 1 foot diameter sewer pipes. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="4807:4966" ph="&quot;&quot;&quot; You have walked up a hill, still in the forest.  The road slopes back ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="4972:5100" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="5248:5289" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="5348:5500" ph="&quot;&quot;&quot; The forest thins out here to reveal a steep cliff.  There is no way ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="5506:5513" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="5574:5670" ph="&quot;&quot;&quot; You are in a valley in the forest beside a stream tumbling along a ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="5676:5831" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="6234:8904" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="6373:6547" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="6431:6493" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="6499:6537" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="6570:6975" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="7001:7401" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="7280:7390" ph="&quot;&quot;&quot; You realize you might never find your way back here ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="7430:8000" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="7497:7833" ph="&quot;&quot;&quot; The bird is singing to you in gratitude for your having returned it to ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="7848:7953" ph="&quot;&quot;&quot; &quot;.  You ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="8051:8732" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="8097:8228" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="8234:8722" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="8378:8506" ph="&quot;&quot;&quot; You think you see your tracks on the forest floor. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="8758:8898" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="8804:8888" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="8986:9138" ph="&quot;&quot;&quot; At your feet all the water of the stream splashes into a 2-inch slit ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="9144:9226" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="9384:9579" ph="&quot;&quot;&quot; You are in a 20-foot depression floored with bare dirt.  Set into the ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="9585:9968" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="9707:9820" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="9849:9962" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="10051:10189" ph="&quot;&quot;&quot; You are in a small chamber beneath a 3x3 steel grate to the surface. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="10195:10315" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="10394:10514" ph="&quot;&quot;&quot; You are crawling over cobbles in a low passage.  There is a dim light ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="10520:10619" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="10704:10992" ph="&quot;&quot;&quot; You are in a debris room filled with stuff washed in from the surface. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="10998:11206" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="11118:11200" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="11372:11449" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="11534:11743" ph="&quot;&quot;&quot; You are in a splendid chamber thirty feet high.  The walls are frozen ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="11749:11847" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="11918:12060" ph="&quot;&quot;&quot; At your feet is a small pit breathing traces of white mist.  An east ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="12066:12158" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="12207:12506" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="12238:12500" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="12553:12677" ph="&quot;&quot;&quot; The crack is far too small for you to follow.  At its widest it is ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="12754:13148" ph="&quot;&quot;&quot; You are at one end of a vast hall stretching forward out of sight to ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="13154:13897" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="13420:13566" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="13438:13515" ph="&quot;&quot;&quot; The cave walls around you become a blur. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="13594:13698" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="13619:13688" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="13727:13891" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="13974:14128" ph="&quot;&quot;&quot; You are on the east bank of a fissure slicing clear across the hall. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="14134:14179" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="14257:14374" ph="&quot;&quot;&quot; This is a low room with a crude note on the wall.  The note says, ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="14380:14452" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="14686:14783" ph="&quot;&quot;&quot; You are in the Hall of the Mountain King, with passages off in all ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="14789:15524" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15131:15249" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15278:15518" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15312:15508" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15334:15452" ph="&quot;&quot;&quot; The little bird attacks the green snake, and in an astounding flurry ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="15586:15728" ph="&quot;&quot;&quot; The passage is blocked by orange safety fencing with a sign saying, ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="15854:15966" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15884:15960" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15972:15996" ph="/ Items .../" />
+            <marker date="1507006770127" expanded="true" signature="16166:16197" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="16782:17320" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17617:17891" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17642:17885" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17685:17789" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17795:17875" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17931:19206" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17962:18230" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="18018:18137" ph="&quot;&quot;&quot; A little bird is sitting here looking sad and lonely. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="18279:19045" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="18318:18991" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="18524:18875" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="18997:19035" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="19075:19200" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="19448:19730" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="19601:19724" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="19835:19872" ph="/ Extra DSLish stuff .../" />
+            <marker date="1507006770127" expanded="true" signature="19974:20179" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="20033:20173" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="20279:20397" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -722,26 +1166,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Toggle.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="8" column="3" lean-forward="false" selection-start-line="8" selection-start-column="3" selection-end-line="8" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$KOTLIN_BUNDLED$/lib/kotlin-stdlib-sources.jar!/kotlin/TypeAliases.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
           <caret line="21" column="37" lean-forward="false" selection-start-line="21" selection-start-column="37" selection-end-line="21" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Lantern.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="26" column="0" lean-forward="true" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -933,105 +1361,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/LocalAction.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="14" column="0" lean-forward="true" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-          <folding>
-            <marker date="1506876697566" expanded="true" signature="42:186" ph="/** An action bound to a room or an item. Its effect is typically specified ...*/" />
-            <marker date="1506876697566" expanded="true" signature="313:1071" ph="{...}" />
-            <marker date="1506876697566" expanded="true" signature="320:431" ph="/** The subjects of the currently executing command, ...*/" />
-            <marker date="1506876697566" expanded="true" signature="582:802" ph="{...}" />
-            <marker date="1506876697566" expanded="true" signature="637:776" ph="{...}" />
-            <marker date="1506876697566" expanded="true" signature="664:712" ph="{...}" />
-            <marker date="1506876697566" expanded="true" signature="718:766" ph="{...}" />
-            <marker date="1506876697566" expanded="true" signature="808:897" ph="/** Indicate whether any of the current subject words refer to the [item]. ...*/" />
-            <marker date="1506876697566" expanded="true" signature="1012:1069" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/ItemAction.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="7" column="18" lean-forward="false" selection-start-line="7" selection-start-column="18" selection-end-line="7" selection-end-column="18" />
-          <folding>
-            <marker date="1506876697622" expanded="true" signature="165:350" ph="{...}" />
-            <marker date="1506876697622" expanded="true" signature="212:347" ph="{...}" />
-            <marker date="1506876697622" expanded="true" signature="262:292" ph="{...}" />
-            <marker date="1506876697622" expanded="true" signature="298:341" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/DarkRoom.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="414">
-          <caret line="23" column="5" lean-forward="true" selection-start-line="23" selection-start-column="5" selection-end-line="23" selection-end-column="5" />
-          <folding>
-            <marker date="1506886067302" expanded="true" signature="42:155" ph="/** The superclass of rooms that have no lights and require the player ...*/" />
-            <marker date="1506886067302" expanded="true" signature="265:827" ph="{...}" />
-            <marker date="1506886067302" expanded="true" signature="407:593" ph="{...}" />
-            <marker date="1506886067302" expanded="true" signature="492:540" ph="{...}" />
-            <marker date="1506886067302" expanded="true" signature="546:587" ph="{...}" />
-            <marker date="1506886067302" expanded="true" signature="635:825" ph="{...}" />
-            <marker date="1506886067302" expanded="true" signature="720:772" ph="{...}" />
-            <marker date="1506886067302" expanded="true" signature="778:819" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/UnenterableRoom.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="8" column="24" lean-forward="true" selection-start-line="8" selection-start-column="24" selection-end-line="8" selection-end-column="24" />
-          <folding>
-            <marker date="1506886067306" expanded="true" signature="42:178" ph="/** A room that refuses any player's attempt to enter, ...*/" />
-            <marker date="1506886067306" expanded="true" signature="257:423" ph="{...}" />
-            <marker date="1506886067306" expanded="true" signature="360:421" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/functions.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="13" column="44" lean-forward="false" selection-start-line="13" selection-start-column="44" selection-end-line="13" selection-end-column="44" />
-          <folding>
-            <marker date="1506898046604" expanded="true" signature="154:275" ph="{...}" />
-            <marker date="1506898046604" expanded="true" signature="180:228" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Direction.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="291">
-          <caret line="46" column="12" lean-forward="false" selection-start-line="46" selection-start-column="12" selection-end-line="46" selection-end-column="12" />
-          <folding>
-            <marker date="1506889199948" expanded="true" signature="42:77" ph="/** @author Vassili Bykov ...*/" />
-            <marker date="1506889199948" expanded="true" signature="121:1445" ph="{...}" />
-            <marker date="1506889199948" expanded="true" signature="436:482" ph="{...}" />
-            <marker date="1506889199948" expanded="true" signature="505:1443" ph="{...}" />
-            <marker date="1506889199948" expanded="true" signature="657:1072" ph="{...}" />
-            <marker date="1506889199948" expanded="true" signature="698:805" ph="{...}" />
-            <marker date="1506889199948" expanded="true" signature="1305:1385" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/OpenSpace.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="18" column="33" lean-forward="true" selection-start-line="18" selection-start-column="33" selection-end-line="18" selection-end-column="33" />
-          <folding>
-            <marker date="1506898426248" expanded="true" signature="42:363" ph="/** A room in which an exit into any not explicitly configured direction leads to ...*/" />
-            <marker date="1506898426248" expanded="true" signature="513:763" ph="{...}" />
-            <marker date="1506898426248" expanded="true" signature="568:761" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$KOTLIN_BUNDLED$/lib/kotlin-stdlib-sources.jar!/kotlin/collections/ArraysJVM.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
@@ -1042,261 +1371,6 @@
             <marker date="1506671584072" expanded="true" signature="1145:1393" ph="/** Returns a typed array containing all of the elements of this collection. ...*/" />
             <marker date="1506671584072" expanded="true" signature="1491:1686" ph="{...}" />
             <marker date="1506671584072" expanded="true" signature="1835:1970" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Fixture.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="11" column="13" lean-forward="false" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-          <folding>
-            <marker date="1506889199952" expanded="true" signature="42:190" ph="/** An [Item] that can't be picked up by the player. (And in general refuses to ...*/" />
-            <marker date="1506889199952" expanded="true" signature="337:604" ph="{...}" />
-            <marker date="1506889199952" expanded="true" signature="523:602" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/com/github/vassilibykov/adventkt/GrateTest.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Action.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="6" column="33" lean-forward="false" selection-start-line="6" selection-start-column="33" selection-end-line="6" selection-end-column="33" />
-          <folding>
-            <marker date="1506878107110" expanded="true" signature="42:77" ph="/** @author Vassili Bykov ...*/" />
-            <marker date="1506878107110" expanded="true" signature="126:518" ph="{...}" />
-            <marker date="1506878107110" expanded="true" signature="138:178" ph="{...}" />
-            <marker date="1506878107110" expanded="true" signature="273:321" ph="{...}" />
-            <marker date="1506878107110" expanded="true" signature="347:388" ph="{...}" />
-            <marker date="1506878107110" expanded="true" signature="411:466" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/ColossalCaveActions.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="201">
-          <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
-          <folding>
-            <marker date="1506915647476" expanded="true" signature="42:94" ph="/ Global vocabulary verbs, alphabetic order .../" />
-            <marker date="1506915647476" expanded="true" signature="140:494" ph="{...}" />
-            <marker date="1506915647476" expanded="true" signature="555:640" ph="{...}" />
-            <marker date="1506915647476" expanded="true" signature="602:638" ph="{...}" />
-            <marker date="1506915647476" expanded="true" signature="669:900" ph="{...}" />
-            <marker date="1506915647476" expanded="true" signature="716:898" ph="{...}" />
-            <marker date="1506915647476" expanded="true" signature="789:859" ph="{...}" />
-            <marker date="1506915647476" expanded="true" signature="933:1117" ph="{...}" />
-            <marker date="1506915647476" expanded="true" signature="980:1115" ph="{...}" />
-            <marker date="1506915647476" expanded="true" signature="1014:1077" ph="{...}" />
-            <marker date="1506915647476" expanded="true" signature="1168:1479" ph="{...}" />
-            <marker date="1506915647476" expanded="true" signature="1215:1477" ph="{...}" />
-            <marker date="1506915647476" expanded="true" signature="1279:1335" ph="{...}" />
-            <marker date="1506915647476" expanded="true" signature="1341:1471" ph="{...}" />
-            <marker date="1506915647476" expanded="true" signature="1508:1674" ph="{...}" />
-            <marker date="1506915647476" expanded="true" signature="1555:1672" ph="{...}" />
-            <marker date="1506915647476" expanded="true" signature="1589:1666" ph="{...}" />
-            <marker date="1506915647476" expanded="true" signature="1710:1802" ph="{...}" />
-            <marker date="1506915647476" expanded="true" signature="1757:1800" ph="{...}" />
-            <marker date="1506915647476" expanded="true" signature="1846:2444" ph="{...}" />
-            <marker date="1506915647476" expanded="true" signature="1893:2192" ph="{...}" />
-            <marker date="1506915647476" expanded="true" signature="1926:1978" ph="{...}" />
-            <marker date="1506915647476" expanded="true" signature="2080:2158" ph="{...}" />
-            <marker date="1506915647476" expanded="true" signature="2220:2441" ph="{...}" />
-            <marker date="1506915647476" expanded="true" signature="2344:2435" ph="{...}" />
-            <marker date="1506915647476" expanded="true" signature="2376:2425" ph="{...}" />
-            <marker date="1506915647476" expanded="true" signature="2476:2564" ph="{...}" />
-            <marker date="1506915647476" expanded="true" signature="2523:2562" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Main.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Player.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
-          <caret line="16" column="0" lean-forward="false" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
-          <folding>
-            <marker date="1506897882704" expanded="true" signature="42:77" ph="/** @author Vassili Bykov ...*/" />
-            <marker date="1506897882704" expanded="true" signature="103:1398" ph="{...}" />
-            <marker date="1506897882704" expanded="true" signature="110:169" ph="/** The items currently owned by the player. ...*/" />
-            <marker date="1506897882704" expanded="true" signature="222:267" ph="/** The room the player is in. ...*/" />
-            <marker date="1506897882704" expanded="true" signature="321:613" ph="/** Relocate the player to a different room. Both rooms involved are asked ...*/" />
-            <marker date="1506897882704" expanded="true" signature="644:901" ph="{...}" />
-            <marker date="1506897882704" expanded="true" signature="759:895" ph="{...}" />
-            <marker date="1506897882704" expanded="true" signature="972:1072" ph="{...}" />
-            <marker date="1506897882704" expanded="true" signature="1004:1066" ph="{...}" />
-            <marker date="1506897882704" expanded="true" signature="1141:1232" ph="{...}" />
-            <marker date="1506897882704" expanded="true" signature="1173:1226" ph="{...}" />
-            <marker date="1506897882704" expanded="true" signature="1280:1311" ph="{...}" />
-            <marker date="1506897882704" expanded="true" signature="1362:1396" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Room.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="201">
-          <caret line="38" column="0" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
-          <folding>
-            <marker date="1506900058788" expanded="true" signature="42:77" ph="/** @author Vassili Bykov ...*/" />
-            <marker date="1506900058788" expanded="true" signature="191:4275" ph="{...}" />
-            <marker date="1506900058788" expanded="true" signature="533:674" ph="/** Print the description of the room and all the items in it. ...*/" />
-            <marker date="1506900058788" expanded="true" signature="707:959" ph="{...}" />
-            <marker date="1506900058788" expanded="true" signature="863:953" ph="{...}" />
-            <marker date="1506900058788" expanded="true" signature="997:1214" ph="{...}" />
-            <marker date="1506900058788" expanded="true" signature="1118:1208" ph="{...}" />
-            <marker date="1506900058788" expanded="true" signature="1289:1546" ph="/** Invoked when the player is about to be moved to another room from this ...*/" />
-            <marker date="1506900058788" expanded="true" signature="1607:1853" ph="/** Invoked when the player is about to be moved to this room from another. ...*/" />
-            <marker date="1506900058788" expanded="true" signature="1916:1994" ph="/** Invoked after the player leaves this room for another room. ...*/" />
-            <marker date="1506900058788" expanded="true" signature="2054:2216" ph="/** Invoked after the player enters this room. This method may be overridden, ...*/" />
-            <marker date="1506900058788" expanded="true" signature="2266:2323" ph="{...}" />
-            <marker date="1506900058788" expanded="true" signature="2446:2981" ph="{...}" />
-            <marker date="1506900058788" expanded="true" signature="2486:2975" ph="{...}" />
-            <marker date="1506900058788" expanded="true" signature="2534:2655" ph="{...}" />
-            <marker date="1506900058788" expanded="true" signature="2756:2883" ph="{...}" />
-            <marker date="1506900058788" expanded="true" signature="3042:3284" ph="{...}" />
-            <marker date="1506900058788" expanded="true" signature="3082:3278" ph="{...}" />
-            <marker date="1506900058788" expanded="true" signature="3130:3229" ph="{...}" />
-            <marker date="1506900058788" expanded="true" signature="3373:3404" ph="{...}" />
-            <marker date="1506900058788" expanded="true" signature="3486:3608" ph="{...}" />
-            <marker date="1506900058788" expanded="true" signature="3748:3779" ph="{...}" />
-            <marker date="1506900058788" expanded="true" signature="3830:3864" ph="{...}" />
-            <marker date="1506900058788" expanded="true" signature="3946:4273" ph="{...}" />
-            <marker date="1506900058788" expanded="true" signature="3956:4089" ph="/** The player is created in this &quot;room&quot; and moved into the starting ...*/" />
-            <marker date="1506900058788" expanded="true" signature="4203:4267" ph="{...}" />
-            <marker date="1506900058788" expanded="true" signature="4242:4257" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/MovementAction.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="10" column="47" lean-forward="true" selection-start-line="10" selection-start-column="47" selection-end-line="10" selection-end-column="47" />
-          <folding>
-            <marker date="1506890517932" expanded="true" signature="42:170" ph="/** A special action bound to a movement direction such as &quot;north&quot;, ...*/" />
-            <marker date="1506890517932" expanded="true" signature="230:644" ph="{...}" />
-            <marker date="1506890517932" expanded="true" signature="275:642" ph="{...}" />
-            <marker date="1506890517932" expanded="true" signature="355:433" ph="{...}" />
-            <marker date="1506890517932" expanded="true" signature="523:601" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/World.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="21" column="0" lean-forward="true" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-          <folding>
-            <marker date="1506916180836" expanded="true" signature="49:202" ph="..." />
-            <marker date="1506916180836" expanded="true" signature="204:471" ph="/** The superclass of a game definition. Uses reflection to implement a second ...*/" />
-            <marker date="1506916180836" expanded="true" signature="516:2506" ph="{...}" />
-            <marker date="1506916180836" expanded="true" signature="666:959" ph="{...}" />
-            <marker date="1506916180836" expanded="true" signature="680:884" ph="{...}" />
-            <marker date="1506916180836" expanded="true" signature="740:874" ph="{...}" />
-            <marker date="1506916180836" expanded="true" signature="910:953" ph="{...}" />
-            <marker date="1506916180836" expanded="true" signature="1027:1398" ph="/** Run [Configurable.configure] methods of all properties of this instance which ...*/" />
-            <marker date="1506916180836" expanded="true" signature="1433:2192" ph="{...}" />
-            <marker date="1506916180836" expanded="true" signature="1707:2186" ph="{...}" />
-            <marker date="1506916180836" expanded="true" signature="1825:2176" ph="{...}" />
-            <marker date="1506916180836" expanded="true" signature="2042:2162" ph="{...}" />
-            <marker date="1506916180836" expanded="true" signature="2198:2400" ph="/** An object which, when a property of a [World] subclass instance defining ...*/" />
-            <marker date="1506916180836" expanded="true" signature="2428:2459" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/com/github/vassilibykov/adventkt/ColossalCaveTest.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="648">
-          <caret line="36" column="27" lean-forward="false" selection-start-line="36" selection-start-column="27" selection-end-line="36" selection-end-column="27" />
-          <folding>
-            <marker date="1506922423360" expanded="true" signature="42:79" ph="/**...*/" />
-            <marker date="1506922423360" expanded="true" signature="186:381" ph="/**...*/" />
-            <marker date="1506922423360" expanded="true" signature="399:605" ph="{...}" />
-            <marker date="1506922423360" expanded="true" signature="641:730" ph="{...}" />
-            <marker date="1506922423360" expanded="true" signature="680:694" ph="{" />
-            <marker date="1506922423360" expanded="true" signature="680:724" ph="{...}" />
-            <marker date="1506922423360" expanded="true" signature="714:724" ph="}" />
-            <marker date="1506922423360" expanded="true" signature="769:779" ph="{" />
-            <marker date="1506922423360" expanded="true" signature="807:813" ph="}" />
-            <marker date="1506922423360" expanded="true" signature="843:853" ph="{" />
-            <marker date="1506922423360" expanded="true" signature="899:905" ph="}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Item.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="11" column="11" lean-forward="false" selection-start-line="11" selection-start-column="11" selection-end-line="11" selection-end-column="11" />
-          <folding>
-            <marker date="1506893085604" expanded="true" signature="42:350" ph="/** An item (or a character). An item can be picked up and carried by the player, ...*/" />
-            <marker date="1506893085604" expanded="true" signature="510:3818" ph="{...}" />
-            <marker date="1506893085604" expanded="true" signature="809:914" ph="/** The description of the item displayed when the item is NOT owned by the ...*/" />
-            <marker date="1506893085604" expanded="true" signature="955:1049" ph="/** The description of the item to display when it's in the player's inventory. ...*/" />
-            <marker date="1506893085604" expanded="true" signature="1097:1179" ph="/** Whether to skip the item when printing a full room description. ...*/" />
-            <marker date="1506893085604" expanded="true" signature="1429:1618" ph="{...}" />
-            <marker date="1506893085604" expanded="true" signature="1706:1903" ph="{...}" />
-            <marker date="1506893085604" expanded="true" signature="2031:2307" ph="/** Move the item to a new owner. This is the standard method of doing so, ...*/" />
-            <marker date="1506893085604" expanded="true" signature="2344:2754" ph="{...}" />
-            <marker date="1506893085604" expanded="true" signature="2546:2748" ph="{...}" />
-            <marker date="1506893085604" expanded="true" signature="2760:2913" ph="/** Unconditionally relocate this item to a new owner, without getting any ...*/" />
-            <marker date="1506893085604" expanded="true" signature="2959:3103" ph="{...}" />
-            <marker date="1506893085604" expanded="true" signature="3307:3816" ph="{...}" />
-            <marker date="1506893085604" expanded="true" signature="3317:3493" ph="/** An [ItemOwner] an item belongs to when it's not in any of the rooms ...*/" />
-            <marker date="1506893085604" expanded="true" signature="3533:3810" ph="{...}" />
-            <marker date="1506893085604" expanded="true" signature="3644:3691" ph="{...}" />
-            <marker date="1506893085604" expanded="true" signature="3750:3800" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/ItemOwner.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="522">
-          <caret line="29" column="26" lean-forward="true" selection-start-line="29" selection-start-column="26" selection-end-line="29" selection-end-column="26" />
-          <folding>
-            <marker date="1506927373672" expanded="true" signature="42:171" ph="/** An object which can contain [Item]s. Rooms and the player are the most common ...*/" />
-            <marker date="1506927373672" expanded="true" signature="192:1042" ph="{...}" />
-            <marker date="1506927373672" expanded="true" signature="232:303" ph="/** Indicate whether the player currently owns the item. ...*/" />
-            <marker date="1506927373672" expanded="true" signature="355:425" ph="/** Return an item one of which names matches the word. ...*/" />
-            <marker date="1506927373672" expanded="true" signature="496:592" ph="/** Return an item one of which names matches one of the words in the collection. ...*/" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/com/github/vassilibykov/adventkt/BirdTest.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="52" column="33" lean-forward="true" selection-start-line="52" selection-start-column="33" selection-end-line="52" selection-end-column="33" />
-          <folding>
-            <marker date="1506922423360" expanded="true" signature="118:175" ph="{...}" />
-            <marker date="1506922423360" expanded="true" signature="207:286" ph="{...}" />
-            <marker date="1506922423360" expanded="true" signature="324:414" ph="{...}" />
-            <marker date="1506922423360" expanded="true" signature="447:554" ph="{...}" />
-            <marker date="1506922423360" expanded="true" signature="584:691" ph="{...}" />
-            <marker date="1506922423360" expanded="true" signature="720:806" ph="{...}" />
-            <marker date="1506922423360" expanded="true" signature="844:940" ph="{...}" />
-            <marker date="1506922423360" expanded="true" signature="974:1064" ph="{...}" />
-            <marker date="1506922423360" expanded="true" signature="1115:1221" ph="{...}" />
-            <marker date="1506922423360" expanded="true" signature="1255:1354" ph="{...}" />
-            <marker date="1506922423360" expanded="true" signature="1387:1496" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -7927,41 +8001,661 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Detail.kt">
+    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/OpenSpace.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="11" column="32" lean-forward="false" selection-start-line="11" selection-start-column="32" selection-end-line="11" selection-end-column="32" />
+        <state relative-caret-position="216">
+          <caret line="12" column="23" lean-forward="true" selection-start-line="12" selection-start-column="23" selection-end-line="12" selection-end-column="23" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Parser.kt">
+    <entry file="file://$PROJECT_DIR$/tests/com/github/vassilibykov/adventkt/GrateTest.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="11">
-          <caret line="18" column="0" lean-forward="false" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+        <state relative-caret-position="738">
+          <caret line="41" column="29" lean-forward="false" selection-start-line="41" selection-start-column="29" selection-end-line="41" selection-end-column="29" />
           <folding>
-            <marker date="1506877144038" expanded="true" signature="42:163" ph="/** A simple input parser. Far from Infocom grade, but better than the ...*/" />
-            <marker date="1506877144038" expanded="true" signature="177:1780" ph="{...}" />
-            <marker date="1506877144038" expanded="true" signature="276:1305" ph="{...}" />
-            <marker date="1506877144038" expanded="true" signature="367:1299" ph="{...}" />
-            <marker date="1506877144038" expanded="true" signature="562:790" ph="{...}" />
-            <marker date="1506877144038" expanded="true" signature="612:691" ph="{...}" />
-            <marker date="1506877144038" expanded="true" signature="697:776" ph="{...}" />
-            <marker date="1506877144038" expanded="true" signature="796:1289" ph="{...}" />
-            <marker date="1506877144038" expanded="true" signature="837:1086" ph="{...}" />
-            <marker date="1506877144038" expanded="true" signature="863:956" ph="{...}" />
-            <marker date="1506877144038" expanded="true" signature="993:1068" ph="{...}" />
-            <marker date="1506877144038" expanded="true" signature="1123:1200" ph="{...}" />
-            <marker date="1506877144038" expanded="true" signature="1206:1275" ph="{...}" />
-            <marker date="1506877144038" expanded="true" signature="1370:1778" ph="{...}" />
+            <marker date="1506978314853" expanded="true" signature="109:119" ph="{" />
+            <marker date="1506978314853" expanded="true" signature="138:144" ph="}" />
+            <marker date="1506978314853" expanded="true" signature="174:274" ph="{...}" />
+            <marker date="1506978314853" expanded="true" signature="311:411" ph="{...}" />
+            <marker date="1506978314853" expanded="true" signature="457:570" ph="{...}" />
+            <marker date="1506978314853" expanded="true" signature="612:773" ph="{...}" />
+            <marker date="1506978314853" expanded="true" signature="813:912" ph="{...}" />
+            <marker date="1506978314853" expanded="true" signature="939:1073" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/com/github/vassilibykov/adventkt/BirdTest.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="3" column="4" lean-forward="false" selection-start-line="3" selection-start-column="4" selection-end-line="3" selection-end-column="4" />
+          <folding>
+            <marker date="1507004852551" expanded="true" signature="116:223" ph="{...}" />
+            <marker date="1507004852551" expanded="true" signature="253:360" ph="{...}" />
+            <marker date="1507004852551" expanded="true" signature="389:475" ph="{...}" />
+            <marker date="1507004852551" expanded="true" signature="513:609" ph="{...}" />
+            <marker date="1507004852551" expanded="true" signature="643:733" ph="{...}" />
+            <marker date="1507004852551" expanded="true" signature="784:890" ph="{...}" />
+            <marker date="1507004852551" expanded="true" signature="924:1023" ph="{...}" />
+            <marker date="1507004852551" expanded="true" signature="1056:1165" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/com/github/vassilibykov/adventkt/SnakeTest.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="3" column="4" lean-forward="false" selection-start-line="3" selection-start-column="4" selection-end-line="3" selection-end-column="4" />
+          <folding>
+            <marker date="1507004852563" expanded="true" signature="131:219" ph="{...}" />
+            <marker date="1507004852563" expanded="true" signature="246:408" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/com/github/vassilibykov/adventkt/NuggetTest.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="2" column="33" lean-forward="false" selection-start-line="2" selection-start-column="33" selection-end-line="2" selection-end-column="33" />
+          <folding>
+            <marker date="1507005352031" expanded="true" signature="115:194" ph="{...}" />
+            <marker date="1507005352031" expanded="true" signature="229:345" ph="{...}" />
+            <marker date="1507005352031" expanded="true" signature="381:512" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/com/github/vassilibykov/adventkt/ImplementorPrizeTest.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="10" column="0" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <folding>
+            <marker date="1507005501519" expanded="true" signature="136:261" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Player.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="11" column="46" lean-forward="true" selection-start-line="11" selection-start-column="46" selection-end-line="11" selection-end-column="46" />
+          <folding>
+            <marker date="1507006770227" expanded="true" signature="645:680" ph="/** @author Vassili Bykov ...*/" />
+            <marker date="1507006770227" expanded="true" signature="706:2113" ph="{...}" />
+            <marker date="1507006770227" expanded="true" signature="713:772" ph="/** The items currently owned by the player. ...*/" />
+            <marker date="1507006770227" expanded="true" signature="825:870" ph="/** The room the player is in. ...*/" />
+            <marker date="1507006770227" expanded="true" signature="924:1216" ph="/** Relocate the player to a different room. Both rooms involved are asked ...*/" />
+            <marker date="1507006770227" expanded="true" signature="1247:1503" ph="{...}" />
+            <marker date="1507006770227" expanded="true" signature="1361:1497" ph="{...}" />
+            <marker date="1507006770227" expanded="true" signature="1543:1616" ph="{...}" />
+            <marker date="1507006770227" expanded="true" signature="1687:1787" ph="{...}" />
+            <marker date="1507006770227" expanded="true" signature="1719:1781" ph="{...}" />
+            <marker date="1507006770227" expanded="true" signature="1856:1947" ph="{...}" />
+            <marker date="1507006770227" expanded="true" signature="1888:1941" ph="{...}" />
+            <marker date="1507006770227" expanded="true" signature="1995:2026" ph="{...}" />
+            <marker date="1507006770227" expanded="true" signature="2077:2111" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/MovementAction.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" column="24" lean-forward="false" selection-start-line="6" selection-start-column="24" selection-end-line="6" selection-end-column="24" />
+          <folding>
+            <marker date="1507006770147" expanded="true" signature="645:810" ph="/** A specialized action identified by a movement direction such as &quot;north&quot;, so a ...*/" />
+            <marker date="1507006770147" expanded="true" signature="870:1292" ph="{...}" />
+            <marker date="1507006770147" expanded="true" signature="915:1290" ph="{...}" />
+            <marker date="1507006770147" expanded="true" signature="995:1054" ph="{...}" />
+            <marker date="1507006770147" expanded="true" signature="1060:1284" ph="{...}" />
+            <marker date="1507006770147" expanded="true" signature="1159:1226" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Main.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="23" column="52" lean-forward="true" selection-start-line="23" selection-start-column="52" selection-end-line="23" selection-end-column="52" />
+          <folding>
+            <marker date="1507006770219" expanded="true" signature="652:806" ph="..." />
+            <marker date="1507006770219" expanded="true" signature="809:844" ph="/** @author Vassili Bykov ...*/" />
+            <marker date="1507006770219" expanded="true" signature="1010:1289" ph="{...}" />
+            <marker date="1507006770219" expanded="true" signature="1038:1254" ph="{...}" />
+            <marker date="1507006770219" expanded="true" signature="1260:1287" ph="{...}" />
+            <marker date="1507006770219" expanded="true" signature="1345:1468" ph="{...}" />
+            <marker date="1507006770219" expanded="true" signature="1362:1413" ph="{...}" />
+            <marker date="1507006770219" expanded="true" signature="1444:1466" ph="{...}" />
+            <marker date="1507006770219" expanded="true" signature="1500:1588" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/LocalAction.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="33" column="45" lean-forward="false" selection-start-line="33" selection-start-column="45" selection-end-line="33" selection-end-column="45" />
+          <folding>
+            <marker date="1507006770123" expanded="true" signature="645:1284" ph="/** An action attached to a room or an item. This is usually done using the ...*/" />
+            <marker date="1507006770123" expanded="true" signature="1415:2519" ph="{...}" />
+            <marker date="1507006770123" expanded="true" signature="1421:1547" ph="/** The subjects of the currently executing command, captured so that the ...*/" />
+            <marker date="1507006770123" expanded="true" signature="1618:1945" ph="/** A DSL clause; amends the action's effect so that the original effect ...*/" />
+            <marker date="1507006770123" expanded="true" signature="2030:2250" ph="{...}" />
+            <marker date="1507006770123" expanded="true" signature="2085:2224" ph="{...}" />
+            <marker date="1507006770123" expanded="true" signature="2112:2160" ph="{...}" />
+            <marker date="1507006770123" expanded="true" signature="2166:2214" ph="{...}" />
+            <marker date="1507006770123" expanded="true" signature="2256:2345" ph="/** Indicate whether any of the current subject words refer to the [item]. ...*/" />
+            <marker date="1507006770123" expanded="true" signature="2460:2517" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Lantern.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="18" column="24" lean-forward="false" selection-start-line="18" selection-start-column="24" selection-end-line="18" selection-end-column="24" />
+          <folding>
+            <marker date="1507006770163" expanded="true" signature="645:1485" ph="/** Most of the game objects are defined in ColossalCave, but the lantern ...*/" />
+            <marker date="1507006770163" expanded="true" signature="1526:2778" ph="{...}" />
+            <marker date="1507006770163" expanded="true" signature="1826:2776" ph="{...}" />
+            <marker date="1507006770163" expanded="true" signature="2122:2770" ph="{...}" />
+            <marker date="1507006770163" expanded="true" signature="2179:2391" ph="{...}" />
+            <marker date="1507006770163" expanded="true" signature="2291:2373" ph="{...}" />
+            <marker date="1507006770163" expanded="true" signature="2429:2683" ph="{...}" />
+            <marker date="1507006770163" expanded="true" signature="2531:2665" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Item.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="828">
+          <caret line="46" column="48" lean-forward="false" selection-start-line="46" selection-start-column="48" selection-end-line="46" selection-end-column="48" />
+          <folding>
+            <marker date="1507006770123" expanded="true" signature="645:953" ph="/** An item (or a character). An item can be picked up and carried by the player, ...*/" />
+            <marker date="1507006770123" expanded="true" signature="1113:5816" ph="{...}" />
+            <marker date="1507006770123" expanded="true" signature="1749:1854" ph="/** The description of the item displayed when the item is NOT owned by the ...*/" />
+            <marker date="1507006770123" expanded="true" signature="1941:2035" ph="/** The description of the item to display when it's in the player's inventory. ...*/" />
+            <marker date="1507006770123" expanded="true" signature="2138:2220" ph="/** Whether to skip the item when printing a full room description. ...*/" />
+            <marker date="1507006770123" expanded="true" signature="2515:2557" ph="{...}" />
+            <marker date="1507006770123" expanded="true" signature="2739:2858" ph="{...}" />
+            <marker date="1507006770123" expanded="true" signature="2759:2852" ph="{...}" />
+            <marker date="1507006770123" expanded="true" signature="2911:2960" ph="{...}" />
+            <marker date="1507006770123" expanded="true" signature="3039:3167" ph="{...}" />
+            <marker date="1507006770123" expanded="true" signature="3073:3127" ph="{...}" />
+            <marker date="1507006770123" expanded="true" signature="3133:3161" ph="{...}" />
+            <marker date="1507006770123" expanded="true" signature="3226:3309" ph="{...}" />
+            <marker date="1507006770123" expanded="true" signature="3389:3578" ph="{...}" />
+            <marker date="1507006770123" expanded="true" signature="3666:3863" ph="{...}" />
+            <marker date="1507006770123" expanded="true" signature="3991:4267" ph="/** Move the item to a new owner. This is the standard method of doing so, ...*/" />
+            <marker date="1507006770123" expanded="true" signature="4304:4714" ph="{...}" />
+            <marker date="1507006770123" expanded="true" signature="4506:4708" ph="{...}" />
+            <marker date="1507006770123" expanded="true" signature="4720:4873" ph="/** Unconditionally relocate this item to a new owner, without getting any ...*/" />
+            <marker date="1507006770123" expanded="true" signature="4919:5063" ph="{...}" />
+            <marker date="1507006770123" expanded="true" signature="5143:5232" ph="/** Return the item's primary name. Some of printing logic relies on this. ...*/" />
+            <marker date="1507006770123" expanded="true" signature="5305:5814" ph="{...}" />
+            <marker date="1507006770123" expanded="true" signature="5315:5491" ph="/** An [ItemOwner] an item belongs to when it's not in any of the rooms ...*/" />
+            <marker date="1507006770123" expanded="true" signature="5531:5808" ph="{...}" />
+            <marker date="1507006770123" expanded="true" signature="5642:5689" ph="{...}" />
+            <marker date="1507006770123" expanded="true" signature="5748:5798" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/functions.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="13" column="44" lean-forward="false" selection-start-line="13" selection-start-column="44" selection-end-line="13" selection-end-column="44" />
+          <folding>
+            <marker date="1507006770215" expanded="true" signature="757:878" ph="{...}" />
+            <marker date="1507006770215" expanded="true" signature="783:831" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Direction.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1008">
+          <caret line="56" column="0" lean-forward="false" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
+          <folding>
+            <marker date="1507006770167" expanded="true" signature="645:746" ph="/** A movement direction, with the concept of opposite directions. ...*/" />
+            <marker date="1507006770167" expanded="true" signature="790:2114" ph="{...}" />
+            <marker date="1507006770167" expanded="true" signature="1105:1151" ph="{...}" />
+            <marker date="1507006770167" expanded="true" signature="1174:2112" ph="{...}" />
+            <marker date="1507006770167" expanded="true" signature="1326:1741" ph="{...}" />
+            <marker date="1507006770167" expanded="true" signature="1367:1474" ph="{...}" />
+            <marker date="1507006770167" expanded="true" signature="1974:2054" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Detail.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" column="24" lean-forward="false" selection-start-line="6" selection-start-column="24" selection-end-line="6" selection-end-column="24" />
+          <folding>
+            <marker date="1507006770151" expanded="true" signature="645:793" ph="/** A simple hidden [Fixture] with no special behavior other than providing a ...*/" />
+            <marker date="1507006770151" expanded="true" signature="987:1174" ph="{...}" />
+            <marker date="1507006770151" expanded="true" signature="1052:1172" ph="{...}" />
+            <marker date="1507006770151" expanded="true" signature="1126:1166" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/DarkRoom.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" column="24" lean-forward="false" selection-start-line="6" selection-start-column="24" selection-end-line="6" selection-end-column="24" />
+          <folding>
+            <marker date="1507006770219" expanded="true" signature="645:838" ph="/** The superclass of rooms that have no natural lights and require the player to ...*/" />
+            <marker date="1507006770219" expanded="true" signature="939:1501" ph="{...}" />
+            <marker date="1507006770219" expanded="true" signature="1081:1267" ph="{...}" />
+            <marker date="1507006770219" expanded="true" signature="1166:1214" ph="{...}" />
+            <marker date="1507006770219" expanded="true" signature="1220:1261" ph="{...}" />
+            <marker date="1507006770219" expanded="true" signature="1309:1499" ph="{...}" />
+            <marker date="1507006770219" expanded="true" signature="1394:1446" ph="{...}" />
+            <marker date="1507006770219" expanded="true" signature="1452:1493" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/ColossalCaveActions.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="16" column="14" lean-forward="true" selection-start-line="16" selection-start-column="14" selection-end-line="16" selection-end-column="14" />
+          <folding>
+            <marker date="1507006770155" expanded="true" signature="645:727" ph="/ Global vocabulary actions, alphabetic order. .../" />
+            <marker date="1507006770155" expanded="true" signature="773:1224" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="1285:1370" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="1332:1368" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="1399:1630" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="1446:1628" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="1519:1589" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="1663:1849" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="1710:1847" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="1744:1788" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="1794:1841" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="1900:2211" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="1947:2209" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="2011:2067" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="2073:2203" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="2240:2453" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="2287:2451" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="2321:2379" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="2385:2445" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="2489:2573" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="2536:2571" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="2609:2701" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="2656:2699" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="2745:3342" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="2792:3091" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="2825:2877" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="2979:3057" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="3119:3340" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="3243:3334" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="3275:3324" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="3344:3462" ph="/** Debugging magic: teleport to player's room any non-fixture item defined as a ...*/" />
+            <marker date="1507006770155" expanded="true" signature="3495:4559" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="3542:4557" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="3579:4551" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="3658:4470" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="3697:3797" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="3938:4134" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="4140:4456" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="4562:4667" ph="/** Debugging magic: move the player into any location defined as a property of ...*/" />
+            <marker date="1507006770155" expanded="true" signature="4704:5087" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="4751:5085" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="4788:5079" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="4867:4982" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="4988:5069" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="5119:5207" ph="{...}" />
+            <marker date="1507006770155" expanded="true" signature="5166:5205" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/com/github/vassilibykov/adventkt/ColossalCaveTest.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1296">
+          <caret line="72" column="5" lean-forward="true" selection-start-line="72" selection-start-column="5" selection-end-line="72" selection-end-column="5" />
+          <folding>
+            <marker date="1507005501523" expanded="true" signature="42:79" ph="/**...*/" />
+            <marker date="1507005501523" expanded="true" signature="186:381" ph="/**...*/" />
+            <marker date="1507005501523" expanded="true" signature="399:605" ph="{...}" />
+            <marker date="1507005501523" expanded="true" signature="641:730" ph="{...}" />
+            <marker date="1507005501523" expanded="true" signature="680:694" ph="{" />
+            <marker date="1507005501523" expanded="true" signature="680:724" ph="{...}" />
+            <marker date="1507005501523" expanded="true" signature="714:724" ph="}" />
+            <marker date="1507005501523" expanded="true" signature="769:779" ph="{" />
+            <marker date="1507005501523" expanded="true" signature="807:813" ph="}" />
+            <marker date="1507005501523" expanded="true" signature="843:853" ph="{" />
+            <marker date="1507005501523" expanded="true" signature="899:905" ph="}" />
+            <marker date="1507005501523" expanded="true" signature="940:997" ph="{...}" />
+            <marker date="1507005501523" expanded="true" signature="1029:1108" ph="{...}" />
+            <marker date="1507005501523" expanded="true" signature="1146:1236" ph="{...}" />
+            <marker date="1507005501523" expanded="true" signature="1272:1336" ph="{...}" />
+            <marker date="1507005501523" expanded="true" signature="1369:1447" ph="{...}" />
+            <marker date="1507005501523" expanded="true" signature="1473:1545" ph="{...}" />
+            <marker date="1507005501523" expanded="true" signature="1579:1657" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/ItemAction.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="25" column="6" lean-forward="false" selection-start-line="25" selection-start-column="6" selection-end-line="25" selection-end-column="6" />
+          <folding>
+            <marker date="1507006770115" expanded="true" signature="0:601" ph="/ Copyright (c) 2017 Vassili Bykov .../" />
+            <marker date="1507006770115" expanded="true" signature="645:912" ph="/** An action associated with an item, as a regular or as a vicinity action. The ...*/" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Toggle.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="26" column="6" lean-forward="false" selection-start-line="26" selection-start-column="6" selection-end-line="26" selection-end-column="6" />
+          <folding>
+            <marker date="1507006770147" expanded="false" signature="0:601" ph="/ Copyright (c) 2017 Vassili Bykov .../" />
+            <marker date="1507006770147" expanded="true" signature="645:974" ph="/** A helper object representing a boolean property that can be changed by the ...*/" />
+            <marker date="1507006770147" expanded="true" signature="1188:1542" ph="{...}" />
+            <marker date="1507006770147" expanded="true" signature="1316:1540" ph="{...}" />
+            <marker date="1507006770147" expanded="true" signature="1346:1425" ph="{...}" />
+            <marker date="1507006770147" expanded="true" signature="1431:1534" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/ColossalCave.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="381">
-          <caret line="326" column="33" lean-forward="false" selection-start-line="326" selection-start-column="33" selection-end-line="326" selection-end-column="33" />
+        <state relative-caret-position="126">
+          <caret line="24" column="24" lean-forward="false" selection-start-line="24" selection-start-column="24" selection-end-line="24" selection-end-column="24" />
+          <folding>
+            <marker date="1507006770127" expanded="true" signature="0:601" ph="/ Copyright (c) 2017 Vassili Bykov .../" />
+            <marker date="1507006770127" expanded="true" signature="698:818" ph="/** A definition of a subset of Colossal Cave, with some changes and ...*/" />
+            <marker date="1507006770127" expanded="true" signature="943:20399" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="967:1129" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="1004:1123" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="1135:1279" ph="/ Rooms. .../" />
+            <marker date="1507006770127" expanded="true" signature="1360:1542" ph="&quot;&quot;&quot; You are standing at the end of a road before a small brick building. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="1548:2435" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="2060:2429" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="2108:2419" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="2216:2358" ph="&quot;&quot;&quot; As you $entryWord the well house, a large box appears hovering in the air. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="2549:3108" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="2659:3102" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="2677:3091" ph="&quot;&quot;&quot; The sign says: ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="3462:4169" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="3609:4163" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="3635:3714" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="3720:4153" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="3772:4138" ph="&quot;&quot;&quot; You open the box, releasing a huge cloud of yellow vapor. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="4356:4742" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="4462:4536" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="4574:4736" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="4592:4725" ph="&quot;&quot;&quot; The stream flows out through a pair of 1 foot diameter sewer pipes. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="4807:4966" ph="&quot;&quot;&quot; You have walked up a hill, still in the forest.  The road slopes back ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="4972:5100" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="5248:5289" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="5348:5500" ph="&quot;&quot;&quot; The forest thins out here to reveal a steep cliff.  There is no way ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="5506:5513" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="5574:5670" ph="&quot;&quot;&quot; You are in a valley in the forest beside a stream tumbling along a ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="5676:5831" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="6234:8904" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="6373:6547" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="6431:6493" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="6499:6537" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="6570:6975" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="7001:7401" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="7280:7390" ph="&quot;&quot;&quot; You realize you might never find your way back here ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="7430:8000" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="7497:7833" ph="&quot;&quot;&quot; The bird is singing to you in gratitude for your having returned it to ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="7848:7953" ph="&quot;&quot;&quot; &quot;.  You ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="8051:8732" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="8097:8228" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="8234:8722" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="8378:8506" ph="&quot;&quot;&quot; You think you see your tracks on the forest floor. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="8758:8898" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="8804:8888" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="8986:9138" ph="&quot;&quot;&quot; At your feet all the water of the stream splashes into a 2-inch slit ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="9144:9226" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="9384:9579" ph="&quot;&quot;&quot; You are in a 20-foot depression floored with bare dirt.  Set into the ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="9585:9968" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="9707:9820" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="9849:9962" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="10051:10189" ph="&quot;&quot;&quot; You are in a small chamber beneath a 3x3 steel grate to the surface. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="10195:10315" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="10394:10514" ph="&quot;&quot;&quot; You are crawling over cobbles in a low passage.  There is a dim light ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="10520:10619" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="10704:10992" ph="&quot;&quot;&quot; You are in a debris room filled with stuff washed in from the surface. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="10998:11206" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="11118:11200" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="11372:11449" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="11534:11743" ph="&quot;&quot;&quot; You are in a splendid chamber thirty feet high.  The walls are frozen ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="11749:11847" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="11918:12060" ph="&quot;&quot;&quot; At your feet is a small pit breathing traces of white mist.  An east ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="12066:12158" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="12207:12506" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="12238:12500" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="12553:12677" ph="&quot;&quot;&quot; The crack is far too small for you to follow.  At its widest it is ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="12754:13148" ph="&quot;&quot;&quot; You are at one end of a vast hall stretching forward out of sight to ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="13154:13897" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="13420:13566" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="13438:13515" ph="&quot;&quot;&quot; The cave walls around you become a blur. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="13594:13698" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="13619:13688" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="13727:13891" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="13974:14128" ph="&quot;&quot;&quot; You are on the east bank of a fissure slicing clear across the hall. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="14134:14179" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="14257:14374" ph="&quot;&quot;&quot; This is a low room with a crude note on the wall.  The note says, ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="14380:14452" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="14686:14783" ph="&quot;&quot;&quot; You are in the Hall of the Mountain King, with passages off in all ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="14789:15524" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15131:15249" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15278:15518" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15312:15508" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15334:15452" ph="&quot;&quot;&quot; The little bird attacks the green snake, and in an astounding flurry ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="15586:15728" ph="&quot;&quot;&quot; The passage is blocked by orange safety fencing with a sign saying, ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="15854:15966" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15884:15960" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="15972:15996" ph="/ Items .../" />
+            <marker date="1507006770127" expanded="true" signature="16166:16197" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="16782:17320" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17617:17891" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17642:17885" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17685:17789" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17795:17875" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17931:19206" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="17962:18230" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="18018:18137" ph="&quot;&quot;&quot; A little bird is sitting here looking sad and lonely. ...&quot;&quot;&quot;" />
+            <marker date="1507006770127" expanded="true" signature="18279:19045" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="18318:18991" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="18524:18875" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="18997:19035" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="19075:19200" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="19448:19730" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="19601:19724" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="19835:19872" ph="/ Extra DSLish stuff .../" />
+            <marker date="1507006770127" expanded="true" signature="19974:20179" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="20033:20173" ph="{...}" />
+            <marker date="1507006770127" expanded="true" signature="20279:20397" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Action.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="558">
+          <caret line="31" column="15" lean-forward="false" selection-start-line="31" selection-start-column="15" selection-end-line="31" selection-end-column="15" />
+          <folding>
+            <marker date="1507006605739" expanded="true" signature="0:601" ph="/ Copyright (c) 2017 Vassili Bykov .../" />
+            <marker date="1507006605739" expanded="true" signature="645:1129" ph="/** A handler of user input, participating in parsing the input and responsible ...*/" />
+            <marker date="1507006605739" expanded="true" signature="1178:2187" ph="{...}" />
+            <marker date="1507006605739" expanded="true" signature="1202:1540" ph="{...}" />
+            <marker date="1507006605739" expanded="true" signature="1212:1486" ph="/** A set of identifying words of all known actions. Used to determine ...*/" />
+            <marker date="1507006605739" expanded="true" signature="1551:1591" ph="{...}" />
+            <marker date="1507006605739" expanded="true" signature="1597:1637" ph="/** Carry out the action. ...*/" />
+            <marker date="1507006605739" expanded="true" signature="1740:1788" ph="{...}" />
+            <marker date="1507006605739" expanded="true" signature="1794:1969" ph="/** Stop the execution of this action and pass control to the next less ...*/" />
+            <marker date="1507006605739" expanded="true" signature="1994:2035" ph="{...}" />
+            <marker date="1507006605739" expanded="true" signature="2073:2126" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Fixture.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="24" column="11" lean-forward="false" selection-start-line="24" selection-start-column="11" selection-end-line="24" selection-end-column="11" />
+          <folding>
+            <marker date="1507006770235" expanded="true" signature="0:601" ph="/ Copyright (c) 2017 Vassili Bykov .../" />
+            <marker date="1507006770235" expanded="true" signature="645:793" ph="/** An [Item] that can't be picked up by the player. (And in general refuses to ...*/" />
+            <marker date="1507006770235" expanded="true" signature="931:1324" ph="{...}" />
+            <marker date="1507006770235" expanded="true" signature="1178:1322" ph="{...}" />
+            <marker date="1507006770235" expanded="true" signature="1220:1282" ph="{...}" />
+            <marker date="1507006770235" expanded="true" signature="1288:1316" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Parser.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="954">
+          <caret line="67" column="0" lean-forward="false" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
+          <folding>
+            <marker date="1507006770231" expanded="false" signature="0:601" ph="/ Copyright (c) 2017 Vassili Bykov .../" />
+            <marker date="1507006770231" expanded="true" signature="645:1028" ph="/** A simple user input parser, selecting and running actions applicable to the ...*/" />
+            <marker date="1507006770231" expanded="true" signature="1042:4720" ph="{...}" />
+            <marker date="1507006770231" expanded="true" signature="1049:1134" ph="/** These words are filtered out from the input before it's processed. ...*/" />
+            <marker date="1507006770231" expanded="true" signature="1202:3104" ph="/** Select and invoke the action(s) applicable to the specified user input as ...*/" />
+            <marker date="1507006770231" expanded="true" signature="3136:4228" ph="{...}" />
+            <marker date="1507006770231" expanded="true" signature="3225:4222" ph="{...}" />
+            <marker date="1507006770231" expanded="true" signature="3448:3678" ph="{...}" />
+            <marker date="1507006770231" expanded="true" signature="3500:3581" ph="{...}" />
+            <marker date="1507006770231" expanded="true" signature="3587:3664" ph="{...}" />
+            <marker date="1507006770231" expanded="true" signature="3684:4212" ph="{...}" />
+            <marker date="1507006770231" expanded="true" signature="3734:4001" ph="{...}" />
+            <marker date="1507006770231" expanded="true" signature="3760:3857" ph="{...}" />
+            <marker date="1507006770231" expanded="true" signature="3894:3983" ph="{...}" />
+            <marker date="1507006770231" expanded="true" signature="4042:4121" ph="{...}" />
+            <marker date="1507006770231" expanded="true" signature="4127:4198" ph="{...}" />
+            <marker date="1507006770231" expanded="true" signature="4298:4718" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/UnenterableRoom.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="20" column="39" lean-forward="true" selection-start-line="20" selection-start-column="39" selection-end-line="20" selection-end-column="39" />
+          <folding>
+            <marker date="1507006770223" expanded="true" signature="0:601" ph="/ Copyright (c) 2017 Vassili Bykov .../" />
+            <marker date="1507006770223" expanded="true" signature="645:781" ph="/** A room that refuses any player's attempt to enter, ...*/" />
+            <marker date="1507006770223" expanded="true" signature="860:1024" ph="{...}" />
+            <marker date="1507006770223" expanded="true" signature="961:1022" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/Room.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1507006770131" expanded="false" signature="0:601" ph="/ Copyright (c) 2017 Vassili Bykov .../" />
+            <marker date="1507006770131" expanded="true" signature="856:891" ph="/** @author Vassili Bykov ...*/" />
+            <marker date="1507006770131" expanded="true" signature="1001:9528" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="1948:2047" ph="/ DSLish stuff .../" />
+            <marker date="1507006770131" expanded="true" signature="2117:2652" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="2157:2646" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="2205:2326" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="2427:2554" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="2722:2964" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="2762:2958" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="2810:2909" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="3070:3101" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="3192:3312" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="3815:3955" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="3841:3949" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="4123:4264" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="4150:4258" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="4749:4834" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="5177:5263" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="5342:5470" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="5376:5430" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="5436:5464" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="5600:5641" ph="/ World object mechanics .../" />
+            <marker date="1507006770131" expanded="true" signature="5672:5714" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="5720:5966" ph="/** Invoked when the player is about to be moved to this room from another. ...*/" />
+            <marker date="1507006770131" expanded="true" signature="6024:6126" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="6132:6389" ph="/** Invoked when the player is about to be moved to another room from this ...*/" />
+            <marker date="1507006770131" expanded="true" signature="6448:6551" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="6557:6748" ph="/** Invoked after the player leaves this room for another room. Room ...*/" />
+            <marker date="1507006770131" expanded="true" signature="6796:6863" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="6869:7117" ph="/** Invoked after the player enters this room. Room definitions should ...*/" />
+            <marker date="1507006770131" expanded="true" signature="7167:7388" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="7467:7563" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="7644:7739" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="7808:7880" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="7951:8022" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="8028:8169" ph="/** Print the description of the room and all the items in it. ...*/" />
+            <marker date="1507006770131" expanded="true" signature="8202:8454" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="8358:8448" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="8492:8709" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="8613:8703" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="9000:9031" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="9082:9116" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="9199:9526" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="9209:9342" ph="/** The player is created in this &quot;room&quot; and moved into the starting ...*/" />
+            <marker date="1507006770131" expanded="true" signature="9456:9520" ph="{...}" />
+            <marker date="1507006770131" expanded="true" signature="9495:9510" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/World.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="536">
+          <caret line="156" column="23" lean-forward="false" selection-start-line="156" selection-start-column="23" selection-end-line="156" selection-end-column="23" />
+          <folding>
+            <marker date="1507006770223" expanded="false" signature="0:601" ph="/ Copyright (c) 2017 Vassili Bykov .../" />
+            <marker date="1507006770223" expanded="true" signature="652:834" ph="..." />
+            <marker date="1507006770223" expanded="true" signature="836:1131" ph="/** The superclass of a game definition. Uses reflection to implement a second ...*/" />
+            <marker date="1507006770223" expanded="true" signature="1176:5586" ph="{...}" />
+            <marker date="1507006770223" expanded="true" signature="1351:1414" ph="{...}" />
+            <marker date="1507006770223" expanded="true" signature="1476:1733" ph="{...}" />
+            <marker date="1507006770223" expanded="true" signature="1490:1658" ph="{...}" />
+            <marker date="1507006770223" expanded="true" signature="1550:1648" ph="{...}" />
+            <marker date="1507006770223" expanded="true" signature="1684:1727" ph="{...}" />
+            <marker date="1507006770223" expanded="true" signature="1801:1832" ph="/ DSLish stuff .../" />
+            <marker date="1507006770223" expanded="true" signature="1932:2046" ph="{...}" />
+            <marker date="1507006770223" expanded="true" signature="2151:2269" ph="{...}" />
+            <marker date="1507006770223" expanded="true" signature="2384:2518" ph="{...}" />
+            <marker date="1507006770223" expanded="true" signature="2601:2701" ph="{...}" />
+            <marker date="1507006770223" expanded="true" signature="2814:2995" ph="{...}" />
+            <marker date="1507006770223" expanded="true" signature="3087:3245" ph="{...}" />
+            <marker date="1507006770223" expanded="true" signature="3251:3622" ph="/** Run [Configurable.configure] methods of all properties of this instance which ...*/" />
+            <marker date="1507006770223" expanded="true" signature="3657:4416" ph="{...}" />
+            <marker date="1507006770223" expanded="true" signature="3931:4410" ph="{...}" />
+            <marker date="1507006770223" expanded="true" signature="4049:4400" ph="{...}" />
+            <marker date="1507006770223" expanded="true" signature="4266:4386" ph="{...}" />
+            <marker date="1507006770223" expanded="true" signature="4422:4605" ph="/** Reflectively examine this world's properties, looking for one with a ...*/" />
+            <marker date="1507006770223" expanded="true" signature="4849:5272" ph="{...}" />
+            <marker date="1507006770223" expanded="true" signature="4906:5246" ph="{...}" />
+            <marker date="1507006770223" expanded="true" signature="5014:5236" ph="{...}" />
+            <marker date="1507006770223" expanded="true" signature="5103:5222" ph="{...}" />
+            <marker date="1507006770223" expanded="true" signature="5278:5480" ph="/** An object which, when a property of a [World] subclass instance defining ...*/" />
+            <marker date="1507006770223" expanded="true" signature="5508:5539" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/github/vassilibykov/adventkt/ItemOwner.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="24" column="10" lean-forward="false" selection-start-line="24" selection-start-column="10" selection-end-line="24" selection-end-column="10" />
           <folding />
         </state>
       </provider>
@@ -7976,6 +8670,20 @@
       <state key="ArtifactsStructureConfigurable.UI">
         <settings>
           <artifact-editor />
+          <last-edited>AdventKT:jar</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.5" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="Copyright.UI">
+        <settings>
+          <last-edited>VB-Apache</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -8046,7 +8754,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited>RequiredByTests</last-edited>
+          <last-edited>jline</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

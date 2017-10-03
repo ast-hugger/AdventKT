@@ -32,13 +32,13 @@ class GrateTest extends ColossalCaveTest {
     void testGrateUnlockingNeedsKey() {
         walkToGrate()
         play("open grate")
-        assertFalse(cave.grate.isOpen.isOn())
+        assertFalse(cave.grateOpen.isOn())
     }
 
     void testOpenGrate() {
         getEverythingFromBuilding()
         walkToGrate()
         play("open grate")
-        assertTrue(cave.grate.isOpen.isOn())
+        assertTrue(cave.grateOpen.isOn())
     }
 }

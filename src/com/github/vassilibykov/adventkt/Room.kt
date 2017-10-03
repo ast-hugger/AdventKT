@@ -1,18 +1,217 @@
+/*
+ * Copyright (c) 2017 Vassili Bykov
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.github.vassilibykov.adventkt
+
+typealias PlayerApprover = Room.(Room) -> Boolean
+typealias PlayerReactor = Room.(Room) -> Unit
+typealias ItemApprover = Room.(ItemOwner, Item) -> Boolean
+typealias ItemReactor = Room.(ItemOwner, Item) -> Unit
 
 /**
  *
  * @author Vassili Bykov
  */
-abstract class Room(private val _shortDescription: String, _description: String) : World.Configurable, ItemOwner {
+open class Room(private val _shortDescription: String, _description: String) : World.Configurable, ItemOwner {
 
     open val description =_description.lines().map{ it.trim() }.joinToString("\n")
     open val shortDescription
         get() = _shortDescription
     override val items = mutableListOf<Item>()
     private val exits = mutableMapOf<Direction, Room>()
-    private val vocabulary = mutableMapOf<String, Action>()
+    private val vocabulary = mutableListOf<Action>()
     var visited = false
+
+    internal var configurator: (Room.()->Unit)? = null
+    private val playerMoveInApprovers = mutableListOf<PlayerApprover>()
+    private val playerMoveOutApprovers = mutableListOf<PlayerApprover>()
+    private val playerMoveInReactors = mutableListOf<PlayerReactor>()
+    private val playerMoveOutReactors = mutableListOf<PlayerReactor>()
+    private val itemMoveInApprovers = mutableListOf<ItemApprover>()
+    private val itemMoveOutApprovers = mutableListOf<ItemApprover>()
+    private val itemMoveInReactors = mutableListOf<ItemReactor>()
+    private val itemMoveOutReactors = mutableListOf<ItemReactor>()
+
+    /*
+        DSLish stuff
+
+        Internal methods intended to be used in configurer blocks.
+     */
+
+    internal fun twoWay(target: Room, vararg directions: Direction) {
+        for (direction in directions) {
+            if (exits.containsKey(direction)) {
+                throw IllegalArgumentException("exit to $direction already exists in $_shortDescription")
+            }
+            val opposite = direction.opposite()
+            if (target.exits.containsKey(opposite)) {
+                throw IllegalArgumentException("exit to $opposite already exists in $target._shortDescription")
+            }
+            addExit(direction, target)
+            target.addExit(opposite, this)
+        }
+    }
+
+    internal fun oneWay(target: Room, vararg directions: Direction) {
+        for (direction in directions) {
+            if (exits.containsKey(direction)) {
+                throw IllegalArgumentException("exit to $direction already exists")
+            }
+            addExit(direction, target)
+        }
+    }
+
+    internal fun here(item: Item) = item.primitiveMoveTo(this)
+
+    internal fun hereShared(item: Item) {
+        items.add(item)
+    }
+
+    internal fun action(vararg words: String, effect: LocalAction.()->Unit): LocalAction {
+        val verb = LocalAction(listOf(*words), effect = effect)
+        vocabulary.add(verb)
+        return verb
+    }
+
+    internal fun allowPlayerMoveIn(a: PlayerApprover) = playerMoveInApprovers.add(a)
+
+    internal fun onPlayerMoveIn(r: PlayerReactor) = playerMoveInReactors.add(r)
+
+    internal fun allowPlayerMoveOut(a: PlayerApprover) = playerMoveOutApprovers.add(a)
+
+    internal fun onPlayerMoveOut(r: PlayerReactor) = playerMoveOutReactors.add(r)
+
+    internal fun allowItemMoveIn(approver: ItemApprover) = itemMoveInApprovers.add(approver)
+
+    internal fun allowItemMoveIn(item: Item, approver: ItemApprover) {
+        allowItemMoveIn { oldRoom, movedItem ->
+            if (movedItem == item) approver(this, oldRoom, item) else true
+        }
+    }
+
+    internal fun allowItemMoveOut(approver: ItemApprover) = itemMoveOutApprovers.add(approver)
+
+    internal fun allowItemMoveOut(item: Item, approver: ItemApprover) {
+        allowItemMoveOut { newRoom, movedItem ->
+            if (movedItem == item) approver(this, newRoom, item) else true
+        }
+    }
+
+    internal fun onItemMoveIn(reactor: ItemReactor) = itemMoveInReactors.add(reactor)
+
+    // The following and its equivalent onItemMoveOut cause overload resolution ambiguity.
+    // The ambiguity seems fishy but what can we do.
+
+//    internal fun onItemMoveIn(item: Item, reactor: Room.(ItemOwner)->Unit) {
+//        onItemMoveIn { oldOwner, movedItem -> if (movedItem == item) reactor(this, oldOwner) }
+//    }
+
+    internal fun onItemMoveIn(item: Item, reactor: Room.()->Unit) {
+        onItemMoveIn { _, movedItem -> if (movedItem == item) reactor(this) }
+    }
+
+    internal fun onItemMoveOut(reactor: ItemReactor) = itemMoveOutReactors.add(reactor)
+
+//    internal fun onItemMoveOut(item: Item, reactor: Room.(ItemOwner)->Unit) {
+//        onItemMoveOut { oldRoom, movedItem -> if (movedItem == item) reactor(this, oldRoom) }
+//    }
+
+    internal fun onItemMoveOut(item: Item, reactor: Room.()->Unit) {
+        onItemMoveOut { _, movedItem -> if (movedItem == item) reactor(this) }
+    }
+
+    internal fun declineIf(condition: ()->Boolean, message: String): Boolean {
+        return if (condition()) {
+            say(message)
+            false
+        } else {
+            true
+        }
+    }
+
+    val deferredOutput = mutableListOf<String>()
+
+    internal fun sayLater(message: String) = deferredOutput.add(message)
+
+    /*
+        World object mechanics
+     */
+
+    override fun configure() {
+        configurator?.invoke(this)
+    }
+
+    /**
+     * Invoked when the player is about to be moved to this room from another.
+     * The method may return false to veto the move. In this case, it typically
+     * should print a game message explaining why the move hasn't happened.
+     */
+    open fun approvePlayerMoveIn(oldRoom: Room): Boolean {
+        return playerMoveInApprovers.fold(true, {b, approver -> b && approver(this, oldRoom)})
+    }
+
+    /**
+     * Invoked when the player is about to be moved to another room from this
+     * one. The method may return false to veto the move. In this case, it
+     * typically should print a game message explaining why the move hasn't
+     * happened.
+     */
+    open fun approvePlayerMoveOut(newRoom: Room): Boolean {
+        return playerMoveOutApprovers.fold(true, {b, approver -> b && approver(this, newRoom)})
+    }
+
+    /**
+     * Invoked after the player leaves this room for another room. Room
+     * definitions should typically use the [onPlayerMoveOut] DSL method instead
+     * of overriding this.
+     */
+    open fun noticePlayerMoveTo(newRoom: Room) {
+        playerMoveOutReactors.forEach { it(this, newRoom) }
+    }
+
+    /**
+     * Invoked after the player enters this room. Room definitions should
+     * typically use the [onPlayerMoveIn] DSL method instead of overriding this.
+     *
+     * If overridden, the overriding method must call this implementation.
+     */
+    open fun noticePlayerMoveFrom(oldRoom: Room) {
+        deferredOutput.clear()
+        playerMoveInReactors.forEach { it(this, oldRoom) }
+        printDescription()
+        visited = true
+        deferredOutput.forEach { say(it) }
+        deferredOutput.clear()
+    }
+
+    override fun approveItemMoveTo(newOwner: ItemOwner, item: Item): Boolean {
+        return itemMoveOutApprovers.fold(true, {b, it -> b && it(this, newOwner, item)})
+    }
+
+    override fun approveItemMoveFrom(oldOwner: ItemOwner, item: Item): Boolean {
+        return itemMoveInApprovers.fold(true, {b, it -> b && it(this, oldOwner, item)})
+    }
+
+    override fun noticeItemMoveTo(newOwner: ItemOwner, item: Item) {
+        itemMoveOutReactors.forEach { it(this, newOwner, item) }
+    }
+
+    override fun noticeItemMoveFrom(oldOwner: ItemOwner, item: Item) {
+        itemMoveInReactors.forEach { it(this, oldOwner, item) }
+    }
 
     /**
      * Print the description of the room and all the items in it.
@@ -38,71 +237,7 @@ abstract class Room(private val _shortDescription: String, _description: String)
 
     open fun exitTo(direction: Direction): Room? = exits[direction]
 
-    /**
-     * Invoked when the player is about to be moved to another room from this
-     * one. The method may return false to veto the move. In this case, it
-     * typically should print a game message explaining why the move hasn't
-     * happened.
-     */
-    open fun approvePlayerMoveTo(newRoom: Room) = true
-
-    /**
-     * Invoked when the player is about to be moved to this room from another.
-     * The method may return false to veto the move. In this case, it typically
-     * should print a game message explaining why the move hasn't happened.
-     */
-    open fun approvePlayerMoveFrom(oldRoom: Room) = true
-
-    /**
-     * Invoked after the player leaves this room for another room.
-     */
-    open fun noticePlayerMoveTo(newRoom: Room) = Unit
-
-    /**
-     * Invoked after the player enters this room. This method may be overridden,
-     * but the overriding method must call this super implementation.
-     */
-    open fun noticePlayerMoveFrom(oldRoom: Room) {
-        printDescription()
-        visited = true
-    }
-
-    fun findAction(word: String): Action? = vocabulary[word]
-
-    fun twoWay(target: Room, vararg directions: Direction) {
-        for (direction in directions) {
-            if (exits.containsKey(direction)) {
-                throw IllegalArgumentException("exit to $direction already exists in $_shortDescription")
-            }
-            val opposite = direction.opposite()
-            if (target.exits.containsKey(opposite)) {
-                throw IllegalArgumentException("exit to $opposite already exists in $target._shortDescription")
-            }
-            addExit(direction, target)
-            target.addExit(opposite, this)
-        }
-    }
-
-    fun oneWay(target: Room, vararg directions: Direction) {
-        for (direction in directions) {
-            if (exits.containsKey(direction)) {
-                throw IllegalArgumentException("exit to $direction already exists")
-            }
-            addExit(direction, target)
-        }
-    }
-
-    fun item(item: Item) = item.primitiveMoveTo(this)
-
-    fun unownedItem(item: Item) {
-        items.add(item)
-    }
-
-    fun action(vararg words: String, effect: LocalAction.()->Unit): LocalAction {
-        val verb = LocalAction(listOf(*words), effect = effect)
-        verb.addTo(vocabulary)
-        return verb
-    }
+    fun findAction(word: String): Action? = vocabulary.find { word in it.words }
 
     private fun addExit(direction: Direction, target: Room) = exits.put(direction, target)
 
@@ -114,7 +249,7 @@ abstract class Room(private val _shortDescription: String, _description: String)
         items.remove(item)
     }
 
-    override fun toString() = "Room: " + shortDescription
+    override fun toString() = "Room \"$shortDescription\""
 
     companion object {
         /**
@@ -127,4 +262,3 @@ abstract class Room(private val _shortDescription: String, _description: String)
         }
     }
 }
-

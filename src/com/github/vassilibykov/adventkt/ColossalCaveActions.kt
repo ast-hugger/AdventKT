@@ -1,7 +1,25 @@
+/*
+ * Copyright (c) 2017 Vassili Bykov
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.github.vassilibykov.adventkt
 
 /*
-    Global vocabulary verbs, alphabetic order
+    Global vocabulary actions, alphabetic order.
+
+    @author Vassili Bykov
  */
 
 fun globalVocabulary(): Map<String, Action> {
@@ -12,7 +30,10 @@ fun globalVocabulary(): Map<String, Action> {
     add(Inventory())
     add(Look())
     add(Quit())
+    add(Say())
+    add(Summon()) // magic; for testing
     add(Take())
+    add(Teleport()) // magic; for testing
     add(Xyzzy())
     Direction.directionNames.forEach {vocabulary.put(it, DirectionAction(it))}
     return vocabulary
@@ -39,9 +60,9 @@ class Go: MovementAction("go") {
     override fun act(subjects: List<String>) {
         if (subjects.isEmpty()) {
             println("Go where?")
-            return
+        } else {
+            movePlayer(subjects[0])
         }
-        movePlayer(subjects[0])
     }
 }
 
@@ -61,8 +82,15 @@ class Look: Action("look") {
     override fun act(subjects: List<String>) {
         if (subjects.isEmpty()) {
             player.room.printFullDescription()
-            return
+        } else {
+            say("You don't see any such thing.")
         }
+    }
+}
+
+class Say: Action("say", "speak") {
+    override fun act(subjects: List<String>) {
+        say("Just say it.")
     }
 }
 
@@ -94,7 +122,55 @@ class Take: Action("take", "get", "pick") {
             }
         }
     }
+}
 
+/**
+ * Debugging magic: teleport to player's room any non-fixture item defined as a
+ * property of the game world.
+ */
+class Summon : Action("summon") {
+    override fun act(subjects: List<String>) {
+        for (itemName in subjects) {
+            val item = cave.findItem(itemName)
+            if (item != null) {
+                if (player has item) {
+                    say("You already own the $item.")
+                    return
+                }
+                val anItem = if (item.isPlural) item.toString() else "${item.indefiniteArticle} $item"
+                if (item is Fixture) {
+                    say("For a brief moment, you see a shimmering outline of $anItem\n" +
+                            "floating in the air. It disappears with a loud \"pop!\"")
+                } else {
+                    say("You see a shimmering outline of $anItem floating in the air.\n" +
+                            "It quickly solidifies, and the $item ${if (item.isPlural) "drop" else "drops"} to the ground.")
+                    item.primitiveMoveTo(player.room)
+                    return
+                }
+            } else
+                say("A gust of wind blows, but nothing happens.")
+        }
+    }
+}
+
+
+/**
+ * Debugging magic: move the player into any location defined as a property of
+ * the game world.
+ */
+class Teleport : Action("teleport") {
+    override fun act(subjects: List<String>) {
+        for (roomName in subjects) {
+            val room = cave.findRoom(roomName)
+            if (room != null) {
+                say(">>Foof!<<")
+                player.internalMoveTo(room)
+                return
+            } else {
+                say("A gust of wind blows, but nothing happens.")
+            }
+        }
+    }
 }
 
 class Xyzzy : Action("xyzzy") {

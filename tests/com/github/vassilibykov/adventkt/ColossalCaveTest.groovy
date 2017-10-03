@@ -36,4 +36,39 @@ abstract class ColossalCaveTest extends GroovyTestCase {
     void teleportToDebris() {
         play("in", "get all", "xyzzy", "turn on lamp")
     }
+
+    void walkToBirdEmptyHanded() {
+        teleportToDebris()
+        play("w", "w")
+    }
+
+    void walkToBirdWithCage() {
+        teleportToDebris()
+        play("e", "get cage", "w", "w", "w")
+    }
+
+    void walkToBirdWithCageAndRod() {
+        teleportToDebris()
+        play("get rod", "e", "get cage", "w", "w", "w")
+    }
+
+    void walkToSnakeWithoutBird() {
+        walkToBirdWithCage()
+        play("w", "d", "d")
+    }
+
+    void walkToSnakeWithBird() {
+        walkToBirdWithCage()
+        play("catch bird", "w", "d", "d")
+    }
+
+    void walkToNugget() {
+        teleportToDebris()
+        play("w", "w", "w", "d", "e")
+    }
+
+    void getNuggetAndTeleport() {
+        walkToNugget()
+        play("get nugget", "w", cave.magicWord)
+    }
 }

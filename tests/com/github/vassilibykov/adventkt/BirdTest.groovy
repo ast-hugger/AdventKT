@@ -2,21 +2,6 @@ package com.github.vassilibykov.adventkt
 
 class BirdTest extends ColossalCaveTest {
 
-    void walkToBirdEmptyHanded() {
-        teleportToDebris()
-        play("w", "w")
-    }
-
-    void walkToBirdWithCage() {
-        teleportToDebris()
-        play("e", "get cage", "w", "w", "w")
-    }
-
-    void walkToBirdWithCageAndRod() {
-        teleportToDebris()
-        play("get rod", "e", "get cage", "w", "w", "w")
-    }
-
     void assertBirdNotCaught() {
         assertTrue(cave.birdChamber.has(cave.bird))
         assertFalse(player.has(cave.cagedBird))

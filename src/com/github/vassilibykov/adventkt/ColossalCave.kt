@@ -1,7 +1,30 @@
+/*
+ * Copyright (c) 2017 Vassili Bykov
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.github.vassilibykov.adventkt
 
 import com.github.vassilibykov.adventkt.Direction.*
 
+/**
+ * A definition of a subset of Colossal Cave, with some changes and
+ * enhancements.
+ *
+ * @author Vassili Bykov
+ */
+@Suppress("MemberVisibilityCanPrivate") // public for testing; no worries
 class ColossalCave private constructor(): World() {
 
     companion object {
@@ -19,289 +42,294 @@ class ColossalCave private constructor(): World() {
         methods instead of regular init{} blocks.
      */
 
-    val finePrint = Detail("fine", "print",
-            description = "\"The Implementor's Prize has not been implemented yet.\"",
-            verbs = setOf("look", "examine", "x", "l", "read"))
-
-    val outsideBuilding = object : OpenSpace("You're in front of building.",
+    val outsideBuilding = outdoors("You're in front of building.",
             """You are standing at the end of a road before a small brick building.
             Around you is a forest.  A small stream flows out of the building and
-            down a gully.""",
-            {forest})
+            down a gully.""")
     {
-        override fun configure() {
-            twoWay(insideBuilding, IN, EAST)
-            twoWay(hill, WEST)
-            oneWay(hill, UP)
-            oneWay(forest, NORTH)
-            twoWay(valley, DOWN, SOUTH)
-            item(adventKtSign)
-            // Unlike Zork and later Infocom games, the original CC didn't support
-            // examining details of the scenery with command like "look at the stream".
-            // Here is how details can be defined in AdventKT.
-            item(finePrint)
-            action("downstream") { player.moveTo(valley) }
-        }
-
-        override fun noticePlayerMoveFrom(oldRoom: Room) {
+        twoWay(insideBuilding, IN, EAST)
+        twoWay(hill, WEST)
+        oneWay(hill, UP)
+        oneWay(forest, NORTH)
+        twoWay(valley, DOWN, SOUTH)
+        here(adventKtSign)
+        // Unlike Zork and later Infocom games, the original CC didn't support
+        // examining details of the scenery with command like "look at the stream".
+        // Here is how details can be defined in AdventKT.
+        here(finePrint)
+        action("downstream") { player.moveTo(valley) }
+        onPlayerMoveIn { oldRoom ->
             if (player has nugget) {
-                say("""Congratulations!""")
-                throw QuitException()
+                val entryWord = if (oldRoom == insideBuilding) "exit" else "approach"
+                say("""As you $entryWord the well house, a large box appears hovering in the air.
+                    |The box drops on the ground with a thud.""")
+                implementorPrize.moveTo(this)
+            }
+        }
+    }
+
+    val adventKtSign = fixture("sign", description = "A freshly painted sign is hanging outside the building.") {
+        cantTakeMessage = "The sign is nailed securely to the wall."
+        vicinityAction("read", "look") {
+            say("""The sign says:
+                    |
+                    |    Welcome to AdventKT, a theme park based on the legendary Colossal Cave.
+                    |    There is a priceless gold nugget hidden in the cave, protected by
+                    |    an ancient curse. Bring it here to win the Implementor's Prize!
+                    |
+                    |There is some fine print at the bottom of the sign.""")
+        }
+    }
+
+    val finePrint = Detail("fine", "print",
+            description = "\"The Implementor's Prize isn't fully implemented yet.\"",
+            verbs = setOf("look", "examine", "x", "l", "read"))
+
+    val implementorPrize = fixture("box", "prize",
+            description = "A large box with a tag \"Implementor's Prize\" is sitting on the ground.")
+    {
+        cantTakeMessage = "The Implementor's Prize is far too big for you to carry."
+
+        var isOpen = false
+
+        vicinityAction("open") {
+            if (isOpen) {
+                say("The Implementor's Prize is already open.")
             } else {
-                super.noticePlayerMoveFrom(oldRoom)
+                isOpen = true
+                say("""You open the box, releasing a huge cloud of yellow vapor.
+                    |The cloud briefly morphs into an inscription,
+                    |
+                    |    TODO("implement this")
+                    |
+                    |before melting into the clear blue sky.
+                    |
+                    |Congratulations! You have won the game.""")
             }
         }
     }
 
     override val start = outsideBuilding
 
-    val adventKtSign = object : Fixture("sign", description = "A freshly painted sign is hanging outside the building.") {
-        override fun configure() {
-            super.configure()
-            vicinityAction("read", "look") {
-                say("""The sign says:
-                    |    Welcome to AdventKT, a theme park based on the legendary Colossal Cave.
-                    |    There is a priceless gold nugget hidden in the cave, protected by
-                    |    an ancient curse. Bring it here to win the Implementor's Prize!
-                    |There is some fine print at the bottom of the sign.""")
-            }
-        }
-    }
-
-    val insideBuilding = object : Room("You're inside building.",
+    val insideBuilding = litRoom("You're inside building.",
             """You are inside a building, a well house for a large spring.""")
     {
-        override fun configure() {
-            item(keys)
-            item(lantern)
-            item(food)
-            item(water)
-            action("xyzzy") {
-                say(">>Foof!<<")
-                player.moveTo(debris)
-            }
-            action("down", "downstream") {
-                say("""The stream flows out through a pair of 1 foot diameter sewer pipes.
+        here(keys)
+        here(lantern)
+        here(food)
+        here(water)
+        action("xyzzy") {
+            say(">>Foof!<<")
+            player.moveTo(debris)
+        }
+        action("down", "downstream") {
+            say("""The stream flows out through a pair of 1 foot diameter sewer pipes.
                     |It would be advisable to use the exit.""")
-            }
         }
     }
 
-    val hill = object : OpenSpace("You're at hill in road.",
+    val hill = outdoors("You're at hill in road.",
             """You have walked up a hill, still in the forest.  The road slopes back
-            |down the other side of the hill.  There is a building in the distance.""",
-            {forest})
+            |down the other side of the hill.  There is a building in the distance.""")
     {
-        override fun configure() {
-            // EAST: twoWay from outsideBuilding
-            twoWay(endOfRoad, WEST)
-            action("down") { say("Which way?")}
-        }
+        // EAST: twoWay from outsideBuilding
+        twoWay(endOfRoad, WEST)
+        action("down") { say("Which way?")}
     }
 
-    val endOfRoad = object : OpenSpace("You're at end of road.",
-            """The road, which approaches from the east, ends here amid the trees.""",
-            {forest})
+    val endOfRoad = outdoors("You're at end of road.",
+            """The road, which approaches from the east, ends here amid the trees.""")
     {
-        override fun configure() {
-            // EAST: twoWay from hill
-        }
+        // EAST: twoWay from hill
     }
 
-    val cliff = object : Room("You're at cliff.",
+    val cliff = outdoors("You're at cliff.",
             """The forest thins out here to reveal a steep cliff.  There is no way
             |down, but a small ledge can be seen to the west across the chasm.""")
     {
-        override fun configure() {
-        }
     }
 
-    val valley = object : OpenSpace("You're in valley.",
+    val valley = outdoors("You're in valley.",
             """You are in a valley in the forest beside a stream tumbling along a
-            |rocky bed.""",
-            {forest})
+            |rocky bed.""")
     {
-        override fun configure() {
             // UP, EAST: twoWay from outsideBuilding
             twoWay(slit, DOWN, SOUTH)
             action("downstream") { player.moveTo(slit) }
-        }
     }
 
-    val magicWord = random("plover", "plugh", "zork", "foobar", "blorple", "frob", "foo", "quux",
+    val magicWords = setOf(
+            "plover", "plugh", "zork", "foobar", "blorple", "frob", "foo", "quux",
             "wibble", "wobble", "wubble", "flob", "blep", "blah", "fnord", "piyo")
 
-    val forest: Room = object : OpenSpace("You are wandering aimlessly through the forest.",
-            "You are wandering aimlessly through the forest.",
-            {forest()})
-    {
-        var stepCount = 0
+    val magicWord = random(*magicWords.toTypedArray())
 
-        override fun configure() {
-            oneWay(outsideBuilding, OUT)
-            oneWay(UnenterableRoom("The trees are too difficult to climb."), UP)
+    val forest: Room = outdoors("You are wandering aimlessly through the forest.",
+            "You are wandering aimlessly through the forest.")
+    {
+        oneWay(outsideBuilding, OUT)
+        oneWay(UnenterableRoom("The trees are too difficult to climb."), UP)
+
+        action("get") { // support "get out"
+            if ("out" in subjects) {
+                player.moveTo(outsideBuilding)
+            } else {
+                pass()
+            }
         }
 
-        override fun noticePlayerMoveFrom(oldRoom: Room) {
+        action("go") {
+            when {
+                "valley" in subjects -> player.moveTo(valley)
+                "building" in subjects -> player.moveTo(outsideBuilding)
+                "house" in subjects -> player.moveTo(outsideBuilding)
+                "slit" in subjects -> player.moveTo(slit)
+                "grate" in subjects -> player.moveTo(outsideGrate)
+                else -> pass()
+            }
+        }
+
+        allowItemMoveIn { oldOwner, _ ->
+            // No dropping items; that would reveal that the forest is one room.
+            // This does not preclude releasing the bird because the bird is
+            // moved here from limbo.
+            declineIf({ oldOwner == player },
+                    """You realize you might never find your way back here
+                    |and decide against dropping it.""")
+        }
+
+        onItemMoveIn(bird) {
+            // The player has released the bird.
+            say("""The bird is singing to you in gratitude for your having returned it to
+                    |its home.  In return, it informs you of a magic word which it thinks
+                    |you may find useful somewhere near the Hall of Mists.  The magic word
+                    |changes frequently, but for now the bird believes it is """" + magicWord + """".  You
+                    |thank the bird for this information, and it flies off into the forest.""")
+            bird.moveTo(Item.LIMBO)
+        }
+
+        var stepCount = 0
+        onPlayerMoveIn { oldRoom ->
             if (oldRoom != this) {
                 say("""You enter the forest and soon become lost among the trees.""")
                 stepCount = 0
             } else {
-                super.noticePlayerMoveFrom(oldRoom)
                 when(++stepCount) {
                     2 -> say("Are you sure you are not walking in circles?")
                     4 -> say("""You think you see your tracks on the forest floor.
                         |But then again, you are not much of a tracker.""")
-                    6 -> say("A forest is not a maze. Maybe you need to try something else.")
+                    6 -> say("The forest is not a maze. Maybe you need to try something else.")
                     8 -> say("You are feeling tired. All you wish for is to get out.")
                 }
             }
         }
 
-        override fun noticePlayerMoveTo(newRoom: Room) {
+        onPlayerMoveOut { newRoom ->
             if (newRoom != this) {
-                say("You finally found your way back to the well house.")
-            }
-            super.noticePlayerMoveTo(newRoom)
-        }
-
-        override fun approveItemMoveFrom(oldOwner: ItemOwner, item: Item): Boolean {
-            if (oldOwner == player) {
-                // When releasing the bird, the bird is moved here from limbo, not player.
-                say("""You realize you might never find your way back here
-                    |and decide against dropping it.""")
-                return false
-            }
-            return true
-        }
-
-        override fun noticeItemMoveFrom(oldOwner: ItemOwner, item: Item) {
-            if (item == bird) {
-                // The player is releasing the bird.
-                say("""The bird is singing to you in gratitude for your having returned it to
-                    |its home.  In return, it informs you of a magic word which it thinks
-                    |you may find useful somewhere near the Hall of Mists.  The magic word
-                    |changes frequently, but for now the bird believes it is """" + magicWord + """".  You
-                    |thank the bird for this information, and it flies off into the forest.""")
-                bird.moveTo(Item.LIMBO)
+                say("You finally found your way out of the forest.")
             }
         }
     }
-    fun forest() = forest
 
-    val slit = object : OpenSpace("You're at slit in streambed.",
-            """At your feet all the water of the stream splashes into a 2-inch slit
-            |in the rock.  Downstream the streambed is bare rock.""",
-            {forest})
+    val slit = outdoors("You're at slit in streambed.",
+                        """At your feet all the water of the stream splashes into a 2-inch slit
+                        |in the rock.  Downstream the streambed is bare rock.""")
     {
-        override fun configure() {
-            // UP, NORTH: twoWay from slit
-            twoWay(outsideGrate, SOUTH)
-        }
+        // UP, NORTH: twoWay from slit
+        twoWay(outsideGrate, SOUTH)
     }
 
     // strangely, need this explicit type to avoid a type checker recursive loop
-    val outsideGrate: Room = object : OpenSpace("You're outside grate.",
+    val outsideGrate: Room = outdoors("You're outside grate.",
             """You are in a 20-foot depression floored with bare dirt.  Set into the
             |dirt is a strong steel grate mounted in concrete.  A dry streambed
-            |leads into the depression.""",
-            {forest})
+            |leads into the depression.""")
     {
-        override fun configure() {
-            item(grate)
-            // NORTH: twoWay from slit
-            twoWay(belowGrate, DOWN, IN)
+        // NORTH: twoWay from slit
+        twoWay(belowGrate, DOWN, IN)
+
+        here(grate)
+
+        allowPlayerMoveIn { oldRoom ->
+            declineIf({ oldRoom == belowGrate && !grateOpen.isOn }, "The grate is closed")
         }
 
-        override fun approvePlayerMoveTo(newRoom: Room): Boolean {
-            if (newRoom == belowGrate && !grate.isOpen.isOn) {
-                say("The grate is closed.")
-                return false
-            }
-            return true
-        }
-
-        override fun approvePlayerMoveFrom(oldRoom: Room): Boolean {
-            if (oldRoom == belowGrate && !grate.isOpen.isOn) {
-                say("The grate is closed.")
-                return false
-            }
-            return true
+        allowPlayerMoveOut { newRoom ->
+            declineIf({ newRoom == belowGrate && !grateOpen.isOn }, "The grate is closed")
         }
     }
 
-    val belowGrate: Room = object : Room(
+    val belowGrate = litRoom(
             "You're below the grate.",
             """You are in a small chamber beneath a 3x3 steel grate to the surface.
             |A low crawl over cobbles leads inward to the west.""")
     {
-        override fun configure() {
-            unownedItem(grate) // the official owner is outsideGrate, but also visible here
-            twoWay(cobble, WEST)
-        }
+        hereShared(grate) // the official owner is outsideGrate, but also seen here
+        twoWay(cobble, WEST)
     }
 
-
-    val cobble = object : Room(
+    val cobble = litRoom(
             "You're in cobble crawl.",
             """You are crawling over cobbles in a low passage.  There is a dim light
             |at the east end of the passage.""")
     {
-        override fun configure() {
-            item(cage)
-            twoWay(debris, WEST, UP)
-            // EAST: twoWay from belowGrate
-        }
+        // EAST: twoWay from belowGrate
+        twoWay(debris, WEST, UP)
+        here(cage)
     }
 
-    val debris: DarkRoom = object : DarkRoom(
+    val debris: Room = darkRoom(
             "You're in debris room.",
             """You are in a debris room filled with stuff washed in from the surface.
             |A low wide passage with cobbles becomes plugged with mud and debris
             |here, but an awkward canyon leads upward and west.  In the mud someone
             |has scrawled, "MAGIC WORD XYZZY".""")
     {
-        override fun configure() {
-            item(rod)
-            twoWay(awkwardCanyon, WEST)
-            // EAST, UP: twoWay from cobble
-            action("xyzzy") {
-                say(">>Foof!<<")
-                player.moveTo(insideBuilding)
-            }
+        twoWay(awkwardCanyon, WEST)
+        // EAST, UP: twoWay from cobble
+        here(rod)
+        action("xyzzy") {
+            say(">>Foof!<<")
+            player.moveTo(insideBuilding)
         }
     }
 
-    val awkwardCanyon = object : DarkRoom(
+    val awkwardCanyon = darkRoom(
             "You are in an awkward sloping east/west canyon.",
             "You are in an awkward sloping east/west canyon.")
     {
-        override fun configure() {
-            twoWay(birdChamber, WEST)
-            // EAST: twoWay from debris
-        }
+        // EAST: twoWay from debris
+        twoWay(birdChamber, WEST)
     }
 
-    val birdChamber = object : DarkRoom(
+    val birdChamber = darkRoom(
             "You're in bird chamber.",
             """You are in a splendid chamber thirty feet high.  The walls are frozen
             |rivers of orange stone.  An awkward canyon and a good passage exit
             |from east and west sides of the chamber.""")
     {
-        override fun configure() {
-            item(bird)
-            twoWay(pitTop, WEST)
-            // EAST: twoWay from awkwardCanyon
-        }
+        // EAST: twoWay from awkwardCanyon
+        twoWay(pitTop, WEST)
+        here(bird)
     }
 
-    val pitTop = object : DarkRoom("You're at top of small pit.",
+    val pitTop = darkRoom("You're at top of small pit.",
             """At your feet is a small pit breathing traces of white mist.  An east
             |passage ends here except for a small crack leading on.""")
     {
-        override fun configure() {
-            twoWay(mistHall, DOWN)
-            oneWay(crack, WEST)
+        twoWay(mistHall, DOWN)
+        oneWay(crack, WEST)
+
+        here(stoneSteps)
+    }
+
+    val stoneSteps: Fixture = fixture("steps") {
+        dynamicDescription = {
+            when (player.room) {
+                pitTop -> "Rough stone steps lead down the pit."
+                mistHall -> "Rough stone steps lead up the dome."
+                else -> "- error: why are the rough stone steps here? -"
+            }
         }
     }
 
@@ -309,82 +337,77 @@ class ColossalCave private constructor(): World() {
             """The crack is far too small for you to follow.  At its widest it is
             |barely wide enough to admit your foot.""")
 
-    val mistHall: Room = object : DarkRoom("You're in Hall of Mists.",
+    val mistHall: Room = darkRoom("You're in Hall of Mists.",
             """You are at one end of a vast hall stretching forward out of sight to
             |the west.  There are openings to either side.  Nearby, a wide stone
             |staircase leads downward.  The hall is filled with wisps of white mist
             |swaying to and fro almost as if alive.  A cold wind blows up the
             |staircase.  There is a passage at the top of a dome behind you.""")
     {
-        override fun configure() {
-            // UP: twoWay from pitTop
-            twoWay(eastBank, WEST)
-            twoWay(kingHall, DOWN)
-            oneWay(kingHall, NORTH) // the return passage from kingHall is EAST
-            twoWay(nuggetRoom, EAST)
-            action(magicWord) {
-                say("""The cave walls around you become a blur.
+        // UP: twoWay from pitTop
+        twoWay(eastBank, WEST)
+        twoWay(kingHall, DOWN)
+        oneWay(kingHall, NORTH) // the return passage from kingHall is EAST
+        twoWay(nuggetRoom, EAST)
+
+        hereShared(stoneSteps)
+
+        action(magicWord) {
+            say("""The cave walls around you become a blur.
                     |>>Foof!<<""")
-                player.moveTo(outsideGrate)
+            player.moveTo(outsideGrate)
+        }
+        magicWords.forEach {
+            action(it) {
+                say("A hollow voice says, \"Fool!\"")
             }
         }
 
-        override fun approvePlayerMoveTo(newRoom: Room): Boolean {
-            if (newRoom == pitTop && player has nugget) {
-                say("An invisible force stops you from climbing the dome.")
-                return false
-            }
-            return true
+        allowPlayerMoveOut { newRoom ->
+            declineIf({ newRoom == pitTop && player has nugget },
+                    "An invisible force stops you from climbing the dome.")
         }
     }
 
-    val eastBank = object : DarkRoom("You're on east bank of fissure.",
+    val eastBank = darkRoom("You're on east bank of fissure.",
             """You are on the east bank of a fissure slicing clear across the hall.
             |The mist is quite thick here, and the fissure is too wide to jump.""")
     {
-        override fun configure() {
-            // EAST: twoWay from mistHall
-        }
+        // EAST: twoWay from mistHall
     }
 
-    val nuggetRoom = object : DarkRoom("You're in nugget-of-gold room.",
+    val nuggetRoom = darkRoom("You're in nugget-of-gold room.",
             """This is a low room with a crude note on the wall.  The note says,
             |"You won't get it up the steps".""")
     {
-        override fun configure() {
-            // DOWN, WEST: twoWay from mistHall
-            item(nugget)
-        }
+        // DOWN, WEST: twoWay from mistHall
+        here(nugget)
     }
 
-    val nugget = Item("nugget", "gold",
+    val nugget = item("nugget", "gold",
             owned = "Large gold nugget",
             dropped = "There is a large sparkling nugget of gold here!")
+    {}
 
-    val kingHall = object : DarkRoom("You're in Hall of Mt King.",
+    val kingHall = darkRoom("You're in Hall of Mt King.",
             """You are in the Hall of the Mountain King, with passages off in all
             |directions.""")
     {
-        override fun configure() {
-            // UP: twoWay from mistHall
-            oneWay(mistHall, EAST) // the return passage from mistHall is NORTH
-            oneWay(unimplementedPassage, NORTH)
-            oneWay(unimplementedPassage, SOUTH)
-            oneWay(unimplementedPassage, WEST)
-            oneWay(unimplementedPassage, SOUTHWEST)
-            item(snake)
+        // UP: twoWay from mistHall
+        oneWay(mistHall, EAST) // the return passage from mistHall is NORTH
+        oneWay(unimplementedPassage, NORTH)
+        oneWay(unimplementedPassage, SOUTH)
+        oneWay(unimplementedPassage, WEST)
+        oneWay(unimplementedPassage, SOUTHWEST)
+
+        here(snake)
+
+        allowPlayerMoveOut { newRoom ->
+            declineIf({ this has snake && newRoom != mistHall }, "You can't get by the snake.")
         }
 
-        override fun approvePlayerMoveTo(newRoom: Room): Boolean {
-            if (this has snake && newRoom != mistHall) {
-                say("You can't get by the snake.")
-                return false
-            }
-            return true
-        }
-
-        override fun noticeItemMoveFrom(oldOwner: ItemOwner, item: Item) {
-            if (item == bird && this has snake) {
+        onItemMoveIn(bird) {
+            if (this has snake) {
                 say("""The little bird attacks the green snake, and in an astounding flurry
                     |drives the snake away.""")
                 snake.moveTo(Item.LIMBO)
@@ -396,13 +419,12 @@ class ColossalCave private constructor(): World() {
             """The passage is blocked by orange safety fencing with a sign saying,
             |"No entry. This part of the cave is under construction.""")
 
-    val snake = object : Item("snake", owned = "", dropped = "A huge green fierce snake bars the way!") {
-        override fun approveMoveTo(newOwner: ItemOwner): Boolean {
-            if (newOwner == player) {
-                say("This doesn't sound like a very good idea.")
-                return false
-            }
-            return true
+    val snake = item("snake",
+            owned = "",
+            dropped = "A huge green fierce snake bars the way!")
+    {
+        allowMoveTo(player) {
+            decline("This doesn't sound like a very good idea.")
         }
     }
 
@@ -412,130 +434,123 @@ class ColossalCave private constructor(): World() {
 
     val lantern = Lantern()
 
-    val keys = Item("keys", "key",
+    val keys = item("keys", "key",
             owned = "Set of keys",
             dropped = "There are some keys on the ground here.")
+    {
+        isPlural = true
+    }
 
-    val food = Item("food",
+    val food = item("food",
             owned = "Tasty food",
             dropped = "There is food here.")
+    {}
 
-    val water = Item("water",
+    val water = item("water",
             owned = "Water in the bottle",
             dropped = "There is a bottle of water here.")
+    {}
 
-    /*
-        The grate is is a fixture rather than item, so it can't be picked up
-        by the player. It also illustrates vicinity actions and guards.
+    val grateOpen = Toggle(false,
+            turnedOnMessage = "You unlock and open the grate.",
+            turnedOffMessage = "You close and lock the grate.",
+            alreadyOnMessage = "The grate is already open.",
+            alreadyOffMessage = "The grate is already closed.")
 
-        A regular action defined for an item is only active when the item is
-        held by the player. A vicinity action is active when the player is in
-        the room with the item.
+    val grate = fixture("grate", "door") {
+        dynamicDescription = { if (grateOpen.isOn) "The grate is open." else "The grate is closed." }
 
-        A guard is attached to a action to only apply it if a guard condition
-        is met, and print a message otherwise. The grate can only be
-        open if it's unlocked, and it can only be unlocked if the player has
-        the keys.
+        vicinityAction("open", "unlock") { grateOpen.turnOn() }
+                // Guards are LIFO, so the !isOpen.isOn check is performed first.
+                .guardedBy({ player has keys },
+                        "The grate is locked and you don't have the key.")
+                .guardedBy({ !grateOpen.isOn },
+                        "The grate is already open.")
 
-        This is a real rather than an anonymous class so that the [grate]
-        has the type of this class rather than generic [Item], and we can
-        access its properties.
-     */
-
-    inner class Grate : Fixture("grate", "door") {
-        val isOpen = Toggle(false,
-                turnOnMessage = "You unlock and open the grate.",
-                turnOffMessage = "You close and lock the grate.",
-                alreadyOnMessage = "The grate is already open.",
-                alreadyOffMessage = "The grate is already closed.")
-
-        override val description get() = if (isOpen.isOn) "The grate is open." else "The grate is closed."
-
-        override fun configure() {
-            vicinityAction("open", "unlock") { isOpen.turnOn() }
-                    // Guards are LIFO, so the !isOpen.isOn check is performed first.
-                    .guardedBy({ player has keys },
-                            "The grate is locked and you don't have the key.")
-                    .guardedBy({ !isOpen.isOn },
-                            "The grate is already open.")
-
-            vicinityAction("close") { isOpen.turnOff() }
-        }
+        vicinityAction("close") { grateOpen.turnOff() }
     }
-    val grate = Grate()
 
-    val cage = Item("cage",
+    val cage = item("cage",
             owned = "Wicker cage",
             dropped = "There is a small wicker cage discarded nearby.")
+    {}
 
-    val rod = object : Item("rod",
+    val rod = item("rod",
             owned = "Black rod",
-            dropped = "A three foot black rod with a rusty star on an end lies nearby.") {
-        override fun configure() {
-            action("wave") {
-                if (player.room == eastBank) {
-                    say("""A hollow voice says, "Sorry, the bridge has not been built yet."""")
-                } else {
-                    say("You look ridiculous waving the black rod.")
-                }
+            dropped = "A three foot black rod with a rusty star on an end lies nearby.")
+    {
+        action("wave") {
+            if (player.room == eastBank) {
+                say("""A hollow voice says, "What did you expect, a crystal bridge?"""")
+            } else {
+                say("You look ridiculous waving the black rod.")
             }
         }
     }
 
-    val bird : Item = object : Item("bird")
+    val bird: Item = item("bird")
     {
-        override val description: String get() =
+        dynamicDescription = {
             if (Item.LIMBO has snake)
                 """A little bird is sitting here looking sad and lonely.
                 |It probably misses its home in the forest."""
             else
                 "A cheerful little bird is sitting here singing."
+        }
 
-        override fun configure() {
-            vicinityAction("take", "get", "catch") {
-                if (referringTo(bird())) {
-                    when {
-                        player has rod ->
-                            say("""As you approach, the bird becomes disturbed and you cannot catch it.""")
-                        player has cage -> {
-                            cage.moveTo(Item.LIMBO)
-                            bird().moveTo(Item.LIMBO)
-                            cagedBird.moveTo(player)
-                            // no message is printed by the above because cagedBird was in limbo, not the room
-                            say("You catch the bird and put in the cage.")
-                        }
-                        else -> say("You can catch the bird, but you cannot carry it.")
+        vicinityAction("take", "get", "catch") {
+            if (referringTo(bird())) {
+                when {
+                    player has rod ->
+                        say("""As you approach, the bird becomes disturbed and you cannot catch it.""")
+                    player has cage -> {
+                        cage.moveTo(Item.LIMBO)
+                        bird().moveTo(Item.LIMBO)
+                        cagedBird.moveTo(player)
+                        // no message is printed by the above because cagedBird was in limbo, not the room
+                        say("You catch the bird and put it in the cage.")
                     }
-                } else {
-                    pass()
+                    else -> say("You can catch the bird, but you cannot carry it.")
                 }
+            } else {
+                pass()
             }
         }
 
-        override fun approveMoveTo(newOwner: ItemOwner): Boolean {
-            if (newOwner == player &&  player has rod) {
-                say("""As you approach, the bird becomes disturbed and you cannot catch it.""")
-                return false
-            }
-            return true
+        allowMoveTo(player) {
+            declineIf({ player has rod }, "As you approach, the bird becomes disturbed and you cannot catch it.")
         }
     }
     private fun bird() = bird // can't reference 'bird' from itself directly, so need this
 
-    private fun cagedBird() = cagedBird // can't reference cagedBird in itself directly. ugh
-    val cagedBird : Item = object : Item("bird", "cage",
+    val cagedBird = item("bird", "cage",
             owned = "Little bird in cage",
             dropped = "There is a little bird in the cage.")
     {
-        override fun configure() {
-            // Allows 'open cage' and 'release bird'.
-            // Also allows 'open bird' and 'release cage' but oh well.
-            action("open", "release") {
-                cagedBird().moveTo(Item.LIMBO)
-                cage.moveTo(player)
-                bird.moveTo(player.room)
-            }
+        // Allows 'open cage' and 'release bird'.
+        // Also allows 'open bird' and 'release cage' but oh well.
+        action("open", "release") {
+            cagedBird().moveTo(Item.LIMBO)
+            cage.moveTo(player)
+            bird.moveTo(player.room)
+        }
+    }
+    private fun cagedBird(): Item = cagedBird // can't reference cagedBird in itself directly. ugh
+
+    /*
+        Extra DSLish stuff
+     */
+
+    private inner class Outdoors(summary: String, description: String) : Room(summary, description) {
+        override fun exitTo(direction: Direction): Room? {
+            return super.exitTo(direction)
+                    ?: if (direction in Direction.compassDirections) forest else null
         }
     }
 
+    private fun outdoors(summary: String, description: String, configurator: Room.()->Unit): Room {
+        val room = Outdoors(summary, description)
+        room.configurator = configurator
+        return room
+    }
 }

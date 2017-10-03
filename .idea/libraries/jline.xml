@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="jline">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/jline-3.5.2-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/jline-3.5.2-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

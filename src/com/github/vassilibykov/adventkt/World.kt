@@ -1,5 +1,22 @@
+/*
+ * Copyright (c) 2017 Vassili Bykov
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.github.vassilibykov.adventkt
 
+import kotlin.reflect.KClass
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.isSubtypeOf
 import kotlin.reflect.full.memberProperties
@@ -10,6 +27,8 @@ import kotlin.reflect.full.starProjectedType
  * initialization pass for its properties which implement the [Configurable]
  * interface, thus allowing mutually recursive references which are the bane of
  * regular initializers.
+ *
+ * @author Vassili Bykov
  */
 abstract class World internal constructor() {
     private val vocabulary = globalVocabulary()
@@ -20,12 +39,16 @@ abstract class World internal constructor() {
 
     val parser = Parser()
 
-    fun play() {
+    private fun defaultReader(): String {
+        print("> ")
+        return readLine() ?: "quit"
+    }
+
+    fun play(lineReader: ()-> String = this::defaultReader) {
         try {
             player.moveTo(start)
             while (true) {
-                print("> ")
-                val command = readLine() ?: "quit"
+                val command = lineReader()
                 parser.process(command)
             }
         } catch (e: QuitException) {
@@ -34,6 +57,48 @@ abstract class World internal constructor() {
     }
 
     fun findAction(word: String): Action? = vocabulary[word]
+
+    /*
+        DSLish stuff
+     */
+
+    internal fun litRoom(caption: String, description: String, configurator: Room.()->Unit): Room {
+        val room = Room(caption, description)
+        room.configurator = configurator
+        return room
+    }
+
+    internal fun darkRoom(caption: String, description: String, configurator: Room.()->Unit): DarkRoom {
+        val room = DarkRoom(caption, description)
+        room.configurator = configurator
+        return room
+    }
+
+    internal fun item(vararg names: String, owned: String, dropped: String, configurator: Item.() -> Unit): Item {
+        val item = Item(*names, owned = owned, dropped = dropped)
+        item.configurator = configurator
+        return item
+    }
+
+    internal fun item(vararg names: String, configurator: Item.() -> Unit): Item {
+        val item = Item(*names)
+        item.configurator = configurator
+        return item
+    }
+
+    internal fun fixture(vararg names: String, description: String, configurator: Fixture.() -> Unit): Fixture {
+        val item = Fixture(*names, dropped = description)
+        @Suppress("UNCHECKED_CAST")
+        item.configurator = configurator as Item.() -> Unit
+        return item
+    }
+
+    internal fun fixture(vararg names: String, configurator: Fixture.() -> Unit): Fixture {
+        val item = Fixture(*names)
+        @Suppress("UNCHECKED_CAST")
+        item.configurator = configurator as Item.() -> Unit
+        return item
+    }
 
     /**
      * Run [Configurable.configure] methods of all properties of this instance which
@@ -62,6 +127,29 @@ abstract class World internal constructor() {
     }
 
     /**
+     * Reflectively examine this world's properties, looking for one with a
+     * matching name and of type [Room]. Return the property value or null
+     * if not found.
+     */
+    fun findRoom(name: String): Room? = findDeclaredObject(Room::class, name)
+
+    fun findItem(name: String): Item? = findDeclaredObject(Item::class, name)
+
+    private fun <T : Any> findDeclaredObject(typeToken: KClass<T>, name: String): T? {
+        for (property in this::class.memberProperties) {
+            val type = property.returnType
+            if (type.isSubtypeOf(typeToken.starProjectedType)) {
+                @Suppress("UNCHECKED_CAST")
+                if (property.name == name) {
+                    val p = property as KProperty1<World, T>
+                    return p.get(this)
+                }
+            }
+        }
+        return null
+    }
+
+    /**
      * An object which, when a property of a [World] subclass instance defining
      * the game world, will have its [configure] method invoked after all properties
      * have been created.
@@ -72,3 +160,4 @@ abstract class World internal constructor() {
 
     class QuitException: RuntimeException()
 }
+

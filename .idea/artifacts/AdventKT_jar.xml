@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="AdventKT:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/AdventKT_jar</output-path>
+    <root id="archive" name="AdventKT.jar">
+      <element id="module-output" name="AdventKT" />
+      <element id="extracted-dir" path="$KOTLIN_BUNDLED$/lib/kotlin-stdlib.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$KOTLIN_BUNDLED$/lib/kotlin-reflect.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$KOTLIN_BUNDLED$/lib/kotlin-test.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$KOTLIN_BUNDLED$/lib/kotlin-stdlib-jre7.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$KOTLIN_BUNDLED$/lib/kotlin-stdlib-jre8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jline-3.5.2-SNAPSHOT.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

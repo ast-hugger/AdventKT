@@ -72,8 +72,8 @@ class Parser {
     fun process(input: String) {
         val tokens = input.split(' ', '\t', '\n', '\r')
         if (!tokens.isEmpty()) {
-            val command = tokens[0]
-            val subjects = tokens.drop(1).filter { it !in IGNORED_WORDS }
+            val command = tokens[0].toLowerCase()
+            val subjects = tokens.drop(1).filter { it !in IGNORED_WORDS }.map { it.toLowerCase() }
             val applicableActions = allApplicableActions(command)
             if (applicableActions.isEmpty()) {
                 if (command in Action.knownWords) {

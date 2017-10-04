@@ -18,6 +18,10 @@ package com.github.vassilibykov.adventkt.framework
 
 import java.util.*
 
+/**
+ * Print a game output message. The message is always
+ * filtered through `trimMargin`, with a newline appended.
+ */
 fun say(message: String) = println(message.trimMargin())
 
 fun <T> random(vararg args: T): T {

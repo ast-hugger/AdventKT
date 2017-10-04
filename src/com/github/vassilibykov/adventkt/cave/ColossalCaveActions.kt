@@ -138,21 +138,21 @@ class Summon : Action("summon") {
             if (item != null) {
                 if (player has item) {
                     say("You already own the $item.")
-                    return
-                }
-                val anItem = if (item.isPlural) item.toString() else "${item.indefiniteArticle} $item"
-                if (item is Fixture) {
-                    say("For a brief moment, you see a shimmering outline of $anItem\n" +
-                            "floating in the air. It disappears with a loud \"pop!\"")
                 } else {
-                    say("You see a shimmering outline of $anItem floating in the air.\n" +
-                            "It quickly solidifies, and the $item ${if (item.isPlural) "drop" else "drops"} to the ground.")
-                    item.primitiveMoveTo(player.room)
-                    return
+                    val anItem = if (item.isPlural) item.toString() else "${item.indefiniteArticle} $item"
+                    if (item is Fixture) {
+                        say("For a brief moment, you see a shimmering outline of $anItem\n" +
+                                "floating in the air. It disappears with a loud \"pop!\"")
+                    } else {
+                        say("You see a shimmering outline of $anItem floating in the air.\n" +
+                                "It quickly solidifies, and the $item ${if (item.isPlural) "drop" else "drops"} to the ground.")
+                        item.primitiveMoveTo(player.room)
+                    }
                 }
-            } else
-                say("A gust of wind blows, but nothing happens.")
+                return // breaking out of the for loop
+            }
         }
+        say("A gust of wind blows, but nothing happens.")
     }
 }
 
@@ -169,10 +169,9 @@ class Teleport : Action("teleport") {
                 say(">>Foof!<<")
                 player.internalMoveTo(room)
                 return
-            } else {
-                say("A gust of wind blows, but nothing happens.")
             }
         }
+        say("A gust of wind blows, but nothing happens.")
     }
 }
 

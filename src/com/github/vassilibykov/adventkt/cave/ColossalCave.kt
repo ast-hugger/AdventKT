@@ -69,7 +69,7 @@ class ColossalCave private constructor(): World() {
         }
     }
 
-    val adventKtSign = fixture("sign", message = "A freshly painted sign is hanging outside the building.") {
+    val adventKtSign = fixture("sign", message = "A new-looking sign is hanging outside the building.") {
         cantTakeMessage = "The sign is nailed securely to the wall."
         vicinityAction("read", "look") {
             say("""The sign says:
@@ -95,7 +95,7 @@ class ColossalCave private constructor(): World() {
             } else {
                 isOpen = true
                 say("""You open the box, releasing a huge cloud of yellow vapor.
-                    |The cloud briefly morphs into an inscription,
+                    |The cloud briefly morphs into words
                     |
                     |    TODO("implement this")
                     |
@@ -133,7 +133,7 @@ class ColossalCave private constructor(): World() {
     {
         // EAST: twoWay from outsideBuilding
         twoWay(endOfRoad, WEST)
-        action("down") { say("Down to the east or down to the west?") }
+        oneWay(UnenterableRoom("Down to the east or down to the west?"), DOWN)
     }
 
     val endOfRoad: Room = outdoors("You're at end of road.",
@@ -285,7 +285,7 @@ class ColossalCave private constructor(): World() {
             |here, but an awkward canyon leads upward and west.  In the mud someone
             |has scrawled, "MAGIC WORD XYZZY".""")
     {
-        twoWay(awkwardCanyon, WEST)
+        twoWay(awkwardCanyon, UP, WEST)
         // EAST, UP: twoWay from cobble
         here(rod)
         action("xyzzy") {
@@ -298,7 +298,7 @@ class ColossalCave private constructor(): World() {
             "You are in an awkward sloping east/west canyon.",
             "You are in an awkward sloping east/west canyon.")
     {
-        // EAST: twoWay from debris
+        // DOWN, EAST: twoWay from debris
         twoWay(birdChamber, WEST)
     }
 
@@ -416,15 +416,10 @@ class ColossalCave private constructor(): World() {
 
     val unimplementedPassage = UnenterableRoom(
             """The passage is blocked by orange safety fencing with a sign saying,
-            |"No entry. This part of the cave is under construction.""")
+            |"No entry. This part of the cave is under construction."""")
 
-    val snake = item("snake",
-            owned = "",
-            dropped = "A huge green fierce snake bars the way!")
-    {
-        allowMoveTo(player) {
-            decline("This doesn't sound like a very good idea.")
-        }
+    val snake = fixture("snake", message = "A huge green fierce snake bars the way!") {
+        cantTakeMessage = "This doesn't sound like a very good idea."
     }
 
     /*
@@ -547,6 +542,10 @@ class ColossalCave private constructor(): World() {
         }
     }
 
+    /**
+     * Declare a room for the outdoors part of Colossal Cave. Any compass
+     * direction which is not explicitly configured leads to the forest.
+     */
     private fun outdoors(summary: String, description: String, configurator: Room.()->Unit): Room {
         val room = Outdoors(summary, description)
         room.configurator = configurator

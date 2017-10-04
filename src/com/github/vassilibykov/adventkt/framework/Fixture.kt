@@ -31,14 +31,14 @@ open class Fixture(vararg names: String, message: ()->String)
     internal constructor(vararg names: String)
             : this(*names, message = "no description() for $names[0]")
 
+    /**
+     * The message displayed when the player tries to pick up this item.
+     */
     var cantTakeMessage = "The $primaryName is fixed in place."
 
     override fun approveMoveTo(newOwner: ItemOwner): Boolean {
-        return if (owner != LIMBO) {
-            say(cantTakeMessage)
-            false
-        } else {
-            true
-        }
+        return owner == LIMBO
+                || newOwner == LIMBO
+                || { say(cantTakeMessage); false }()
     }
 }

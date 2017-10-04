@@ -27,11 +27,11 @@ private val light = Toggle(false,
 /**
  * Most of the game objects are defined in ColossalCave, but the lantern
  * is special because it determines the player's ability to see in dark
- * rooms, so it's in fact part of the player.
+ * rooms. Through that, it's in fact part of the player implementation.
  *
  * The lantern is a good example of using a Toggle to track its lit/unlit
  * state, producing appropriate messages as the state changes. It is also
- * an example of an item with dynamic descriptions dependent on the state.
+ * an example of an item with a dynamic description dependent on the state.
  *
  * A lantern defines a local action which turns it on or off it the player
  * is holding the lantern, in which case the action is included in the action
@@ -42,9 +42,9 @@ private val light = Toggle(false,
  *
  * @author Vassili Bykov
  */
-class Lantern : Item("lamp", "lantern",
+class Lantern : Item("lantern", "lamp",
         owned = { if (light.isOn) "A lit brass lantern" else "A brass lantern" },
-        dropped = { if (light.isOn) "There is a brass lamp nearby." else "There is a brass lamp shining nearby." })
+        dropped = { if (light.isOn) "There is a brass lamp shining nearby." else "There is a brass lamp nearby." })
 {
     val isOn get() = light.isOn
 

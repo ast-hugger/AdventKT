@@ -107,6 +107,10 @@ open class Item (
         return moveApprovers.fold(true, {b, it -> b && it(this, newOwner)})
     }
 
+    /**
+     * Declare an action which is considered for execution by the parser when
+     * the player is holding the item.
+     */
     fun action(vararg words: String, effect: ItemAction.()->Unit): ItemAction {
         @Suppress("UNCHECKED_CAST")
         val verb = ItemAction(this, listOf(*words), effect = effect as LocalAction.() -> Unit)
@@ -114,6 +118,10 @@ open class Item (
         return verb
     }
 
+    /**
+     * Declare an action which is considered for execution by the parser when
+     * the player is in the same room as the item.
+     */
     fun vicinityAction(vararg words: String, effect: ItemAction.()->Unit): ItemAction {
         @Suppress("UNCHECKED_CAST")
         val verb = ItemAction(this, listOf(*words), effect = effect as LocalAction.() -> Unit)
@@ -123,11 +131,17 @@ open class Item (
 
     private val lookWords = setOf("look", "l")
     private val lookAction = ItemAction(this, lookWords, { say(description) })
+    private val lookInventoryAction = ItemAction(this, lookWords, {
 
-    fun findAction(word: String) = vocabulary[word]
+        say(inventoryDescription)
+    })
+
+    fun findAction(word: String): Action? {
+        return vocabulary[word] ?: if (word in lookWords) lookInventoryAction else null
+    }
 
     fun findVicinityAction(word: String): Action? {
-        return vicinityVocabulary[word] ?: if (word in setOf("look", "l")) lookAction else null
+        return vicinityVocabulary[word] ?: if (word in lookWords) lookAction else null
     }
 
     /**

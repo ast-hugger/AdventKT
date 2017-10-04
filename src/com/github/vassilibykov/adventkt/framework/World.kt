@@ -24,10 +24,11 @@ import kotlin.reflect.full.memberProperties
 import kotlin.reflect.full.starProjectedType
 
 /**
- * The superclass of a game definition. Uses reflection to implement a second
- * initialization pass for its properties which implement the [Configurable]
- * interface, thus allowing mutually recursive references which are the bane of
- * regular initializers.
+ * The superclass of a game definition. Defines the top-level DSL constructs.
+ *
+ * Uses reflection to implement a second initialization pass for its properties
+ * which implement the [Configurable] interface, thus allowing mutually
+ * recursive references which are the bane of regular initializers.
  *
  * @author Vassili Bykov
  */
@@ -60,39 +61,59 @@ abstract class World internal constructor() {
     fun findAction(word: String): Action? = vocabulary[word]
 
     /*
-        DSLish stuff
+        DSL constructs
      */
 
+    /**
+     * Declare a room with natural light. The player can always see in this room.
+     */
     internal fun litRoom(caption: String, description: String, configurator: Room.()->Unit): Room {
         val room = Room(caption, description)
         room.configurator = configurator
         return room
     }
 
+    /**
+     * Declare a room with no natural light. The player can see only when the
+     * lantern in the room, and the lantern is lit. The lantern may be dropped
+     * in the room or carried by the player.
+     */
     internal fun darkRoom(caption: String, description: String, configurator: Room.()->Unit): DarkRoom {
         val room = DarkRoom(caption, description)
         room.configurator = configurator
         return room
     }
 
+    /**
+     * Declare a general purpose item.
+     */
     internal fun item(vararg names: String, owned: ()->String, dropped: ()->String, configurator: Item.() -> Unit): Item {
         val item = Item(*names, owned = owned, dropped = dropped)
         item.configurator = configurator
         return item
     }
 
+    /**
+     * Declare a general purpose item.
+     */
     internal fun item(vararg names: String, owned: String, dropped: String, configurator: Item.() -> Unit): Item {
         val item = Item(*names, owned = owned, dropped = dropped)
         item.configurator = configurator
         return item
     }
 
+    /**
+     * Declare a general purpose item.
+     */
     internal fun item(vararg names: String, configurator: Item.() -> Unit): Item {
         val item = Item(*names)
         item.configurator = configurator
         return item
     }
 
+    /**
+     * Declare an item which is present in the room but can't be picked up by the player.
+     */
     internal fun fixture(vararg names: String, message: ()->String, configurator: Fixture.() -> Unit): Fixture {
         val item = Fixture(*names, message = message)
         @Suppress("UNCHECKED_CAST")
@@ -100,6 +121,9 @@ abstract class World internal constructor() {
         return item
     }
 
+    /**
+     * Declare an item which is present in the room but can't be picked up by the player.
+     */
     internal fun fixture(vararg names: String, message: String, configurator: Fixture.() -> Unit): Fixture {
         val item = Fixture(*names, message = message)
         @Suppress("UNCHECKED_CAST")
@@ -107,6 +131,9 @@ abstract class World internal constructor() {
         return item
     }
 
+    /**
+     * Declare an item which is present in the room but can't be picked up by the player.
+     */
     internal fun fixture(vararg names: String, configurator: Fixture.() -> Unit): Fixture {
         val item = Fixture(*names)
         @Suppress("UNCHECKED_CAST")
@@ -123,8 +150,6 @@ abstract class World internal constructor() {
      * @see ColossalCave.create
      */
     internal fun runObjectSetup() {
-        // A property may refer to another property value, so we need to protect
-        // against calling .configure() more than once on the same object.
         val configurationContext = ConfigurationContext()
         for (property in this::class.memberProperties) {
             val type = property.returnType
@@ -177,8 +202,8 @@ abstract class World internal constructor() {
 
     /**
      * An object which, when a property of a [World] subclass instance defining
-     * the game world, will have its [configure] method invoked after all properties
-     * have been created.
+     * the game world, will have its [configure] method invoked after all the
+     * world properties have been created.
      */
     interface Configurable {
         fun configure(context: ConfigurationContext)

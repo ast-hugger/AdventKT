@@ -255,12 +255,13 @@ open class Room(private val _shortDescription: String, _description: String) : W
 
     /**
      * Evaluate the [condition]. If true, print the specified message and return false.
-     * Otherwise, silently return false. Intended to be used as part of `allow`
+     * Otherwise, silently return true. Intended to be used as part of `allow`
      * declarations, for example
      *
-     *   allowPlayerMoveOut { _ ->
-     *     declineIf({ player has forbiddenItem }, "You are not allowed to take $forbiddenItem out of the room.")
-     *   }
+     *     allowPlayerMoveOut { _ ->
+     *       declineIf({ player has forbiddenItem },
+     *         "You are not allowed to take $forbiddenItem out of the room.")
+     *     }
      */
     internal fun declineIf(condition: ()->Boolean, message: String): Boolean {
         return if (condition()) {

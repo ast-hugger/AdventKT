@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.vassilibykov.adventkt
+package com.github.vassilibykov.adventkt.framework
 
 /**
  * An action attached to a room or an item. This is usually done using the

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.vassilibykov.adventkt
+package com.github.vassilibykov.adventkt.framework
 
 /**
  * A movement direction, with the concept of opposite directions.

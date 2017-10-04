@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package com.github.vassilibykov.adventkt
+package com.github.vassilibykov.adventkt.cave
 
-import com.github.vassilibykov.adventkt.Direction.*
+import com.github.vassilibykov.adventkt.framework.*
+import com.github.vassilibykov.adventkt.framework.Direction.*
 
 /**
  * A definition of a subset of Colossal Cave, with some changes and
@@ -37,9 +38,6 @@ class ColossalCave private constructor(): World() {
 
     /*
         Rooms.
-
-        See the Room class documentation for why we use configure()
-        methods instead of regular init{} blocks.
      */
 
     val outsideBuilding = outdoors("You're in front of building.",
@@ -52,23 +50,26 @@ class ColossalCave private constructor(): World() {
         oneWay(hill, UP)
         oneWay(forest, NORTH)
         twoWay(valley, DOWN, SOUTH)
+
         here(adventKtSign)
-        // Unlike Zork and later Infocom games, the original CC didn't support
-        // examining details of the scenery with command like "look at the stream".
-        // Here is how details can be defined in AdventKT.
-        here(finePrint)
+        detail("fine", "print",
+                extraVerbs = setOf("read"),
+                message = "\"The Implementor's Prize isn't fully implemented yet.\"")
+            .cantTakeMessage = "How do you imagine doing that?"
+
         action("downstream") { player.moveTo(valley) }
+
         onPlayerMoveIn { oldRoom ->
             if (player has nugget) {
                 val entryWord = if (oldRoom == insideBuilding) "exit" else "approach"
                 say("""As you $entryWord the well house, a large box appears hovering in the air.
-                    |The box drops on the ground with a thud.""")
+                    |The box drops to the ground with a thud.""")
                 implementorPrize.moveTo(this)
             }
         }
     }
 
-    val adventKtSign = fixture("sign", description = "A freshly painted sign is hanging outside the building.") {
+    val adventKtSign = fixture("sign", message = "A freshly painted sign is hanging outside the building.") {
         cantTakeMessage = "The sign is nailed securely to the wall."
         vicinityAction("read", "look") {
             say("""The sign says:
@@ -81,12 +82,8 @@ class ColossalCave private constructor(): World() {
         }
     }
 
-    val finePrint = Detail("fine", "print",
-            description = "\"The Implementor's Prize isn't fully implemented yet.\"",
-            verbs = setOf("look", "examine", "x", "l", "read"))
-
     val implementorPrize = fixture("box", "prize",
-            description = "A large box with a tag \"Implementor's Prize\" is sitting on the ground.")
+            message = "A large box with a tag \"Implementor's Prize\" is sitting on the ground.")
     {
         cantTakeMessage = "The Implementor's Prize is far too big for you to carry."
 
@@ -118,10 +115,12 @@ class ColossalCave private constructor(): World() {
         here(lantern)
         here(food)
         here(water)
+
         action("xyzzy") {
             say(">>Foof!<<")
             player.moveTo(debris)
         }
+
         action("down", "downstream") {
             say("""The stream flows out through a pair of 1 foot diameter sewer pipes.
                     |It would be advisable to use the exit.""")
@@ -134,13 +133,14 @@ class ColossalCave private constructor(): World() {
     {
         // EAST: twoWay from outsideBuilding
         twoWay(endOfRoad, WEST)
-        action("down") { say("Which way?")}
+        action("down") { say("Down to the east or down to the west?") }
     }
 
-    val endOfRoad = outdoors("You're at end of road.",
+    val endOfRoad: Room = outdoors("You're at end of road.",
             """The road, which approaches from the east, ends here amid the trees.""")
     {
         // EAST: twoWay from hill
+        oneWay(hill, UP)
     }
 
     val cliff = outdoors("You're at cliff.",
@@ -153,9 +153,9 @@ class ColossalCave private constructor(): World() {
             """You are in a valley in the forest beside a stream tumbling along a
             |rocky bed.""")
     {
-            // UP, EAST: twoWay from outsideBuilding
-            twoWay(slit, DOWN, SOUTH)
-            action("downstream") { player.moveTo(slit) }
+        // UP, EAST: twoWay from outsideBuilding
+        twoWay(slit, DOWN, SOUTH)
+        action("downstream") { player.moveTo(slit) }
     }
 
     val magicWords = setOf(
@@ -323,15 +323,14 @@ class ColossalCave private constructor(): World() {
         here(stoneSteps)
     }
 
-    val stoneSteps: Fixture = fixture("steps") {
-        dynamicDescription = {
+    val stoneSteps: Fixture = fixture("steps", message = {
             when (player.room) {
                 pitTop -> "Rough stone steps lead down the pit."
                 mistHall -> "Rough stone steps lead up the dome."
                 else -> "- error: why are the rough stone steps here? -"
             }
-        }
-    }
+        })
+    {}
 
     val crack = UnenterableRoom(
             """The crack is far too small for you to follow.  At its widest it is
@@ -457,9 +456,9 @@ class ColossalCave private constructor(): World() {
             alreadyOnMessage = "The grate is already open.",
             alreadyOffMessage = "The grate is already closed.")
 
-    val grate = fixture("grate", "door") {
-        dynamicDescription = { if (grateOpen.isOn) "The grate is open." else "The grate is closed." }
-
+    val grate = fixture("grate", "door",
+            message = { if (grateOpen.isOn) "The grate is open." else "The grate is closed." })
+    {
         vicinityAction("open", "unlock") { grateOpen.turnOn() }
                 // Guards are LIFO, so the !isOpen.isOn check is performed first.
                 .guardedBy({ player has keys },
@@ -488,16 +487,16 @@ class ColossalCave private constructor(): World() {
         }
     }
 
-    val bird: Item = item("bird")
-    {
-        dynamicDescription = {
-            if (Item.LIMBO has snake)
-                """A little bird is sitting here looking sad and lonely.
+    val bird: Item = item("bird",
+            owned = {""},
+            dropped = {
+                if (Item.LIMBO has snake)
+                    """A little bird is sitting here looking sad and lonely.
                 |It probably misses its home in the forest."""
-            else
-                "A cheerful little bird is sitting here singing."
-        }
-
+                else
+                    "A cheerful little bird is sitting here singing."
+            })
+    {
         vicinityAction("take", "get", "catch") {
             if (referringTo(bird())) {
                 when {
@@ -537,10 +536,10 @@ class ColossalCave private constructor(): World() {
     }
     private fun cagedBird(): Item = cagedBird // can't reference cagedBird in itself directly. ugh
 
-    /*
-        Extra DSLish stuff
+    /**
+     * The standard room for the outdoors. Any not explicitly connected
+     * compass direction leads to the forest.
      */
-
     private inner class Outdoors(summary: String, description: String) : Room(summary, description) {
         override fun exitTo(direction: Direction): Room? {
             return super.exitTo(direction)

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.vassilibykov.adventkt
+package com.github.vassilibykov.adventkt.framework
 
 /**
  * An item (or a character). An item can be picked up and carried by the player,
@@ -22,15 +22,23 @@ package com.github.vassilibykov.adventkt
  * item can prohibit that by overriding [approveMoveTo], or by inheriting from
  * [Fixture] instead of this class.
  *
+ * Not intended to be instantiated directly or subclassed. Instead, typically
+ * created and configured using the `item()` DSL clause.
+ *
+ * @see World.item
+ *
  * @author Vassili Bykov
  */
 
 open class Item (
         private vararg val _names: String,
-        private val owned: String,
-        private val dropped: String)
+        private var owned: ()->String,
+        private val dropped: ()->String)
     : World.Configurable
 {
+    constructor(vararg  names: String, owned: String, dropped: String)
+            : this(*names, owned = { owned }, dropped = { dropped })
+
     internal constructor(vararg names: String)
             : this(*names, owned = "<no inventoryDescription() for $names[0]>", dropped = "no description() for $names[0]")
 
@@ -38,8 +46,6 @@ open class Item (
         internal set
     val names = _names.toSet()
     internal var isPlural = false
-    internal var dynamicDescription: (() -> String)? = null
-    internal var dynamicInventoryDescription: (() -> String)? = null
     val primaryName
         get() = _names[0]
     val indefiniteArticle
@@ -53,14 +59,12 @@ open class Item (
      * The description of the item displayed when the item is NOT owned by the
      * player.
      */
-    open val description
-        get() = dynamicDescription?.invoke() ?: dropped
+    open val description get() = dropped()
 
     /**
      * The description of the item to display when it's in the player's inventory.
      */
-    open val inventoryDescription
-        get() = dynamicInventoryDescription?.invoke() ?: owned
+    open val inventoryDescription get() = owned()
 
     /**
      * Whether to skip the item when printing a full room description.
@@ -73,7 +77,7 @@ open class Item (
     internal var configurator: (Item.()->Unit)? = null
     private val moveApprovers = mutableListOf<Item.(ItemOwner)->Boolean>()
 
-    override fun configure() {
+    override fun configure(context: World.ConfigurationContext) {
         configurator?.invoke(this)
     }
 
@@ -117,9 +121,14 @@ open class Item (
         return verb
     }
 
+    private val lookWords = setOf("look", "l")
+    private val lookAction = ItemAction(this, lookWords, { say(description) })
+
     fun findAction(word: String) = vocabulary[word]
 
-    fun findVicinityAction(word: String) = vicinityVocabulary[word]
+    fun findVicinityAction(word: String): Action? {
+        return vicinityVocabulary[word] ?: if (word in setOf("look", "l")) lookAction else null
+    }
 
     /**
      * Move the item to a new owner. This is the standard method of doing so,

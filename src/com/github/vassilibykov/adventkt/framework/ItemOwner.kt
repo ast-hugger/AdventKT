@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.vassilibykov.adventkt
+package com.github.vassilibykov.adventkt.framework
 
 /**
  * An object which can contain [Item]s. Rooms and the player are the most common

@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-package com.github.vassilibykov.adventkt
+package com.github.vassilibykov.adventkt.cave
+
+import com.github.vassilibykov.adventkt.framework.*
+
 
 /*
     Global vocabulary actions, alphabetic order.
@@ -109,9 +112,9 @@ class Take: Action("take", "get", "pick") {
         val item = subjects.map { player.room.findItem(it) }.firstOrNull()
         if (item == null) {
             say("There is no such thing here.")
-            return
+        } else {
+            item.moveTo(player)
         }
-        item.moveTo(player)
     }
 
     private fun takeAll() {

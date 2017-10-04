@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.vassilibykov.adventkt
+package com.github.vassilibykov.adventkt.cave
 
 import org.jline.reader.EndOfFileException
 import org.jline.reader.LineReader

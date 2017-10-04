@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.vassilibykov.adventkt
+package com.github.vassilibykov.adventkt.framework
 
 /**
  * A helper object representing a boolean property that can be changed by the

@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-package com.github.vassilibykov.adventkt
+package com.github.vassilibykov.adventkt.framework
+
+import com.github.vassilibykov.adventkt.cave.lantern
+import com.github.vassilibykov.adventkt.cave.player
 
 /**
  * The superclass of rooms that have no natural lights and require the player to
@@ -26,7 +29,7 @@ class DarkRoom(shortDescription: String, description: String) : Room(shortDescri
     private val DARK_MESSAGE = "It is now pitch dark. If you proceed you will likely fall into a pit."
 
     override fun printDescription() {
-        if ((player has lantern || player.room has lantern) && lantern.light.isOn) {
+        if ((player has lantern || player.room has lantern) && lantern.isOn) {
             super.printDescription()
         } else {
             say(DARK_MESSAGE)
@@ -34,7 +37,7 @@ class DarkRoom(shortDescription: String, description: String) : Room(shortDescri
     }
 
     override fun printFullDescription() {
-        if ((player has lantern || player.room has lantern) && lantern.light.isOn) {
+        if ((player has lantern || player.room has lantern) && lantern.isOn) {
             super.printFullDescription()
         } else {
             say(DARK_MESSAGE)

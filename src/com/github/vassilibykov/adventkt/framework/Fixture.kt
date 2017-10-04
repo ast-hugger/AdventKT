@@ -14,24 +14,27 @@
  * limitations under the License.
  */
 
-package com.github.vassilibykov.adventkt
+package com.github.vassilibykov.adventkt.framework
 
 /**
- * An [Item] that can't be picked up by the player. (And in general refuses to
- * be moved to another location).
+ * An [Item] that can't be picked up by the player, and in general refuses to
+ * be moved to another location as part of the regular [Item.moveTo] protocol.
  *
  * @author Vassili Bykov
  */
-open class Fixture(vararg names: String, dropped: String)
-    : Item(*names, owned = "$names[0] should not be owned", dropped = dropped)
+open class Fixture(vararg names: String, message: ()->String)
+    : Item(*names, owned = { throw IllegalStateException("fixture should not be owned") }, dropped = message)
 {
+    constructor(vararg names: String, message: String)
+        :this(*names, message = { message })
+
     internal constructor(vararg names: String)
-            : this(*names, dropped = "no description() for $names[0]")
+            : this(*names, message = "no description() for $names[0]")
 
     var cantTakeMessage = "The $primaryName is fixed in place."
 
     override fun approveMoveTo(newOwner: ItemOwner): Boolean {
-        return if (owner != Item.LIMBO) {
+        return if (owner != LIMBO) {
             say(cantTakeMessage)
             false
         } else {

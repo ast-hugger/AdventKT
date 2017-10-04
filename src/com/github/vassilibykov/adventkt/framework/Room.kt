@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.vassilibykov.adventkt
+package com.github.vassilibykov.adventkt.framework
 
 typealias PlayerApprover = Room.(Room) -> Boolean
 typealias PlayerReactor = Room.(Room) -> Unit
@@ -22,6 +22,12 @@ typealias ItemApprover = Room.(ItemOwner, Item) -> Boolean
 typealias ItemReactor = Room.(ItemOwner, Item) -> Unit
 
 /**
+ * A game location. Not intended to be instantiated directly or subclassed,
+ * instead typically created and configured using the `litRoom()` or the
+ * `darkRoom()` DSL clause.
+ *
+ * @see [World.litRoom]
+ * @see [World.darkRoom]
  *
  * @author Vassili Bykov
  */
@@ -48,9 +54,14 @@ open class Room(private val _shortDescription: String, _description: String) : W
     /*
         DSLish stuff
 
-        Internal methods intended to be used in configurer blocks.
+        Internal methods intended to be used in configuration blocks of Rooms.
      */
 
+    /**
+     * Declare a two-way passage between this room and [target].
+     * The passage leaves this room in the specified direction(s),
+     * and the target room in the opposite direction(s).
+     */
     internal fun twoWay(target: Room, vararg directions: Direction) {
         for (direction in directions) {
             if (exits.containsKey(direction)) {
@@ -65,6 +76,10 @@ open class Room(private val _shortDescription: String, _description: String) : W
         }
     }
 
+    /**
+     * Declare a one-way passage between this room and [target].
+     * The passage leaves this room in the specified direction(s).
+     */
     internal fun oneWay(target: Room, vararg directions: Direction) {
         for (direction in directions) {
             if (exits.containsKey(direction)) {
@@ -74,42 +89,129 @@ open class Room(private val _shortDescription: String, _description: String) : W
         }
     }
 
-    internal fun here(item: Item) = item.primitiveMoveTo(this)
-
-    internal fun hereShared(item: Item) {
-        items.add(item)
+    /**
+     * Declare an item which belongs to this room.
+     */
+    internal fun here(item: Item): Item {
+        item.primitiveMoveTo(this)
+        return item
     }
 
+    /**
+     * Declare an item which officially belongs to another location, but is also
+     * visible in this room.
+     */
+    internal fun hereShared(item: Item): Item {
+        items.add(item)
+        return item
+    }
+
+    /**
+     * Declare a detail: a hidden item which can be looked at, producing the specified
+     * description message.
+     */
+    internal fun detail(vararg names: String, extraVerbs: Collection<String> = setOf(), message: String): Detail {
+        val detail = Detail(*names, extraVerbs = extraVerbs, message = message)
+        here(detail)
+        return detail
+    }
+
+    /**
+     * Declare a room-specific action. The action is only considered by the
+     * parser when the player is in this room.
+     */
     internal fun action(vararg words: String, effect: LocalAction.()->Unit): LocalAction {
         val verb = LocalAction(listOf(*words), effect = effect)
         vocabulary.add(verb)
         return verb
     }
 
+    /**
+     * Declare a predicate evaluated before a player is moved to this room. If
+     * the predicate returns false, the move is vetoed. The room the player is
+     * about to move from is passed as an argument to the predicate.
+     *
+     * @see Player.moveTo
+     */
     internal fun allowPlayerMoveIn(a: PlayerApprover) = playerMoveInApprovers.add(a)
 
+    /**
+     * Declare a reaction block evaluated after the player has been moved into
+     * this room. The room the player has moved from is passed as an argument to
+     * the block.
+     *
+     * @see Player.moveTo
+     */
     internal fun onPlayerMoveIn(r: PlayerReactor) = playerMoveInReactors.add(r)
 
+    /**
+     * Declare a predicate evaluated before a player is moved out of this room.
+     * If the predicate returns false, the move is vetoed. The room the player
+     * is about to to from is passed as an argument to the predicate.
+     *
+     * @see Player.moveTo
+     */
     internal fun allowPlayerMoveOut(a: PlayerApprover) = playerMoveOutApprovers.add(a)
 
+    /**
+     * Declare a reaction block evaluated after the player has been moved out of
+     * this room. The room the player has move to is passed as an argument to
+     * the block.
+     *
+     * @see Player.moveTo
+     */
     internal fun onPlayerMoveOut(r: PlayerReactor) = playerMoveOutReactors.add(r)
 
+    /**
+     * Declare a predicate evaluated before any item is moved into this room.
+     * The current owner and the item are passed as arguments to the predicate.
+     * If the predicate returns false, the move is vetoed.
+     *
+     * @see Item.moveTo
+     */
     internal fun allowItemMoveIn(approver: ItemApprover) = itemMoveInApprovers.add(approver)
 
-    internal fun allowItemMoveIn(item: Item, approver: ItemApprover) {
+    /**
+     * Declare a predicate evaluated before the specified item is moved into this room.
+     * The current owner is passed as an argument to the predicate.
+     * If the predicate returns false, the move is vetoed.
+     *
+     * @see Item.moveTo
+     */
+    internal fun allowItemMoveIn(item: Item, approver: Room.(ItemOwner)->Boolean) {
         allowItemMoveIn { oldRoom, movedItem ->
-            if (movedItem == item) approver(this, oldRoom, item) else true
+            if (movedItem == item) approver(this, oldRoom) else true
         }
     }
 
+    /**
+     * Declare a predicate evaluated before any item is moved out of this room.
+     * The future owner and the item are passed as arguments to the predicate.
+     * If the predicate returns false, the move is vetoed.
+     *
+     * @see Item.moveTo
+     */
     internal fun allowItemMoveOut(approver: ItemApprover) = itemMoveOutApprovers.add(approver)
 
-    internal fun allowItemMoveOut(item: Item, approver: ItemApprover) {
+    /**
+     * Declare a predicate evaluated before the specified item is moved into this room.
+     * The future owner is passed as an argument to the predicate.
+     * If the predicate returns false, the move is vetoed.
+     *
+     * @see Item.moveTo
+     */
+    internal fun allowItemMoveOut(item: Item, approver: Room.(ItemOwner)->Boolean) {
         allowItemMoveOut { newRoom, movedItem ->
-            if (movedItem == item) approver(this, newRoom, item) else true
+            if (movedItem == item) approver(this, newRoom) else true
         }
     }
 
+    /**
+     * Declare a reaction block evaluated after any item is moved into this room.
+     * The item's old owner and the item itself are passed as arguments to the block.
+     *
+     * @see Item.moveTo
+     */
     internal fun onItemMoveIn(reactor: ItemReactor) = itemMoveInReactors.add(reactor)
 
     // The following and its equivalent onItemMoveOut cause overload resolution ambiguity.
@@ -119,20 +221,47 @@ open class Room(private val _shortDescription: String, _description: String) : W
 //        onItemMoveIn { oldOwner, movedItem -> if (movedItem == item) reactor(this, oldOwner) }
 //    }
 
+    /**
+     * Declare a reaction block evaluated after the specified item is moved into
+     * this room.
+     *
+     * @see Item.moveTo
+     */
     internal fun onItemMoveIn(item: Item, reactor: Room.()->Unit) {
         onItemMoveIn { _, movedItem -> if (movedItem == item) reactor(this) }
     }
 
+    /**
+     * Declare a reaction block evaluated after any item is moved out of this room.
+     * The item's new owner and the item itself are passed as arguments to the block.
+     *
+     * @see Item.moveTo
+     */
     internal fun onItemMoveOut(reactor: ItemReactor) = itemMoveOutReactors.add(reactor)
 
 //    internal fun onItemMoveOut(item: Item, reactor: Room.(ItemOwner)->Unit) {
 //        onItemMoveOut { oldRoom, movedItem -> if (movedItem == item) reactor(this, oldRoom) }
 //    }
 
+    /**
+     * Declare a reaction block evaluated after the specified item is moved out
+     * of this room.
+     *
+     * @see Item.moveTo
+     */
     internal fun onItemMoveOut(item: Item, reactor: Room.()->Unit) {
         onItemMoveOut { _, movedItem -> if (movedItem == item) reactor(this) }
     }
 
+    /**
+     * Evaluate the [condition]. If true, print the specified message and return false.
+     * Otherwise, silently return false. Intended to be used as part of `allow`
+     * declarations, for example
+     *
+     *   allowPlayerMoveOut { _ ->
+     *     declineIf({ player has forbiddenItem }, "You are not allowed to take $forbiddenItem out of the room.")
+     *   }
+     */
     internal fun declineIf(condition: ()->Boolean, message: String): Boolean {
         return if (condition()) {
             say(message)
@@ -150,14 +279,21 @@ open class Room(private val _shortDescription: String, _description: String) : W
         World object mechanics
      */
 
-    override fun configure() {
+    override fun configure(context: World.ConfigurationContext) {
         configurator?.invoke(this)
+        // Some of the items may be declared directly in the room declaration
+        // and not seen by the world's reflective configuration code, so we
+        // need to make sure they are configured.
+        items.forEach { context.configure(it) }
     }
 
     /**
      * Invoked when the player is about to be moved to this room from another.
      * The method may return false to veto the move. In this case, it typically
      * should print a game message explaining why the move hasn't happened.
+     *
+     * Specific rooms should typically use the `allow` set of DSL declarations
+     * instead of overriding this.
      */
     open fun approvePlayerMoveIn(oldRoom: Room): Boolean {
         return playerMoveInApprovers.fold(true, {b, approver -> b && approver(this, oldRoom)})
@@ -254,10 +390,10 @@ open class Room(private val _shortDescription: String, _description: String) : W
     companion object {
         /**
          * The player is created in this "room" and moved into the starting
-         * location when the game begins.
+         * room when the game begins, thus producing the opening room description.
          */
         val NOWHERE = object : Room("You're nowhere.", "This is exactly what the middle of nowhere looks like.") {
-            override fun configure() {
+            override fun configure(context: World.ConfigurationContext) {
             }
         }
     }

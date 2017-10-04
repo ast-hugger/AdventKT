@@ -14,25 +14,20 @@
  * limitations under the License.
  */
 
-package com.github.vassilibykov.adventkt
+package com.github.vassilibykov.adventkt.framework
 
 /**
- * A specialized action identified by a movement direction such as "north", so a
- * direction by itself can be used as a command.
+ * A room that refuses any player's attempt to enter,
+ * printing the specified explanatory message.
  *
  * @author Vassili Bykov
  */
-abstract class MovementAction(word: String) : Action(word) {
-    internal fun movePlayer(where: String) {
-        val direction = Direction.named(where)
-        if (direction == null) {
-            println("You can't go to '$where'")
-        } else {
-            val destination = player.room.exitTo(direction)
-            if (destination == null) {
-                println("You can't go $direction.")
-            } else
-                player.moveTo(destination)
-        }
+class UnenterableRoom(private val entryRefusedMessage: String) : Room("", "") {
+
+    override fun configure(context: World.ConfigurationContext) = Unit
+
+    override fun approvePlayerMoveIn(oldRoom: Room): Boolean {
+        say(entryRefusedMessage)
+        return false
     }
 }

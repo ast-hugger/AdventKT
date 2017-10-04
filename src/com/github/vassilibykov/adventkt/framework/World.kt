@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.github.vassilibykov.adventkt
+package com.github.vassilibykov.adventkt.framework
 
+import com.github.vassilibykov.adventkt.cave.globalVocabulary
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.isSubtypeOf
@@ -74,6 +75,12 @@ abstract class World internal constructor() {
         return room
     }
 
+    internal fun item(vararg names: String, owned: ()->String, dropped: ()->String, configurator: Item.() -> Unit): Item {
+        val item = Item(*names, owned = owned, dropped = dropped)
+        item.configurator = configurator
+        return item
+    }
+
     internal fun item(vararg names: String, owned: String, dropped: String, configurator: Item.() -> Unit): Item {
         val item = Item(*names, owned = owned, dropped = dropped)
         item.configurator = configurator
@@ -86,8 +93,15 @@ abstract class World internal constructor() {
         return item
     }
 
-    internal fun fixture(vararg names: String, description: String, configurator: Fixture.() -> Unit): Fixture {
-        val item = Fixture(*names, dropped = description)
+    internal fun fixture(vararg names: String, message: ()->String, configurator: Fixture.() -> Unit): Fixture {
+        val item = Fixture(*names, message = message)
+        @Suppress("UNCHECKED_CAST")
+        item.configurator = configurator as Item.() -> Unit
+        return item
+    }
+
+    internal fun fixture(vararg names: String, message: String, configurator: Fixture.() -> Unit): Fixture {
+        val item = Fixture(*names, message = message)
         @Suppress("UNCHECKED_CAST")
         item.configurator = configurator as Item.() -> Unit
         return item
@@ -111,17 +125,14 @@ abstract class World internal constructor() {
     internal fun runObjectSetup() {
         // A property may refer to another property value, so we need to protect
         // against calling .configure() more than once on the same object.
-        val alreadyConfigured = mutableSetOf<Configurable>()
+        val configurationContext = ConfigurationContext()
         for (property in this::class.memberProperties) {
             val type = property.returnType
             if (type.isSubtypeOf(Configurable::class.starProjectedType)) {
                 @Suppress("UNCHECKED_CAST")
                 val p = property as KProperty1<World, Configurable>
                 val configurable = p.get(this)
-                if (configurable !in alreadyConfigured) {
-                    alreadyConfigured.add(configurable)
-                    configurable.configure()
-                }
+                configurationContext.configure(configurable)
             }
         }
     }
@@ -150,12 +161,27 @@ abstract class World internal constructor() {
     }
 
     /**
+     * Keeps track of configurable objects configured so far, thus avoiding
+     * multiple and infinitely recursive configuration calls.
+     */
+    class ConfigurationContext {
+        private val alreadyConfigured = mutableSetOf<Configurable>()
+
+        fun configure(c: Configurable) {
+            if (c !in alreadyConfigured) {
+                alreadyConfigured.add(c)
+                c.configure(this)
+            }
+        }
+    }
+
+    /**
      * An object which, when a property of a [World] subclass instance defining
      * the game world, will have its [configure] method invoked after all properties
      * have been created.
      */
     interface Configurable {
-        fun configure()
+        fun configure(context: ConfigurationContext)
     }
 
     class QuitException: RuntimeException()

@@ -14,7 +14,15 @@
  * limitations under the License.
  */
 
-package com.github.vassilibykov.adventkt
+package com.github.vassilibykov.adventkt.framework
+
+import com.github.vassilibykov.adventkt.cave.player
+
+private val light = Toggle(false,
+        turnedOnMessage = "Your lamp is now turned on.",
+        turnedOffMessage = "Your lamp is now turned off.",
+        alreadyOnMessage = "Your lamp is already turned on.",
+        alreadyOffMessage = "Your lamp is already turned off.")
 
 /**
  * Most of the game objects are defined in ColossalCave, but the lantern
@@ -34,18 +42,13 @@ package com.github.vassilibykov.adventkt
  *
  * @author Vassili Bykov
  */
-class Lantern : Item("lamp", "lantern") {
-    var light = Toggle(false,
-            turnedOnMessage = "Your lamp is now turned on.",
-            turnedOffMessage = "Your lamp is now turned off.",
-            alreadyOnMessage = "Your lamp is already turned on.",
-            alreadyOffMessage = "Your lamp is already turned off.")
+class Lantern : Item("lamp", "lantern",
+        owned = { if (light.isOn) "A lit brass lantern" else "A brass lantern" },
+        dropped = { if (light.isOn) "There is a brass lamp nearby." else "There is a brass lamp shining nearby." })
+{
+    val isOn get() = light.isOn
 
     init {
-        dynamicDescription =
-                { if (light.isOn) "There is a brass lamp nearby." else "There is a brass lamp shining nearby." }
-        dynamicInventoryDescription =
-                { if (light.isOn) "A lit brass lantern" else "A brass lantern" }
         action("turn", "switch") {
             when {
                 "on" in subjects -> {
@@ -58,7 +61,7 @@ class Lantern : Item("lamp", "lantern") {
                 "off" in subjects -> {
                     light.turnOff()
                     if (player.room is DarkRoom && !light.isOn) {
-                        say("It is pitch black. You are likely to be eaten by... umm, nevermind, wrong game.")
+                        say("It is pitch black. You are likely to be eaten by... ummm, nevermind, wrong game.")
                     }
                 }
                 else -> say("Do you want the lamp on or off?")

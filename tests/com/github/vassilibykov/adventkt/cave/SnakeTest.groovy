@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package com.github.vassilibykov.adventkt
+package com.github.vassilibykov.adventkt.cave
 
-/**
- * A room that refuses any player's attempt to enter,
- * printing the specified explanatory message.
- *
- * @author Vassili Bykov
- */
-class UnenterableRoom(private val entryRefusedMessage: String) : Room("", "") {
+class SnakeTest extends ColossalCaveTest {
 
-    override fun configure() = Unit
+    void testSnakeIsThere() throws Exception {
+        walkToSnakeWithoutBird()
+        assertTrue(player.room.has(cave.snake))
+    }
 
-    override fun approvePlayerMoveIn(oldRoom: Room): Boolean {
-        say(entryRefusedMessage)
-        return false
+    void testBirdWorks() {
+        walkToSnakeWithBird()
+        play("release bird")
+        assertFalse(player.room.has(cave.snake))
+        assertTrue(player.room.has(cave.bird))
     }
 }

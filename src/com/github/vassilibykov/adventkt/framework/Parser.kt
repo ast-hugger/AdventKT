@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-package com.github.vassilibykov.adventkt
+package com.github.vassilibykov.adventkt.framework
+
+import com.github.vassilibykov.adventkt.cave.cave
+import com.github.vassilibykov.adventkt.cave.player
 
 /**
  * A simple user input parser, selecting and running actions applicable to the

@@ -14,17 +14,24 @@
  * limitations under the License.
  */
 
-package com.github.vassilibykov.adventkt
+package com.github.vassilibykov.adventkt.cave
 
-import java.util.*
+class NuggetTest extends ColossalCaveTest {
 
-fun say(message: String) = println(message.trimMargin())
-
-fun <T> random(vararg args: T): T {
-    if (args.isEmpty()) {
-        throw IllegalArgumentException()
+    void testNugetIsThere() {
+        walkToNugget()
+        assertTrue(player.room.has(cave.nugget))
     }
-    return args[Random().nextInt(args.size)]
-}
 
-fun emptyVocabulary() = mutableMapOf<String, Action>()
+    void testCantBringUpstairs() {
+        walkToNugget()
+        play("get nugget", "w", "u")
+        assertEquals(cave.mistHall, player.room)
+    }
+
+    void testTeleportWithNugget() {
+        walkToNugget()
+        play("get nugget", "w", cave.magicWord)
+        assertEquals(cave.outsideGrate, player.room)
+    }
+}

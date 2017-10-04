@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.vassilibykov.adventkt
+package com.github.vassilibykov.adventkt.framework
 
 /**
  * A simple hidden [Fixture] with no special behavior other than providing a
@@ -23,15 +23,19 @@ package com.github.vassilibykov.adventkt
  * @author Vassili Bykov
  */
 class Detail(vararg names: String,
-             override val description: String,
-             private val verbs: Collection<String> = setOf("look", "examine", "l", "x"))
-    : Fixture(*names)
+             message: ()->String,
+             private val extraVerbs: Collection<String> = setOf())
+    : Fixture(*names, message = message)
 {
+    constructor(vararg names: String, message: String, extraVerbs: Collection<String>)
+        : this(*names, message = { message }, extraVerbs = extraVerbs)
+
     override val isHidden = true
 
-    override fun configure() {
-        super.configure()
-        vicinityAction(*verbs.toTypedArray()) {
+    override fun configure(context: World.ConfigurationContext) {
+        super.configure(context)
+        val allVerbs = extraVerbs.union(setOf("look", "examine", "l", "x"))
+        vicinityAction(*allVerbs.toTypedArray()) {
             say(description)
         }
     }

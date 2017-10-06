@@ -39,7 +39,7 @@ class Player : ItemOwner {
      * game output. If the move is approved, the player is relocated and then
      * both rooms are sent a move notification.
      */
-    fun moveTo(newRoom: Room) {
+    infix fun moveTo(newRoom: Room) {
         val oldRoom = room
         if (room.approvePlayerMoveOut(newRoom) && newRoom.approvePlayerMoveIn(room)) {
             room = newRoom

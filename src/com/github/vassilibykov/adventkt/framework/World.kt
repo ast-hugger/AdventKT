@@ -46,6 +46,26 @@ abstract class World internal constructor() {
         return readLine() ?: "quit"
     }
 
+    /**
+     * Read and process the user input until a [QuitException] is thrown.
+     *
+     * Here is a high level overview of how input is processed.
+     *
+     *   1. The input string is analyzed by the parser. The parser selects
+     *   and invokes applicable actions as detailed in [Parser.process].
+     *   2. Invoked actions move, or attempt to move, game objects (items
+     *   and the player), producing the bulk of the game output. (For example,
+     *   if the player has moved to a new room, the new room prints its
+     *   description when it's notified about the player moving into it).
+     *   For more details, see [Player.moveTo] and [Item.moveTo].
+     *   3. Once all actions have run, items in the player's vicinity,
+     *   which are items held by the player and items in the player's room,
+     *   as well as the player's room itself, are notified about the
+     *   turn end. That lets them generate additional game events which
+     *   appear to be independent from the player's actions (for example,
+     *   in certain rooms a dwarf shows up and throws an axe).
+     *   See [Item.noticeTurnEnd] and [Room.noticeTurnEnd].
+     */
     fun play(lineReader: ()-> String = this::defaultReader) {
         try {
             player.moveTo(start)
@@ -164,11 +184,20 @@ abstract class World internal constructor() {
 
     /**
      * Reflectively examine this world's properties, looking for one with a
-     * matching name and of type [Room]. Return the property value or null
-     * if not found.
+     * matching name and of type [Room]. Return the property value or null if
+     * not found. This [name] is expected to come from the parser, and therefore
+     * be converted to lowercase. Thus, the match against the property name is
+     * case-insensitive.
      */
     fun findRoom(name: String): Room? = findDeclaredObject(Room::class, name)
 
+    /**
+     * Reflectively examine this world's properties, looking for one with a
+     * matching name and of type [Item]. Return the property value or null if
+     * not found. This [name] is expected to come from the parser, and therefore
+     * be converted to lowercase. Thus, the match against the property name is
+     * case-insensitive.
+     */
     fun findItem(name: String): Item? = findDeclaredObject(Item::class, name)
 
     private fun <T : Any> findDeclaredObject(typeToken: KClass<T>, name: String): T? {
@@ -176,7 +205,7 @@ abstract class World internal constructor() {
             val type = property.returnType
             if (type.isSubtypeOf(typeToken.starProjectedType)) {
                 @Suppress("UNCHECKED_CAST")
-                if (property.name == name) {
+                if (property.name.toLowerCase() == name) {
                     val p = property as KProperty1<World, T>
                     return p.get(this)
                 }

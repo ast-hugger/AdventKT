@@ -25,13 +25,13 @@ class NuggetTest extends ColossalCaveTest {
 
     void testCantBringUpstairs() {
         walkToNugget()
-        play("get nugget", "w", "u")
+        play("get nugget", "n", "u")
         assertEquals(cave.mistHall, player.room)
     }
 
     void testTeleportWithNugget() {
         walkToNugget()
-        play("get nugget", "w", cave.magicWord)
+        play("get nugget", "n", cave.magicWord)
         assertEquals(cave.outsideGrate, player.room)
     }
 }

@@ -69,49 +69,41 @@ open class Item (
     /**
      * Whether to skip the item when printing a full room description.
      */
-    open val isHidden = false
+    open var isHidden = false
 
     private val vocabulary = emptyVocabulary()
     private val vicinityVocabulary = emptyVocabulary()
 
     internal var configurator: (Item.()->Unit)? = null
     private val moveApprovers = mutableListOf<Item.(ItemOwner)->Boolean>()
+    private var turnEndAction = {}
 
-    override fun configure(context: World.ConfigurationContext) {
-        configurator?.invoke(this)
-    }
+    /*
+        DSL declarations
+     */
 
+    /**
+     * Declare a predicate evaluated before the item is moved to a new owner.
+     * The predicate receives the proposed owner as the argument.
+     * If the predicate returns false, the move is vetoed.
+     */
     internal fun allowMove(approver: Item.(ItemOwner)->Boolean) = moveApprovers.add(approver)
 
+    /**
+     * Declare a predicate evaluated before the item is moved to the specified owner.
+     * If the predicate returns false, the move is vetoed.
+     */
     internal fun allowMoveTo(ownerOfInterest: ItemOwner, approver: Item.()->Boolean) {
         allowMove { newOwner ->
             if (newOwner == ownerOfInterest) approver(this) else true
         }
     }
 
-    internal fun decline(message: String): Boolean {
-        say(message)
-        return false
-    }
-
-    internal fun declineIf(condition: ()->Boolean, message: String): Boolean {
-        return if (condition()) {
-            say(message)
-            false
-        } else {
-            true
-        }
-    }
-
-    open fun approveMoveTo(newOwner: ItemOwner): Boolean {
-        return moveApprovers.fold(true, {b, it -> b && it(this, newOwner)})
-    }
-
     /**
      * Declare an action which is considered for execution by the parser when
      * the player is holding the item.
      */
-    fun action(vararg words: String, effect: ItemAction.()->Unit): ItemAction {
+    internal fun action(vararg words: String, effect: ItemAction.()->Unit): ItemAction {
         @Suppress("UNCHECKED_CAST")
         val verb = ItemAction(this, listOf(*words), effect = effect as LocalAction.() -> Unit)
         verb.addTo(vocabulary)
@@ -122,11 +114,33 @@ open class Item (
      * Declare an action which is considered for execution by the parser when
      * the player is in the same room as the item.
      */
-    fun vicinityAction(vararg words: String, effect: ItemAction.()->Unit): ItemAction {
+    internal fun vicinityAction(vararg words: String, effect: ItemAction.()->Unit): ItemAction {
         @Suppress("UNCHECKED_CAST")
         val verb = ItemAction(this, listOf(*words), effect = effect as LocalAction.() -> Unit)
         verb.addTo(vicinityVocabulary)
         return verb
+    }
+
+    /**
+     * Declare a reaction block evaluated after every player command (which may
+     * be a non-movement command such as "turn on lamp") at the end of which the
+     * item is in the same room as the player, or in the player inventory.
+     */
+
+    internal fun onTurnEnd(action: ()->Unit) {
+        turnEndAction = action
+    }
+
+    /*
+        Object model mechanics
+     */
+
+    override fun configure(context: World.ConfigurationContext) {
+        configurator?.invoke(this)
+    }
+
+    open fun approveMoveTo(newOwner: ItemOwner): Boolean {
+        return moveApprovers.fold(true, {b, it -> b && it(this, newOwner)})
     }
 
     private val lookWords = setOf("look", "l")
@@ -148,9 +162,9 @@ open class Item (
      * Move the item to a new owner. This is the standard method of doing so,
      * invoking approval methods of all parties involved and thus giving them
      * the chance to veto the move. The parties involved are also notified
-     * once the move is complete.
+     * once the move is complete (if it has not been vetoed).
      */
-    fun moveTo(newOwner: ItemOwner) {
+    infix fun moveTo(newOwner: ItemOwner) {
         val oldOwner = owner
         if (approveMoveTo(newOwner)
                 && oldOwner.approveItemMoveTo(newOwner, this)
@@ -175,6 +189,8 @@ open class Item (
     }
 
     open fun noticeMove(newOwner: ItemOwner, oldOwner: ItemOwner) = Unit
+
+    open fun noticeTurnEnd() = turnEndAction()
 
     /**
      * Return the item's primary name. Some of printing logic relies on this.

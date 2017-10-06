@@ -42,7 +42,7 @@ class ColossalCave private constructor(): World() {
 
     val outsideBuilding = outdoors("You're in front of building.",
             """You are standing at the end of a road before a small brick building.
-            Around you is a forest.  A small stream flows out of the building and
+            Around you is a forest. A small stream flows out of the building and
             down a gully.""")
     {
         twoWay(insideBuilding, IN, EAST)
@@ -128,8 +128,8 @@ class ColossalCave private constructor(): World() {
     }
 
     val hill = outdoors("You're at hill in road.",
-            """You have walked up a hill, still in the forest.  The road slopes back
-            |down the other side of the hill.  There is a building in the distance.""")
+            """You have walked up a hill, still in the forest. The road slopes back
+            |down the other side of the hill. There is a building in the distance.""")
     {
         // EAST: twoWay from outsideBuilding
         twoWay(endOfRoad, WEST)
@@ -144,7 +144,7 @@ class ColossalCave private constructor(): World() {
     }
 
     val cliff = outdoors("You're at cliff.",
-            """The forest thins out here to reveal a steep cliff.  There is no way
+            """The forest thins out here to reveal a steep cliff. There is no way
             |down, but a small ledge can be seen to the west across the chasm.""")
     {
     }
@@ -201,9 +201,9 @@ class ColossalCave private constructor(): World() {
         onItemMoveIn(bird) {
             // The player has released the bird.
             say("""The bird is singing to you in gratitude for your having returned it to
-                    |its home.  In return, it informs you of a magic word which it thinks
-                    |you may find useful somewhere near the Hall of Mists.  The magic word
-                    |changes frequently, but for now the bird believes it is """" + magicWord + """".  You
+                    |its home. In return, it informs you of a magic word which it thinks
+                    |you may find useful somewhere near the Hall of Mists. The magic word
+                    |changes frequently, but for now the bird believes it is """" + magicWord + """". You
                     |thank the bird for this information, and it flies off into the forest.""")
             bird.moveTo(Item.LIMBO)
         }
@@ -233,7 +233,7 @@ class ColossalCave private constructor(): World() {
 
     val slit = outdoors("You're at slit in streambed.",
                         """At your feet all the water of the stream splashes into a 2-inch slit
-                        |in the rock.  Downstream the streambed is bare rock.""")
+                        |in the rock. Downstream the streambed is bare rock.""")
     {
         // UP, NORTH: twoWay from slit
         twoWay(outsideGrate, SOUTH)
@@ -241,8 +241,8 @@ class ColossalCave private constructor(): World() {
 
     // strangely, need this explicit type to avoid a type checker recursive loop
     val outsideGrate: Room = outdoors("You're outside grate.",
-            """You are in a 20-foot depression floored with bare dirt.  Set into the
-            |dirt is a strong steel grate mounted in concrete.  A dry streambed
+            """You are in a 20-foot depression floored with bare dirt. Set into the
+            |dirt is a strong steel grate mounted in concrete. A dry streambed
             |leads into the depression.""")
     {
         // NORTH: twoWay from slit
@@ -270,7 +270,7 @@ class ColossalCave private constructor(): World() {
 
     val cobble = litRoom(
             "You're in cobble crawl.",
-            """You are crawling over cobbles in a low passage.  There is a dim light
+            """You are crawling over cobbles in a low passage. There is a dim light
             |at the east end of the passage.""")
     {
         // EAST: twoWay from belowGrate
@@ -282,7 +282,7 @@ class ColossalCave private constructor(): World() {
             "You're in debris room.",
             """You are in a debris room filled with stuff washed in from the surface.
             |A low wide passage with cobbles becomes plugged with mud and debris
-            |here, but an awkward canyon leads upward and west.  In the mud someone
+            |here, but an awkward canyon leads upward and west. In the mud someone
             |has scrawled, "MAGIC WORD XYZZY".""")
     {
         twoWay(awkwardCanyon, UP, WEST)
@@ -304,8 +304,8 @@ class ColossalCave private constructor(): World() {
 
     val birdChamber = darkRoom(
             "You're in bird chamber.",
-            """You are in a splendid chamber thirty feet high.  The walls are frozen
-            |rivers of orange stone.  An awkward canyon and a good passage exit
+            """You are in a splendid chamber thirty feet high. The walls are frozen
+            |rivers of orange stone. An awkward canyon and a good passage exit
             |from east and west sides of the chamber.""")
     {
         // EAST: twoWay from awkwardCanyon
@@ -314,9 +314,10 @@ class ColossalCave private constructor(): World() {
     }
 
     val pitTop = darkRoom("You're at top of small pit.",
-            """At your feet is a small pit breathing traces of white mist.  An east
+            """At your feet is a small pit breathing traces of white mist. An east
             |passage ends here except for a small crack leading on.""")
     {
+        // EAST: twoWay from birdChamber
         twoWay(mistHall, DOWN)
         oneWay(crack, WEST)
 
@@ -333,23 +334,41 @@ class ColossalCave private constructor(): World() {
     {}
 
     val crack = UnenterableRoom(
-            """The crack is far too small for you to follow.  At its widest it is
+            """The crack is far too small for you to follow. At its widest it is
             |barely wide enough to admit your foot.""")
+
+    val randomDwarf = fixture("dwarf")
+    {
+        isHidden = true
+        onTurnEnd {
+            withProbability(0.3) {
+                if (axe.owner == Item.LIMBO) {
+                    blankLine()
+                    say("""A little dwarf just walked around a corner, saw you, threw a little
+                        |axe at you which missed, cursed, and ran away.""")
+                    axe.moveTo(player.room)
+                }
+            }
+        }
+    }
+
+    val axe = item("axe", owned = "Dwarf's axe", dropped = "There is a little axe here.") {}
 
     val mistHall: Room = darkRoom("You're in Hall of Mists.",
             """You are at one end of a vast hall stretching forward out of sight to
-            |the west.  There are openings to either side.  Nearby, a wide stone
-            |staircase leads downward.  The hall is filled with wisps of white mist
-            |swaying to and fro almost as if alive.  A cold wind blows up the
-            |staircase.  There is a passage at the top of a dome behind you.""")
+            |the west. There are openings to either side. Nearby, a wide stone
+            |staircase leads downward. The hall is filled with wisps of white mist
+            |swaying to and fro almost as if alive. A cold wind blows up the
+            |staircase. There is a passage at the top of a dome behind you.""")
     {
         // UP: twoWay from pitTop
         twoWay(eastBank, WEST)
         twoWay(kingHall, DOWN)
         oneWay(kingHall, NORTH) // the return passage from kingHall is EAST
-        twoWay(nuggetRoom, EAST)
+        twoWay(nuggetRoom, SOUTH)
 
         hereShared(stoneSteps)
+        hereShared(randomDwarf)
 
         action(magicWord) {
             say("""The cave walls around you become a blur.
@@ -373,14 +392,16 @@ class ColossalCave private constructor(): World() {
             |The mist is quite thick here, and the fissure is too wide to jump.""")
     {
         // EAST: twoWay from mistHall
+        hereShared(randomDwarf)
     }
 
     val nuggetRoom = darkRoom("You're in nugget-of-gold room.",
-            """This is a low room with a crude note on the wall.  The note says,
+            """This is a low room with a crude note on the wall. The note says,
             |"You won't get it up the steps".""")
     {
-        // DOWN, WEST: twoWay from mistHall
+        // NORTH: twoWay from mistHall
         here(nugget)
+        hereShared(randomDwarf)
     }
 
     val nugget = item("nugget", "gold",
@@ -400,6 +421,7 @@ class ColossalCave private constructor(): World() {
         oneWay(unimplementedPassage, SOUTHWEST)
 
         here(snake)
+        hereShared(randomDwarf)
 
         allowPlayerMoveOut { newRoom ->
             declineIf({ this has snake && newRoom != mistHall }, "You can't get by the snake.")
@@ -524,9 +546,9 @@ class ColossalCave private constructor(): World() {
         // Allows 'open cage' and 'release bird'.
         // Also allows 'open bird' and 'release cage' but oh well.
         action("open", "release") {
-            cagedBird().moveTo(Item.LIMBO)
-            cage.moveTo(player)
-            bird.moveTo(player.room)
+            cagedBird() moveTo Item.LIMBO
+            cage moveTo player
+            bird moveTo player.room
         }
     }
     private fun cagedBird(): Item = cagedBird // can't reference cagedBird in itself directly. ugh

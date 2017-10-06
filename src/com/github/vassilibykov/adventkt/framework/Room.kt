@@ -16,6 +16,8 @@
 
 package com.github.vassilibykov.adventkt.framework
 
+import java.util.*
+
 typealias PlayerApprover = Room.(Room) -> Boolean
 typealias PlayerReactor = Room.(Room) -> Unit
 typealias ItemApprover = Room.(ItemOwner, Item) -> Boolean
@@ -50,6 +52,7 @@ open class Room(private val _shortDescription: String, _description: String) : W
     private val itemMoveOutApprovers = mutableListOf<ItemApprover>()
     private val itemMoveInReactors = mutableListOf<ItemReactor>()
     private val itemMoveOutReactors = mutableListOf<ItemReactor>()
+    private var turnEndAction = {}
 
     /*
         DSLish stuff
@@ -254,22 +257,12 @@ open class Room(private val _shortDescription: String, _description: String) : W
     }
 
     /**
-     * Evaluate the [condition]. If true, print the specified message and return false.
-     * Otherwise, silently return true. Intended to be used as part of `allow`
-     * declarations, for example
-     *
-     *     allowPlayerMoveOut { _ ->
-     *       declineIf({ player has forbiddenItem },
-     *         "You are not allowed to take $forbiddenItem out of the room.")
-     *     }
+     * Declare a reaction block evaluated after every player command (which may
+     * be a non-movement command such as "turn on lamp") at the end of which the
+     * player is in this room.
      */
-    internal fun declineIf(condition: ()->Boolean, message: String): Boolean {
-        return if (condition()) {
-            say(message)
-            false
-        } else {
-            true
-        }
+    internal fun onTurnEnd(action: ()->Unit) {
+        turnEndAction = action
     }
 
     val deferredOutput = mutableListOf<String>()
@@ -333,6 +326,12 @@ open class Room(private val _shortDescription: String, _description: String) : W
         deferredOutput.forEach { say(it) }
         deferredOutput.clear()
     }
+
+    /**
+     * Invoked after every game command processed by the game for the room
+     * the player is in at the end of the move.
+     */
+    open fun noticeTurnEnd() = turnEndAction()
 
     override fun approveItemMoveTo(newOwner: ItemOwner, item: Item): Boolean {
         return itemMoveOutApprovers.fold(true, {b, it -> b && it(this, newOwner, item)})

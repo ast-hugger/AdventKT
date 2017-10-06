@@ -30,7 +30,7 @@ class Detail(vararg names: String,
     constructor(vararg names: String, message: String, extraVerbs: Collection<String>)
         : this(*names, message = { message }, extraVerbs = extraVerbs)
 
-    override val isHidden = true
+    override var isHidden = true
 
     override fun configure(context: World.ConfigurationContext) {
         super.configure(context)

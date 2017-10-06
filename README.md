@@ -12,9 +12,10 @@ and events was fun. The game itself was more of a use case and a test case than
 a goal in itself. This said, it turned out to be a fairly complete
 mini-adventure with its own goal and plot.
 
-Locations and item descriptions are generally true to the original, however some
-interactions are changed or augmented to try out various engine features, and to
-keep the world cohesive without replicating it all.
+Locations and item descriptions are generally true to the original, as published
+by Eric Raymond (adventure.yaml is included). Some interactions are changed or
+augmented to try out various engine features, and to keep the world cohesive
+without replicating it all.
 
 ## Building and Running
 
@@ -48,6 +49,8 @@ move, or perform additional game actions.
 
 The world definition DSL as seen in the `ColossalCave` class is defined by a set
 of methods in `World` and `Room`, and to a lesser degree, the `Item` class.
+
+[http://www.digitalhumanities.org/dhq/vol/001/2/000009/000009.html]
 
 ## License
 

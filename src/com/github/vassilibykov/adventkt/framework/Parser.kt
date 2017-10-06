@@ -68,6 +68,16 @@ class Parser {
      * subject words for a match with one of the item's names. If there is no
      * match, the item action will not attempt to run and will throw
      * [Action.RejectedException], setting in motion the step (6) above.
+     *
+     * Once all actions have been executed, items in the player vicinity
+     * and the player's room are notified as follows:
+     *
+     *   1. The [Item.noticeTurnEnd] method of every item in the player's
+     *   inventory is invoked.
+     *   2. The [Item.noticeTurnEnd] method of every item in the room the
+     *   player is in is invoked.
+     *   3. The [Room.noticeTurnEnd] method of the room the player is in is
+     *   invoked.
      */
     fun process(input: String) {
         val tokens = input.split(' ', '\t', '\n', '\r')
@@ -85,6 +95,10 @@ class Parser {
                 for (verb in applicableActions) {
                     try {
                         verb.act(subjects)
+                        val room = player.room
+                        notifyAboutTurnEnd(player.items)
+                        notifyAboutTurnEnd(room.items)
+                        room.noticeTurnEnd()
                         return
                     } catch (e: Action.RejectedException) {
                         // continue to the next applicable action
@@ -105,6 +119,14 @@ class Parser {
         val roomActions = listOfNotNull(player.room.findAction(command))
         val globalActions = listOfNotNull(cave.findAction(command))
         return inventoryItemActions + vicinityItemActions + roomActions + globalActions
+    }
+
+    /**
+     * Notify while iterating over a copy so the original collection can be
+     * manipulated.
+     */
+    private fun notifyAboutTurnEnd(items: Collection<Item>) {
+        items.toList().forEach { it.noticeTurnEnd() }
     }
 }
 

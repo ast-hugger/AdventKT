@@ -82,11 +82,11 @@ abstract class ColossalCaveTest extends GroovyTestCase {
 
     void walkToNugget() {
         teleportToDebris()
-        play("w", "w", "w", "d", "e")
+        play("w", "w", "w", "d", "s")
     }
 
     void getNuggetAndTeleport() {
         walkToNugget()
-        play("get nugget", "w", cave.magicWord)
+        play("get nugget", "n", cave.magicWord)
     }
 }

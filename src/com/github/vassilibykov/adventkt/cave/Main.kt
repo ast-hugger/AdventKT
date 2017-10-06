@@ -20,9 +20,12 @@ import org.jline.reader.EndOfFileException
 import org.jline.reader.LineReader
 import org.jline.reader.LineReaderBuilder
 import org.jline.terminal.TerminalBuilder
+import org.jline.utils.AttributedStringBuilder
+import org.jline.utils.AttributedStyle
 
 
 /**
+ * The launcher.
  *
  * @author Vassili Bykov
  */
@@ -39,6 +42,7 @@ fun main(args: Array<String>) {
         val terminal = TerminalBuilder.terminal()
         val lineReader = LineReaderBuilder.builder()
                 .terminal(terminal)
+                .highlighter({ _, buffer -> formatAsInputLine(buffer.toString()).toAttributedString() })
                 .build()
         cave.play({ readJLine(lineReader) })
     } else {
@@ -46,9 +50,17 @@ fun main(args: Array<String>) {
     }
 }
 
+private fun formatAsInputLine(text: String): AttributedStringBuilder {
+    return AttributedStringBuilder()
+            .style(AttributedStyle.BOLD.foreground(AttributedStyle.BLUE))
+            .append(text)
+}
+
+private val jlinePrompt = formatAsInputLine("> ").toAnsi()
+
 private fun readJLine(lineReader: LineReader): String {
     return try {
-        lineReader.readLine("> ") ?: "quit"
+        lineReader.readLine(jlinePrompt) ?: "quit"
     } catch (e: EndOfFileException) {
         "quit"
     }

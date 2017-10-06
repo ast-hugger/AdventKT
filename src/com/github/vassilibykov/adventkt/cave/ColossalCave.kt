@@ -57,14 +57,14 @@ class ColossalCave private constructor(): World() {
                 message = "\"The Implementor's Prize isn't fully implemented yet.\"")
             .cantTakeMessage = "How do you imagine doing that?"
 
-        action("downstream") { player.moveTo(valley) }
+        action("downstream") { player moveTo valley }
 
         onPlayerMoveIn { oldRoom ->
             if (player has nugget) {
                 val entryWord = if (oldRoom == insideBuilding) "exit" else "approach"
-                say("""As you $entryWord the well house, a large box appears hovering in the air.
-                    |The box drops to the ground with a thud.""")
-                implementorPrize.moveTo(this)
+                + """As you $entryWord the well house, a large box appears hovering in the air.
+                  |The box drops to the ground with a thud."""
+                implementorPrize moveTo this
             }
         }
     }
@@ -72,13 +72,13 @@ class ColossalCave private constructor(): World() {
     val adventKtSign = fixture("sign", message = "A new-looking sign is hanging outside the building.") {
         cantTakeMessage = "The sign is nailed securely to the wall."
         vicinityAction("read", "look") {
-            say("""The sign says:
-                    |
-                    |    Welcome to AdventKT, a theme park based on the legendary Colossal Cave.
-                    |    There is a priceless gold nugget hidden in the cave, protected by
-                    |    an ancient curse. Bring it here to win the Implementor's Prize!
-                    |
-                    |There is some fine print at the bottom of the sign.""")
+            + """The sign says:
+              |
+              |    Welcome to AdventKT, a theme park based on the legendary Colossal Cave.
+              |    There is a priceless gold nugget hidden in the cave, protected by
+              |    an ancient curse. Bring it here to win the Implementor's Prize!
+              |
+              |There is some fine print at the bottom of the sign."""
         }
     }
 
@@ -91,17 +91,17 @@ class ColossalCave private constructor(): World() {
 
         vicinityAction("open") {
             if (isOpen) {
-                say("The Implementor's Prize is already open.")
+                + "The Implementor's Prize is already open."
             } else {
                 isOpen = true
-                say("""You open the box, releasing a huge cloud of yellow vapor.
-                    |The cloud briefly morphs into words
-                    |
-                    |    TODO("implement this")
-                    |
-                    |before melting into the clear blue sky.
-                    |
-                    |Congratulations! You have won the game.""")
+                + """You open the box, releasing a huge cloud of yellow vapor.
+                  |The cloud briefly morphs into words
+                  |
+                  |    TODO("implement this")
+                  |
+                  |before melting into the clear blue sky.
+                  |
+                  |Congratulations! You have won the game."""
             }
         }
     }
@@ -117,13 +117,13 @@ class ColossalCave private constructor(): World() {
         here(water)
 
         action("xyzzy") {
-            say(">>Foof!<<")
-            player.moveTo(debris)
+            + ">>Foof!<<"
+            player moveTo debris
         }
 
         action("down", "downstream") {
-            say("""The stream flows out through a pair of 1 foot diameter sewer pipes.
-                    |It would be advisable to use the exit.""")
+            + """The stream flows out through a pair of 1 foot diameter sewer pipes.
+              |It would be advisable to use the exit."""
         }
     }
 
@@ -155,7 +155,7 @@ class ColossalCave private constructor(): World() {
     {
         // UP, EAST: twoWay from outsideBuilding
         twoWay(slit, DOWN, SOUTH)
-        action("downstream") { player.moveTo(slit) }
+        action("downstream") { player moveTo slit }
     }
 
     val magicWords = setOf(
@@ -172,7 +172,7 @@ class ColossalCave private constructor(): World() {
 
         action("get") { // support "get out"
             if ("out" in subjects) {
-                player.moveTo(outsideBuilding)
+                player moveTo outsideBuilding
             } else {
                 pass()
             }
@@ -180,11 +180,11 @@ class ColossalCave private constructor(): World() {
 
         action("go") {
             when {
-                "valley" in subjects -> player.moveTo(valley)
-                "building" in subjects -> player.moveTo(outsideBuilding)
-                "house" in subjects -> player.moveTo(outsideBuilding)
-                "slit" in subjects -> player.moveTo(slit)
-                "grate" in subjects -> player.moveTo(outsideGrate)
+                "valley" in subjects -> player moveTo valley
+                "building" in subjects -> player moveTo outsideBuilding
+                "house" in subjects -> player moveTo outsideBuilding
+                "slit" in subjects -> player moveTo slit
+                "grate" in subjects -> player moveTo outsideGrate
                 else -> pass()
             }
         }
@@ -200,33 +200,33 @@ class ColossalCave private constructor(): World() {
 
         onItemMoveIn(bird) {
             // The player has released the bird.
-            say("""The bird is singing to you in gratitude for your having returned it to
-                    |its home. In return, it informs you of a magic word which it thinks
-                    |you may find useful somewhere near the Hall of Mists. The magic word
-                    |changes frequently, but for now the bird believes it is """" + magicWord + """". You
-                    |thank the bird for this information, and it flies off into the forest.""")
-            bird.moveTo(Item.LIMBO)
+            + """The bird is singing to you in gratitude for your having returned it to
+               |its home. In return, it informs you of a magic word which it thinks
+               |you may find useful somewhere near the Hall of Mists. The magic word
+               |changes frequently, but for now the bird believes it is "$magicWord". You
+               |thank the bird for this information, and it flies off into the forest."""
+            bird moveTo Item.LIMBO
         }
 
         var stepCount = 0
         onPlayerMoveIn { oldRoom ->
             if (oldRoom != this) {
-                say("""You enter the forest and soon become lost among the trees.""")
+                + """You enter the forest and soon become lost among the trees."""
                 stepCount = 0
             } else {
                 when(++stepCount) {
-                    2 -> say("Are you sure you are not walking in circles?")
-                    4 -> say("""You think you see your tracks on the forest floor.
-                        |But then again, you are not much of a tracker.""")
-                    6 -> say("The forest is not a maze. Maybe you need to try something else.")
-                    8 -> say("You are feeling tired. All you wish for is to get out.")
+                    2 -> + "Are you sure you are not walking in circles?"
+                    4 -> + """You think you see your tracks on the forest floor
+                           |But then again, you are not much of a tracker."""
+                    6 -> + "The forest is not a maze. Maybe you need to try something else."
+                    8 -> + "You are feeling tired. All you wish for is to get out."
                 }
             }
         }
 
         onPlayerMoveOut { newRoom ->
             if (newRoom != this) {
-                say("You finally found your way out of the forest.")
+                + "You finally found your way out of the forest."
             }
         }
     }
@@ -289,8 +289,8 @@ class ColossalCave private constructor(): World() {
         // EAST, UP: twoWay from cobble
         here(rod)
         action("xyzzy") {
-            say(">>Foof!<<")
-            player.moveTo(insideBuilding)
+            + ">>Foof!<<"
+            player moveTo insideBuilding
         }
     }
 
@@ -343,10 +343,10 @@ class ColossalCave private constructor(): World() {
         onTurnEnd {
             withProbability(0.3) {
                 if (axe.owner == Item.LIMBO) {
-                    blankLine()
-                    say("""A little dwarf just walked around a corner, saw you, threw a little
-                        |axe at you which missed, cursed, and ran away.""")
-                    axe.moveTo(player.room)
+                    + ""
+                    + """A little dwarf just walked around a corner, saw you, threw a little
+                        |axe at you which missed, cursed, and ran away."""
+                    axe moveTo player.room
                 }
             }
         }
@@ -371,13 +371,13 @@ class ColossalCave private constructor(): World() {
         hereShared(randomDwarf)
 
         action(magicWord) {
-            say("""The cave walls around you become a blur.
-                    |>>Foof!<<""")
-            player.moveTo(outsideGrate)
+            + """The cave walls around you become a blur.
+              |>>Foof!<<"""
+            player moveTo outsideGrate
         }
         magicWords.forEach {
             action(it) {
-                say("A hollow voice says, \"Fool!\"")
+                + "A hollow voice says, \"Fool!\""
             }
         }
 
@@ -429,9 +429,9 @@ class ColossalCave private constructor(): World() {
 
         onItemMoveIn(bird) {
             if (this has snake) {
-                say("""The little bird attacks the green snake, and in an astounding flurry
-                    |drives the snake away.""")
-                snake.moveTo(Item.LIMBO)
+                 + """The little bird attacks the green snake, and in an astounding flurry
+                   |drives the snake away."""
+                snake moveTo Item.LIMBO
             }
         }
     }
@@ -497,9 +497,9 @@ class ColossalCave private constructor(): World() {
     {
         action("wave") {
             if (player.room == eastBank) {
-                say("""A hollow voice says, "What did you expect, a crystal bridge?"""")
+                + """A hollow voice says, "What did you expect, a crystal bridge?""""
             } else {
-                say("You look ridiculous waving the black rod.")
+                + "You look ridiculous waving the black rod."
             }
         }
     }
@@ -509,7 +509,7 @@ class ColossalCave private constructor(): World() {
             dropped = {
                 if (Item.LIMBO has snake)
                     """A little bird is sitting here looking sad and lonely.
-                |It probably misses its home in the forest."""
+                    |It probably misses its home in the forest."""
                 else
                     "A cheerful little bird is sitting here singing."
             })
@@ -518,13 +518,13 @@ class ColossalCave private constructor(): World() {
             if (referringTo(bird())) {
                 when {
                     player has rod ->
-                        say("""As you approach, the bird becomes disturbed and you cannot catch it.""")
+                        + """As you approach, the bird becomes disturbed and you cannot catch it."""
                     player has cage -> {
-                        cage.moveTo(Item.LIMBO)
-                        bird().moveTo(Item.LIMBO)
-                        cagedBird.moveTo(player)
+                        cage moveTo Item.LIMBO
+                        bird() moveTo Item.LIMBO
+                        cagedBird moveTo player
                         // no message is printed by the above because cagedBird was in limbo, not the room
-                        say("You catch the bird and put it in the cage.")
+                        + "You catch the bird and put it in the cage."
                     }
                     else -> say("You can catch the bird, but you cannot carry it.")
                 }

@@ -269,6 +269,10 @@ open class Room(private val _shortDescription: String, _description: String) : W
 
     internal fun sayLater(message: String) = deferredOutput.add(message)
 
+    internal operator fun String.unaryPlus() {
+        say(this)
+    }
+
     /*
         World object mechanics
      */

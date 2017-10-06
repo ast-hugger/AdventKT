@@ -131,6 +131,10 @@ open class Item (
         turnEndAction = action
     }
 
+    internal operator fun String.unaryPlus() {
+        say(this)
+    }
+
     /*
         Object model mechanics
      */

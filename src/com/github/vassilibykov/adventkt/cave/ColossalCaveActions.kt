@@ -34,10 +34,11 @@ fun globalVocabulary(): Map<String, Action> {
     add(Look())
     add(Quit())
     add(Say())
-    add(Summon()) // magic; for testing
     add(Take())
-    add(Teleport()) // magic; for testing
     add(Xyzzy())
+    add(Summon())
+    add(Teleport())
+    add(AvadaKedavra())
     Direction.directionNames.forEach {vocabulary.put(it, DirectionAction(it))}
     return vocabulary
 }
@@ -127,11 +128,23 @@ class Take: Action("take", "get", "pick") {
     }
 }
 
-/**
- * Debugging magic: teleport to player's room any non-fixture item defined as a
- * property of the game world.
+class Xyzzy : Action("xyzzy") {
+    override fun act(subjects: List<String>) {
+        say("Nothing happens.")
+    }
+}
+
+/*
+    Let's have a few generic magic spells for testing and giggles.
  */
-class Summon : Action("summon") {
+
+/**
+ * `vocare <name>`: teleport to the player's room any non-fixture item.
+ * `vocare fortis <name>`: teleport to player's room any item, even if it's a fixture.
+ *
+ * The name is the name of the property which declares the item in the [ColossalCave] class.
+ */
+class Summon : Action("vocare") {
     override fun act(subjects: List<String>) {
         for (itemName in subjects) {
             val item = cave.findItem(itemName)
@@ -140,7 +153,7 @@ class Summon : Action("summon") {
                     say("You already own the $item.")
                 } else {
                     val anItem = if (item.isPlural) item.toString() else "${item.indefiniteArticle} $item"
-                    if (item is Fixture) {
+                    if (item is Fixture  && "fortis" !in subjects) {
                         say("For a brief moment, you see a shimmering outline of $anItem\n" +
                                 "floating in the air. It disappears with a loud \"pop!\"")
                     } else {
@@ -158,10 +171,10 @@ class Summon : Action("summon") {
 
 
 /**
- * Debugging magic: move the player into any location defined as a property of
- * the game world.
+ * `teleportio <name>`: teleport the player to any room. The room must be declared
+ * as a property in the world definition class. Name match is case-insensitive.
  */
-class Teleport : Action("teleport") {
+class Teleport : Action("teleportio") {
     override fun act(subjects: List<String>) {
         for (roomName in subjects) {
             val room = cave.findRoom(roomName)
@@ -175,8 +188,27 @@ class Teleport : Action("teleport") {
     }
 }
 
-class Xyzzy : Action("xyzzy") {
+private var firstAKuse = true;
+
+class AvadaKedavra : Action("avada") {
     override fun act(subjects: List<String>) {
-        say("Nothing happens.")
+        if ("kedavra" in subjects) {
+            val item = subjects.mapNotNull { player.room.findItem(it) }.firstOrNull()
+            if (item != null) {
+                say("""There is a flash of green lightning and a rushing sound.
+                    |The $item disappears in a puff of green smoke.""")
+                item.moveTo(Item.LIMBO)
+                if (firstAKuse) {
+                    firstAKuse = false
+                    say("\nA hollow voice says, \"Been doing some reading, have we?\"")
+                }
+            } else {
+                say("""There is a flash of green lightning and a rushing sound.
+                    |You disappear in a puff of green smoke.""")
+                throw World.QuitException()
+            }
+        } else {
+            say("I don't like the sound of this.")
+        }
     }
 }

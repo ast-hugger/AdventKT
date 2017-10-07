@@ -16,8 +16,6 @@
 
 package com.github.vassilibykov.adventkt.framework
 
-import java.util.*
-
 typealias PlayerApprover = Room.(Room) -> Boolean
 typealias PlayerReactor = Room.(Room) -> Unit
 typealias ItemApprover = Room.(ItemOwner, Item) -> Boolean
@@ -25,10 +23,10 @@ typealias ItemReactor = Room.(ItemOwner, Item) -> Unit
 
 /**
  * A game location. Not intended to be instantiated directly or subclassed,
- * instead typically created and configured using the `litRoom()` or the
+ * instead typically created and configured using the `room()` or the
  * `darkRoom()` DSL clause.
  *
- * @see [World.litRoom]
+ * @see [World.room]
  * @see [World.darkRoom]
  *
  * @author Vassili Bykov
@@ -136,7 +134,7 @@ open class Room(private val _shortDescription: String, _description: String) : W
      *
      * @see Player.moveTo
      */
-    internal fun allowPlayerMoveIn(a: PlayerApprover) = playerMoveInApprovers.add(a)
+    internal fun allowPlayerEntry(a: PlayerApprover) = playerMoveInApprovers.add(a)
 
     /**
      * Declare a reaction block evaluated after the player has been moved into
@@ -145,7 +143,7 @@ open class Room(private val _shortDescription: String, _description: String) : W
      *
      * @see Player.moveTo
      */
-    internal fun onPlayerMoveIn(r: PlayerReactor) = playerMoveInReactors.add(r)
+    internal fun onPlayerEntry(r: PlayerReactor) = playerMoveInReactors.add(r)
 
     /**
      * Declare a predicate evaluated before a player is moved out of this room.
@@ -154,7 +152,7 @@ open class Room(private val _shortDescription: String, _description: String) : W
      *
      * @see Player.moveTo
      */
-    internal fun allowPlayerMoveOut(a: PlayerApprover) = playerMoveOutApprovers.add(a)
+    internal fun allowPlayerExit(a: PlayerApprover) = playerMoveOutApprovers.add(a)
 
     /**
      * Declare a reaction block evaluated after the player has been moved out of
@@ -163,7 +161,7 @@ open class Room(private val _shortDescription: String, _description: String) : W
      *
      * @see Player.moveTo
      */
-    internal fun onPlayerMoveOut(r: PlayerReactor) = playerMoveOutReactors.add(r)
+    internal fun onPlayerExit(r: PlayerReactor) = playerMoveOutReactors.add(r)
 
     /**
      * Declare a predicate evaluated before any item is moved into this room.
@@ -309,7 +307,7 @@ open class Room(private val _shortDescription: String, _description: String) : W
 
     /**
      * Invoked after the player leaves this room for another room. Room
-     * definitions should typically use the [onPlayerMoveOut] DSL method instead
+     * definitions should typically use the [onPlayerExit] DSL method instead
      * of overriding this.
      */
     open fun noticePlayerMoveTo(newRoom: Room) {
@@ -318,7 +316,7 @@ open class Room(private val _shortDescription: String, _description: String) : W
 
     /**
      * Invoked after the player enters this room. Room definitions should
-     * typically use the [onPlayerMoveIn] DSL method instead of overriding this.
+     * typically use the [onPlayerEntry] DSL method instead of overriding this.
      *
      * If overridden, the overriding method must call this implementation.
      */

@@ -20,8 +20,11 @@ import com.github.vassilibykov.adventkt.framework.*
 import com.github.vassilibykov.adventkt.framework.Direction.*
 
 /**
- * A definition of a subset of Colossal Cave, with some changes and
+ * A definition of a portion of Colossal Cave, with some changes and
  * enhancements.
+ *
+ * It is an example of the world definition DSL. See the commentary in line
+ * comments throughout the class.
  *
  * @author Vassili Bykov
  */
@@ -31,6 +34,7 @@ class ColossalCave private constructor(): World() {
     companion object {
         fun create(): ColossalCave {
             val instance = ColossalCave()
+            // A World subclass instance must be initialized by its creator calling runObjectSetup().
             instance.runObjectSetup()
             return instance
         }
@@ -40,37 +44,67 @@ class ColossalCave private constructor(): World() {
         Rooms.
      */
 
+    // An 'outdoor()' declaration is defined at the end of this class.
+    // It is a room in which any not explicitly set exit leads to the 'forest' location.
+    // Any room declaration starts with two arguments: the short summary displayed
+    // when revisiting the room, and a long description printed on first visit.
     val outsideBuilding = outdoors("You're in front of building.",
             """You are standing at the end of a road before a small brick building.
             Around you is a forest. A small stream flows out of the building and
             down a gully.""")
     {
+        // Declare a two-way passageway: from this room in the specified directions,
+        // and a matching passageway from the target room back here in the opposite directions.
         twoWay(insideBuilding, IN, EAST)
         twoWay(hill, WEST)
+        twoWay(valley, DOWN, SOUTH)
+        // A one-way passageway does not have a matching return path automatically created.
         oneWay(hill, UP)
         oneWay(forest, NORTH)
-        twoWay(valley, DOWN, SOUTH)
 
+        // The item 'adventKtSign' (declared below) is present in this room
+        // and listed when describing the room.
         here(adventKtSign)
+
+        // A 'detail' is a special kind of immobile item which is not explicitly listed when
+        // describing this room, but which the player can interact with using the standard verbs
+        // "look", "l", and "examine", and possibly additional verbs--in this case, "read".
+        // "fine" and "print" are both names of this item. All together, this declaration
+        // allows the player to say "read fine print" or "look at fine print" (as well as
+        // other verb+name combination such as "look fine"), and get back the item's
+        // 'message'.
         detail("fine", "print",
                 extraVerbs = setOf("read"),
                 message = "\"The Implementor's Prize isn't fully implemented yet.\"")
             .cantTakeMessage = "How do you imagine doing that?"
 
+        // An action available in this room only. Saying "downstream" will invoke the attached
+        // block, which will relocate the player to the valley.
         action("downstream") { player moveTo valley }
 
-        onPlayerMoveIn { oldRoom ->
+        // A block executed every time the player enters the room, with the room the player
+        // enters from as the argument.
+        onPlayerEntry { oldRoom ->
             if (player has nugget) {
                 val entryWord = if (oldRoom == insideBuilding) "exit" else "approach"
+                // '+ "message"' or 'say("message")' both have the effect of printing
+                // the message as game output, followed by newline.
                 + """As you $entryWord the well house, a large box appears hovering in the air.
-                  |The box drops to the ground with a thud."""
+                  |The box drops to the ground with a thud.
+                  |"""
                 implementorPrize moveTo this
             }
         }
     }
 
+    // A 'fixture' is an immobile item. An attempt by the player to pick it up will display
+    // a generic message saying the item is "fixed in place", or a custom 'cantTakeMessage'
+    // as specified below.
     val adventKtSign = fixture("sign", message = "A new-looking sign is hanging outside the building.") {
         cantTakeMessage = "The sign is nailed securely to the wall."
+
+        // A vicinityAction is an action selected by the specified commands when the item is
+        // in the same room as the player (but not owned by the player).
         vicinityAction("read", "look") {
             + """The sign says:
               |
@@ -106,9 +140,13 @@ class ColossalCave private constructor(): World() {
         }
     }
 
+    // The abstract property 'start' of the World class must be defined to point
+    // at the room where the player starts the game.
     override val start = outsideBuilding
 
-    val insideBuilding = litRoom("You're inside building.",
+    // A regular 'room'. Unlike 'outdoors', the only available exits are the ones
+    // explicitly specified.
+    val insideBuilding = room("You're inside building.",
             """You are inside a building, a well house for a large spring.""")
     {
         here(keys)
@@ -158,10 +196,12 @@ class ColossalCave private constructor(): World() {
         action("downstream") { player moveTo slit }
     }
 
+    // Magic words for teleporting out of mistHall.
     val magicWords = setOf(
             "plover", "plugh", "zork", "foobar", "blorple", "frob", "foo", "quux",
             "wibble", "wobble", "wubble", "flob", "blep", "blah", "fnord", "piyo")
 
+    // The current magic word revealed by the bird.
     val magicWord = random(*magicWords.toTypedArray())
 
     val forest: Room = outdoors("You are wandering aimlessly through the forest.",
@@ -170,7 +210,7 @@ class ColossalCave private constructor(): World() {
         oneWay(outsideBuilding, OUT)
         oneWay(UnenterableRoom("The trees are too difficult to climb."), UP)
 
-        action("get") { // support "get out"
+        action("get") { // recognize "get out" as a way to get out of the forest
             if ("out" in subjects) {
                 player moveTo outsideBuilding
             } else {
@@ -178,7 +218,7 @@ class ColossalCave private constructor(): World() {
             }
         }
 
-        action("go") {
+        action("go") { // recognize "go <location>" for some nearby locations
             when {
                 "valley" in subjects -> player moveTo valley
                 "building" in subjects -> player moveTo outsideBuilding
@@ -189,27 +229,37 @@ class ColossalCave private constructor(): World() {
             }
         }
 
+        // The associated block is evaluated when an item is about to be moved
+        // into this room. Returning false will veto the move.
         allowItemMoveIn { oldOwner, _ ->
-            // No dropping items; that would reveal that the forest is one room.
-            // This does not preclude releasing the bird because the bird is
-            // moved here from limbo.
+            // If oldOwner is player, the player is trying to drop the item.
+            // We want to prohibit that because it would reveal that the forest
+            // is only one room. We could use a regular 'if/else', but it reads
+            // smoother with the supplied 'declineIf': if the predicate matches,
+            // the message is printed and false is returned.
             declineIf({ oldOwner == player },
                     """You realize you might never find your way back here
                     |and decide against dropping it.""")
         }
 
+        // The associated block is evaluated after the matching item has been moved
+        // into this room. A bird is moved into this room when it's released by the
+        // player. That can happen despite the above prohibition on dropping things
+        // because a bird owned by the player is represented by 'cagedBird', dropping
+        // which moves 'cagedBird' to limbo and 'bird' from limbo to here.
         onItemMoveIn(bird) {
-            // The player has released the bird.
+            // Print the message revealing the magic word, them move back to limbo.
             + """The bird is singing to you in gratitude for your having returned it to
                |its home. In return, it informs you of a magic word which it thinks
                |you may find useful somewhere near the Hall of Mists. The magic word
                |changes frequently, but for now the bird believes it is "$magicWord". You
                |thank the bird for this information, and it flies off into the forest."""
-            bird moveTo Item.LIMBO
+            bird moveTo LIMBO
         }
 
-        var stepCount = 0
-        onPlayerMoveIn { oldRoom ->
+        var stepCount = 0 // keep track of how long the player has been wandering
+
+        onPlayerEntry { oldRoom ->
             if (oldRoom != this) {
                 + """You enter the forest and soon become lost among the trees."""
                 stepCount = 0
@@ -217,14 +267,14 @@ class ColossalCave private constructor(): World() {
                 when(++stepCount) {
                     2 -> + "Are you sure you are not walking in circles?"
                     4 -> + """You think you see your tracks on the forest floor
-                           |But then again, you are not much of a tracker."""
+                           |But then again, you've never been much of a tracker."""
                     6 -> + "The forest is not a maze. Maybe you need to try something else."
                     8 -> + "You are feeling tired. All you wish for is to get out."
                 }
             }
         }
 
-        onPlayerMoveOut { newRoom ->
+        onPlayerExit { newRoom ->
             if (newRoom != this) {
                 + "You finally found your way out of the forest."
             }
@@ -246,29 +296,33 @@ class ColossalCave private constructor(): World() {
             |leads into the depression.""")
     {
         // NORTH: twoWay from slit
-        twoWay(belowGrate, DOWN, IN)
+        twoWay(belowGrate, DOWN, IN) // the way in, but see 'allowPlayerEntry'
 
         here(grate)
 
-        allowPlayerMoveIn { oldRoom ->
-            declineIf({ oldRoom == belowGrate && !grateOpen.isOn }, "The grate is closed")
-        }
-
-        allowPlayerMoveOut { newRoom ->
-            declineIf({ newRoom == belowGrate && !grateOpen.isOn }, "The grate is closed")
+        // We don't let the player into the cave until the grate is open.
+        allowPlayerExit { newRoom ->
+            declineIf({ newRoom == belowGrate && !grateOpen.isOn }, "The grate is closed.")
         }
     }
 
-    val belowGrate = litRoom(
+    val belowGrate = room(
             "You're below the grate.",
             """You are in a small chamber beneath a 3x3 steel grate to the surface.
             |A low crawl over cobbles leads inward to the west.""")
     {
-        hereShared(grate) // the official owner is outsideGrate, but also seen here
+        // Note the 'hereShared' instead of 'here'. The grate is visible in both rooms,
+        // but using 'here' would make it disappear from 'outsideGrate'.
+        hereShared(grate)
         twoWay(cobble, WEST)
+
+
+        allowPlayerExit { newRoom ->
+            declineIf({ newRoom == outsideGrate && !grateOpen.isOn }, "The grate is closed.")
+        }
     }
 
-    val cobble = litRoom(
+    val cobble = room(
             "You're in cobble crawl.",
             """You are crawling over cobbles in a low passage. There is a dim light
             |at the east end of the passage.""")
@@ -319,7 +373,11 @@ class ColossalCave private constructor(): World() {
     {
         // EAST: twoWay from birdChamber
         twoWay(mistHall, DOWN)
-        oneWay(crack, WEST)
+        // Setting a passageway target to an UnenterableRoom makes it possible
+        // to try going that way, but all it will do is print the specified message.
+        oneWay(UnenterableRoom(
+                """The crack is far too small for you to follow. At its widest it is
+                |barely wide enough to admit your foot."""), WEST)
 
         here(stoneSteps)
     }
@@ -333,16 +391,17 @@ class ColossalCave private constructor(): World() {
         })
     {}
 
-    val crack = UnenterableRoom(
-            """The crack is far too small for you to follow. At its widest it is
-            |barely wide enough to admit your foot.""")
-
-    val randomDwarf = fixture("dwarf")
+    // Here is all there is to the dwarf that occasionally shows to throw an axe at you.
+    // It is a fixture with an 'onTurnEnd' action which gets executed after processing
+    // any player input if the player is in the same room.
+    val lurkingDwarf = fixture("dwarf") // needs no description because it's hidden
     {
         isHidden = true
         onTurnEnd {
             withProbability(0.3) {
-                if (axe.owner == Item.LIMBO) {
+                // If the axe is in limbo, it's not carried by the player or lying
+                // somewhere, so we can have the dwarf throw it.
+                if (axe.owner == LIMBO) {
                     + ""
                     + """A little dwarf just walked around a corner, saw you, threw a little
                         |axe at you which missed, cursed, and ran away."""
@@ -368,20 +427,25 @@ class ColossalCave private constructor(): World() {
         twoWay(nuggetRoom, SOUTH)
 
         hereShared(stoneSteps)
-        hereShared(randomDwarf)
+        hereShared(lurkingDwarf)
 
+        // Have the magic word du jour work as advertised.
         action(magicWord) {
             + """The cave walls around you become a blur.
               |>>Foof!<<"""
             player moveTo outsideGrate
         }
+
+        // Any other magic word is recognized but frowned upon.
+        // Note that this also defines a discouraging action for the currently valid magic word.
+        // However, its real teleport action defined earlier will take precedence.
         magicWords.forEach {
             action(it) {
                 + "A hollow voice says, \"Fool!\""
             }
         }
 
-        allowPlayerMoveOut { newRoom ->
+        allowPlayerExit { newRoom ->
             declineIf({ newRoom == pitTop && player has nugget },
                     "An invisible force stops you from climbing the dome.")
         }
@@ -392,7 +456,7 @@ class ColossalCave private constructor(): World() {
             |The mist is quite thick here, and the fissure is too wide to jump.""")
     {
         // EAST: twoWay from mistHall
-        hereShared(randomDwarf)
+        hereShared(lurkingDwarf)
     }
 
     val nuggetRoom = darkRoom("You're in nugget-of-gold room.",
@@ -401,7 +465,7 @@ class ColossalCave private constructor(): World() {
     {
         // NORTH: twoWay from mistHall
         here(nugget)
-        hereShared(randomDwarf)
+        hereShared(lurkingDwarf)
     }
 
     val nugget = item("nugget", "gold",
@@ -421,9 +485,9 @@ class ColossalCave private constructor(): World() {
         oneWay(unimplementedPassage, SOUTHWEST)
 
         here(snake)
-        hereShared(randomDwarf)
+        hereShared(lurkingDwarf)
 
-        allowPlayerMoveOut { newRoom ->
+        allowPlayerExit { newRoom ->
             declineIf({ this has snake && newRoom != mistHall }, "You can't get by the snake.")
         }
 
@@ -431,7 +495,7 @@ class ColossalCave private constructor(): World() {
             if (this has snake) {
                  + """The little bird attacks the green snake, and in an astounding flurry
                    |drives the snake away."""
-                snake moveTo Item.LIMBO
+                snake moveTo LIMBO
             }
         }
     }
@@ -467,6 +531,8 @@ class ColossalCave private constructor(): World() {
             dropped = "There is a bottle of water here.")
     {}
 
+    // A Toggle is an object representing a Boolean state ('isOn'), with state transition
+    // messages displayed to the user when the state is changed using 'turnOn' and 'turnOff'.
     val grateOpen = Toggle(false,
             turnedOnMessage = "You unlock and open the grate.",
             turnedOffMessage = "You close and lock the grate.",
@@ -476,14 +542,23 @@ class ColossalCave private constructor(): World() {
     val grate = fixture("grate", "door",
             message = { if (grateOpen.isOn) "The grate is open." else "The grate is closed." })
     {
+        // An action with a .guardedBy() clause will only execute its action block if the
+        // predicate in the clause returns true. Otherwise, the refusal message in the clause
+        // is printed.
+        // .guardedBy() clauses can be chained as below. In that case, all of them are applied,
+        // and all must pass for the action to happen. The LAST clause is applied FIRST.
         vicinityAction("open", "unlock") { grateOpen.turnOn() }
-                // Guards are LIFO, so the !isOpen.isOn check is performed first.
                 .guardedBy({ player has keys },
                         "The grate is locked and you don't have the key.")
+                // The following clause is required despite having a similar message in the Toggle.
+                // Otherwise, at attempt by a player without a key to open and already open grate
+                // would say that the grate is locked.
                 .guardedBy({ !grateOpen.isOn },
                         "The grate is already open.")
 
         vicinityAction("close") { grateOpen.turnOff() }
+                .guardedBy({ player has keys },
+                        "You don't have the key to lock it.")
     }
 
     val cage = item("cage",
@@ -497,17 +572,23 @@ class ColossalCave private constructor(): World() {
     {
         action("wave") {
             if (player.room == eastBank) {
-                + """A hollow voice says, "What did you expect, a crystal bridge?""""
+                + "A hollow voice says, \"What did you expect, a crystal bridge?\""
             } else {
-                + "You look ridiculous waving the black rod."
+                + "You look silly waving the black rod."
             }
         }
     }
 
+    // The apparent bird and cage are actually three items: bird, cagedBird, and cage.
+    // The bird in a room is always 'bird', and the bird carried by the player is always 'cagedBird'.
+    // The cage is involved in transitions between these.
+
     val bird: Item = item("bird",
             owned = {""},
+            // Here is an example of a dynamic object description, specified as a block instead of a string.
+            // We are giving a hint to release the bird in the forest after the snake has been driven away.
             dropped = {
-                if (Item.LIMBO has snake)
+                if (LIMBO has snake)
                     """A little bird is sitting here looking sad and lonely.
                     |It probably misses its home in the forest."""
                 else
@@ -515,21 +596,16 @@ class ColossalCave private constructor(): World() {
             })
     {
         vicinityAction("take", "get", "catch") {
-            if (referringTo(bird())) {
-                when {
-                    player has rod ->
-                        + """As you approach, the bird becomes disturbed and you cannot catch it."""
-                    player has cage -> {
-                        cage moveTo Item.LIMBO
-                        bird() moveTo Item.LIMBO
-                        cagedBird moveTo player
-                        // no message is printed by the above because cagedBird was in limbo, not the room
-                        + "You catch the bird and put it in the cage."
-                    }
-                    else -> say("You can catch the bird, but you cannot carry it.")
+            when {
+                player has rod ->
+                    + "As you approach, the bird becomes disturbed and you cannot catch it."
+                player has cage -> {
+                    cage moveTo LIMBO
+                    bird() moveTo LIMBO
+                    cagedBird moveTo player
+                    + "You catch the bird and put it in the cage."
                 }
-            } else {
-                pass()
+                else -> say("You can catch the bird, but you cannot carry it.")
             }
         }
 
@@ -546,7 +622,7 @@ class ColossalCave private constructor(): World() {
         // Allows 'open cage' and 'release bird'.
         // Also allows 'open bird' and 'release cage' but oh well.
         action("open", "release") {
-            cagedBird() moveTo Item.LIMBO
+            cagedBird() moveTo LIMBO
             cage moveTo player
             bird moveTo player.room
         }

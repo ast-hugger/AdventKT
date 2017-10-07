@@ -35,6 +35,7 @@ import kotlin.reflect.full.starProjectedType
 abstract class World internal constructor() {
     private val vocabulary = globalVocabulary()
 
+    val LIMBO = Item.LIMBO
     val player = Player()
 
     abstract val start: Room
@@ -74,7 +75,7 @@ abstract class World internal constructor() {
                 parser.process(command)
             }
         } catch (e: QuitException) {
-            println("Leaving.")
+            println("THE END")
         }
     }
 
@@ -87,7 +88,7 @@ abstract class World internal constructor() {
     /**
      * Declare a room with natural light. The player can always see in this room.
      */
-    internal fun litRoom(caption: String, description: String, configurator: Room.()->Unit): Room {
+    internal fun room(caption: String, description: String, configurator: Room.()->Unit): Room {
         val room = Room(caption, description)
         room.configurator = configurator
         return room

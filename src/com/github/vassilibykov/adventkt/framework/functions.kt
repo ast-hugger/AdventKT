@@ -35,12 +35,12 @@ fun decline(message: String): Boolean {
 
 /**
  * Evaluate the [condition]. If true, print the specified message and return false.
- * Otherwise, silently return true. Intended to be used as part of `allow`
+ * Otherwise, silently return true. Intended to be used as part of the `allow`
  * declarations, for example
  *
- *     allowPlayerMoveOut { _ ->
- *       declineIf({ player has forbiddenItem },
- *         "You are not allowed to take $forbiddenItem out of the room.")
+ *     allowPlayerExit { _ ->
+ *         declineIf({ player has forbiddenItem },
+ *             "You are not allowed to take $forbiddenItem out of the room.")
  *     }
  */
 fun declineIf(condition: ()->Boolean, message: String): Boolean {

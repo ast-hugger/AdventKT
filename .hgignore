@@ -1,7 +1,0 @@
-syntax: glob
-
-*~
-*.orig
-out
-/.idea/workspace.xml
-.idea/workspace.xml

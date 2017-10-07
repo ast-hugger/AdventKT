@@ -1,6 +1,6 @@
 # AdventKT
 
-A fully-functional text adventure engine/DSL, with a partial replica of the
+A text adventure engine and DSL in Kotlin, with a partial replica of the
 classic Colossal Cave as an example.
 
 ## Background

@@ -1,0 +1,5 @@
+
+*~
+*.orig
+out
+.idea/workspace.xml

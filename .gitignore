@@ -1,5 +1,7 @@
 
 *~
 *.orig
-out
-.idea/workspace.xml
+/out
+/.idea/workspace.xml
+/build/
+/.gradle/

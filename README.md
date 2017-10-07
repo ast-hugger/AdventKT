@@ -1,7 +1,7 @@
 # AdventKT
 
-A text adventure engine and DSL in Kotlin, with a partial replica of the
-classic Colossal Cave as an example.
+A Kotlin-based DSL for text adventures, with a partial replica of the classic
+Colossal Cave as an example.
 
 ## Background
 
@@ -18,10 +18,15 @@ without replicating it all.
 
 ## Building and running
 
-All building is currently via the IDE. This repository includes an IDEA project,
-with an artifact that builds a `.jar` file. To run the game with command line
-editing, build the artifact and in a terminal window run the `advent` script
-found in the project root.
+Run `gradle jar` in the project directory to build a jar under `build/libs/AdventKT.jar`.
+
+Alternatively, open the project directory in IntelliJ (it is a project) and
+build the `AdventKT:jar` artifact. This produces
+`out/artifacts/AdventKT_jar/AdventKT.jar`.
+
+Run the jar using the `advent` shell script in the project directory. It runs
+the jar from the location where the IDE builds it. If using Gradle, edit the
+path in the script accordingly.
 
 ## Study pointers for the curious
 
@@ -43,21 +48,3 @@ of methods in `World` and `Room`, and to a lesser degree, the `Item` class.
 [Open Adventure](https://gitlab.com/esr/open-adventure), the original Colossal Cave version 2.5  
 
 [Photos of the real world cave](http://www.digitalhumanities.org/dhq/vol/001/2/000009/000009.html)
-
-## License
-
-    Copyright (c) 2017 Vassili Bykov
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
- 
-       http://www.apache.org/licenses/LICENSE-2.0
-     
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-
-Repository icon by [Freepik](www.freepik.com) from www.flaticon.com

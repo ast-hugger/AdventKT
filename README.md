@@ -30,11 +30,10 @@ path in the script accordingly.
 
 ## Study pointers for the curious
 
-The game is defined entirely in the `cave.ColossalCave` class, with global
-actions in `cave.ColossalCaveActions.kt`. (Warning: the former is one huge
-spoiler if you intend to actually play it). The class is Kotlin code, but
-shaped into a DSL. The definition is extensively commented to explain the
-use of DSL constructs.
+The game is defined entirely in the [ColossalCave](https://github.com/vassilibykov/AdventKT/blob/master/src/com/github/vassilibykov/adventkt/cave/ColossalCave.kt)
+class. (Spoiler alert). The class is Kotlin code, but shaped into a DSL. The
+definition is extensively commented to explain the use of DSL constructs.
+It's accompanied by global action definitions in `ColossalCaveActions.kt` 
 
 The implementation revolves around four core classes under `framework`: `World`,
 `Room`, `Item`, and `Action`. The DSL expressions in `cave.ColossalCave`

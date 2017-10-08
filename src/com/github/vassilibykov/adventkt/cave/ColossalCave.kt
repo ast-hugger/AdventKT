@@ -69,7 +69,7 @@ class ColossalCave private constructor(): World() {
         east and `in` to insideBuilding
         west and up to hill
         down and south to valley
-        // exit to a non-standard direction is introduces with 'exit named ...'
+        // exit to a non-standard direction is introduced with 'exit named ...'
         exit named "downstream" to valley
         exit named "grate" to outsideGrate
 
@@ -148,6 +148,9 @@ class ColossalCave private constructor(): World() {
             """You are inside a building, a well house for a large spring.""")
     {
         out and west to outsideBuilding
+        exit named "downstream" and down noEntry
+                """The stream flows out through a pair of 1 foot diameter sewer pipes.
+                |It would be advisable to use the exit."""
 
         - keys
         - lantern
@@ -157,11 +160,6 @@ class ColossalCave private constructor(): World() {
         action("xyzzy") {
             + ">>Foof!<<"
             player moveTo debris
-        }
-
-        action("down", "downstream") {
-            + """The stream flows out through a pair of 1 foot diameter sewer pipes.
-              |It would be advisable to use the exit."""
         }
     }
 
@@ -213,6 +211,7 @@ class ColossalCave private constructor(): World() {
         exit named "house" to outsideBuilding
         exit named "slit" to slit
         exit named "grate" to outsideGrate
+
         action("get") { // recognize "get out" as a way to get out of the forest
             if ("out" in subjects) {
                 player moveTo outsideBuilding

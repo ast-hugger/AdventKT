@@ -39,7 +39,7 @@ fun globalVocabulary(): Map<String, Action> {
     add(Summon())
     add(Teleport())
     add(AvadaKedavra())
-    Direction.directionNames.forEach {vocabulary.put(it, DirectionAction(it))}
+    StandardDirection.directionNames.forEach {vocabulary.put(it, DirectionAction(it))}
     return vocabulary
 }
 
@@ -188,7 +188,7 @@ class Teleport : Action("teleportio") {
     }
 }
 
-private var firstAKuse = true;
+private var firstAKuse = true
 
 class AvadaKedavra : Action("avada") {
     override fun act(subjects: List<String>) {

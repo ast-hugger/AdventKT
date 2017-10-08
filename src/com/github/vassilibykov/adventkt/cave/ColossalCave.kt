@@ -17,7 +17,6 @@
 package com.github.vassilibykov.adventkt.cave
 
 import com.github.vassilibykov.adventkt.framework.*
-import com.github.vassilibykov.adventkt.framework.Direction.*
 
 /**
  * A definition of a portion of Colossal Cave, with some changes and
@@ -48,39 +47,38 @@ class ColossalCave private constructor(): World() {
     // It is a room in which any not explicitly set exit leads to the 'forest' location.
     // Any room declaration starts with two arguments: the short summary displayed
     // when revisiting the room, and a long description printed on first visit.
+    //
+    // A room body typically includes a number of exit declared using the 'to'
+    // syntax and a list of items which start off in the room declared using
+    // the '-' syntax similar to an itemized list in Markdown.
+    //
+    // This room has a 'detail', a special hidden immobile item which the player
+    // can interact with using the standard verbs "look", "l", and
+    // "examine", and possibly additional verbs--in this case, "read".
+    // "fine" and "print" are both names of this item. All together, this declaration
+    // allows the player to say "read fine print" or "look at fine print" (as well as
+    // less fortunate verb+name combination such as "look fine"), and get back the item's
+    // 'message'.
+    // The definition is parenthesized so it can span multiple lines.
+
     val outsideBuilding = outdoors("You're in front of building.",
             """You are standing at the end of a road before a small brick building.
             Around you is a forest. A small stream flows out of the building and
             down a gully.""")
     {
-        // Declare a two-way passageway: from this room in the specified directions,
-        // and a matching passageway from the target room back here in the opposite directions.
-        twoWay(insideBuilding, IN, EAST)
-        twoWay(hill, WEST)
-        twoWay(valley, DOWN, SOUTH)
-        // A one-way passageway does not have a matching return path automatically created.
-        oneWay(hill, UP)
-        oneWay(forest, NORTH)
+        east and `in` to insideBuilding
+        west and up to hill
+        down and south to valley
+        // exit to a non-standard direction is introduces with 'exit named ...'
+        exit named "downstream" to valley
+        exit named "grate" to outsideGrate
 
-        // The item 'adventKtSign' (declared below) is present in this room
-        // and listed when describing the room.
-        here(adventKtSign)
+        - adventKtSign
 
-        // A 'detail' is a special kind of immobile item which is not explicitly listed when
-        // describing this room, but which the player can interact with using the standard verbs
-        // "look", "l", and "examine", and possibly additional verbs--in this case, "read".
-        // "fine" and "print" are both names of this item. All together, this declaration
-        // allows the player to say "read fine print" or "look at fine print" (as well as
-        // other verb+name combination such as "look fine"), and get back the item's
-        // 'message'.
-        detail("fine", "print",
-                extraVerbs = setOf("read"),
-                message = "\"The Implementor's Prize isn't fully implemented yet.\"")
-            .cantTakeMessage = "How do you imagine doing that?"
-
-        // An action available in this room only. Saying "downstream" will invoke the attached
-        // block, which will relocate the player to the valley.
-        action("downstream") { player moveTo valley }
+        (detail named "fine" or "print"
+                description "\"The Implementor's Prize isn't fully implemented yet.\""
+                extraVerb "read"
+                cantTakeMessage "How do you imagine doing that?")
 
         // A block executed every time the player enters the room, with the room the player
         // enters from as the argument.
@@ -146,13 +144,15 @@ class ColossalCave private constructor(): World() {
 
     // A regular 'room'. Unlike 'outdoors', the only available exits are the ones
     // explicitly specified.
-    val insideBuilding = room("You're inside building.",
+    val insideBuilding: Room = room("You're inside building.",
             """You are inside a building, a well house for a large spring.""")
     {
-        here(keys)
-        here(lantern)
-        here(food)
-        here(water)
+        out and west to outsideBuilding
+
+        - keys
+        - lantern
+        - food
+        - water
 
         action("xyzzy") {
             + ">>Foof!<<"
@@ -165,20 +165,19 @@ class ColossalCave private constructor(): World() {
         }
     }
 
-    val hill = outdoors("You're at hill in road.",
+    val hill: Room = outdoors("You're at hill in road.",
             """You have walked up a hill, still in the forest. The road slopes back
             |down the other side of the hill. There is a building in the distance.""")
     {
-        // EAST: twoWay from outsideBuilding
-        twoWay(endOfRoad, WEST)
-        oneWay(UnenterableRoom("Down to the east or down to the west?"), DOWN)
+        east to outsideBuilding
+        west to endOfRoad
+        down noEntry "Down to the east or down to the west?"
     }
 
     val endOfRoad: Room = outdoors("You're at end of road.",
             """The road, which approaches from the east, ends here amid the trees.""")
     {
-        // EAST: twoWay from hill
-        oneWay(hill, UP)
+        east and up to hill
     }
 
     val cliff = outdoors("You're at cliff.",
@@ -187,13 +186,13 @@ class ColossalCave private constructor(): World() {
     {
     }
 
-    val valley = outdoors("You're in valley.",
+    val valley: Room = outdoors("You're in valley.",
             """You are in a valley in the forest beside a stream tumbling along a
             |rocky bed.""")
     {
-        // UP, EAST: twoWay from outsideBuilding
-        twoWay(slit, DOWN, SOUTH)
-        action("downstream") { player moveTo slit }
+        north and up to outsideBuilding
+        south and down to slit
+        exit named "downstream" to slit
     }
 
     // Magic words for teleporting out of mistHall.
@@ -207,9 +206,13 @@ class ColossalCave private constructor(): World() {
     val forest: Room = outdoors("You are wandering aimlessly through the forest.",
             "You are wandering aimlessly through the forest.")
     {
-        oneWay(outsideBuilding, OUT)
-        oneWay(UnenterableRoom("The trees are too difficult to climb."), UP)
-
+        out to outsideBuilding
+        up noEntry "The trees are too difficult to climb."
+        exit named "valley" to valley
+        exit named "building" to outsideBuilding
+        exit named "house" to outsideBuilding
+        exit named "slit" to slit
+        exit named "grate" to outsideGrate
         action("get") { // recognize "get out" as a way to get out of the forest
             if ("out" in subjects) {
                 player moveTo outsideBuilding
@@ -218,16 +221,7 @@ class ColossalCave private constructor(): World() {
             }
         }
 
-        action("go") { // recognize "go <location>" for some nearby locations
-            when {
-                "valley" in subjects -> player moveTo valley
-                "building" in subjects -> player moveTo outsideBuilding
-                "house" in subjects -> player moveTo outsideBuilding
-                "slit" in subjects -> player moveTo slit
-                "grate" in subjects -> player moveTo outsideGrate
-                else -> pass()
-            }
-        }
+        detail named "tree" or "trees" description "You can't see the forest for all of them."
 
         // The associated block is evaluated when an item is about to be moved
         // into this room. Returning false will veto the move.
@@ -285,8 +279,9 @@ class ColossalCave private constructor(): World() {
                         """At your feet all the water of the stream splashes into a 2-inch slit
                         |in the rock. Downstream the streambed is bare rock.""")
     {
-        // UP, NORTH: twoWay from slit
-        twoWay(outsideGrate, SOUTH)
+        north and up to valley
+        south to outsideGrate
+        down noEntry "You don't fit through a two-inch slit!"
     }
 
     // strangely, need this explicit type to avoid a type checker recursive loop
@@ -295,15 +290,11 @@ class ColossalCave private constructor(): World() {
             |dirt is a strong steel grate mounted in concrete. A dry streambed
             |leads into the depression.""")
     {
-        // NORTH: twoWay from slit
-        twoWay(belowGrate, DOWN, IN) // the way in, but see 'allowPlayerEntry'
+        north to slit
+        down and `in` to belowGrate unless { !grateOpen.isOn } thenSay "The grate is closed."
+        exit named "building" to outsideBuilding
 
-        here(grate)
-
-        // We don't let the player into the cave until the grate is open.
-        allowPlayerExit { newRoom ->
-            declineIf({ newRoom == belowGrate && !grateOpen.isOn }, "The grate is closed.")
-        }
+        - grate
     }
 
     val belowGrate = room(
@@ -311,25 +302,22 @@ class ColossalCave private constructor(): World() {
             """You are in a small chamber beneath a 3x3 steel grate to the surface.
             |A low crawl over cobbles leads inward to the west.""")
     {
-        // Note the 'hereShared' instead of 'here'. The grate is visible in both rooms,
-        // but using 'here' would make it disappear from 'outsideGrate'.
-        hereShared(grate)
-        twoWay(cobble, WEST)
+        west to cobble
+        up and out to outsideGrate unless { !grateOpen.isOn } thenSay "The grate is closed."
+        exit named "pit" to pitTop
 
-
-        allowPlayerExit { newRoom ->
-            declineIf({ newRoom == outsideGrate && !grateOpen.isOn }, "The grate is closed.")
-        }
+        - grate
     }
 
-    val cobble = room(
+    val cobble: Room = room(
             "You're in cobble crawl.",
             """You are crawling over cobbles in a low passage. There is a dim light
             |at the east end of the passage.""")
     {
-        // EAST: twoWay from belowGrate
-        twoWay(debris, WEST, UP)
-        here(cage)
+        east to belowGrate
+        west and up to debris
+
+        - cage
     }
 
     val debris: Room = darkRoom(
@@ -339,9 +327,11 @@ class ColossalCave private constructor(): World() {
             |here, but an awkward canyon leads upward and west. In the mud someone
             |has scrawled, "MAGIC WORD XYZZY".""")
     {
-        twoWay(awkwardCanyon, UP, WEST)
-        // EAST, UP: twoWay from cobble
-        here(rod)
+        east and down to cobble
+        west and up to awkwardCanyon
+
+        - rod
+
         action("xyzzy") {
             + ">>Foof!<<"
             player moveTo insideBuilding
@@ -352,34 +342,33 @@ class ColossalCave private constructor(): World() {
             "You are in an awkward sloping east/west canyon.",
             "You are in an awkward sloping east/west canyon.")
     {
-        // DOWN, EAST: twoWay from debris
-        twoWay(birdChamber, WEST)
+        east and down to debris
+        west to birdChamber
     }
 
-    val birdChamber = darkRoom(
+    val birdChamber: Room = darkRoom(
             "You're in bird chamber.",
             """You are in a splendid chamber thirty feet high. The walls are frozen
             |rivers of orange stone. An awkward canyon and a good passage exit
             |from east and west sides of the chamber.""")
     {
-        // EAST: twoWay from awkwardCanyon
-        twoWay(pitTop, WEST)
-        here(bird)
+        east to awkwardCanyon
+        west to pitTop
+
+        - bird
     }
 
-    val pitTop = darkRoom("You're at top of small pit.",
+    val pitTop: Room = darkRoom("You're at top of small pit.",
             """At your feet is a small pit breathing traces of white mist. An east
             |passage ends here except for a small crack leading on.""")
     {
-        // EAST: twoWay from birdChamber
-        twoWay(mistHall, DOWN)
-        // Setting a passageway target to an UnenterableRoom makes it possible
-        // to try going that way, but all it will do is print the specified message.
-        oneWay(UnenterableRoom(
-                """The crack is far too small for you to follow. At its widest it is
-                |barely wide enough to admit your foot."""), WEST)
+        east to birdChamber
+        down to mistHall
+        west noEntry """The crack is far too small for you to follow. At its widest it is
+                     |barely wide enough to admit your foot."""
+        exit named "entrance" to belowGrate
 
-        here(stoneSteps)
+        - stoneSteps
     }
 
     val stoneSteps: Fixture = fixture("steps", message = {
@@ -394,14 +383,14 @@ class ColossalCave private constructor(): World() {
     // Here is all there is to the dwarf that occasionally shows to throw an axe at you.
     // It is a fixture with an 'onTurnEnd' action which gets executed after processing
     // any player input if the player is in the same room.
-    val lurkingDwarf = fixture("dwarf") // needs no description because it's hidden
+    val dwarf = fixture("dwarf") // needs no description because it's hidden
     {
         isHidden = true
         onTurnEnd {
             withProbability(0.3) {
                 // If the axe is in limbo, it's not carried by the player or lying
                 // somewhere, so we can have the dwarf throw it.
-                if (axe.owner == LIMBO) {
+                if (axe isIn LIMBO) {
                     + ""
                     + """A little dwarf just walked around a corner, saw you, threw a little
                         |axe at you which missed, cursed, and ran away."""
@@ -420,14 +409,14 @@ class ColossalCave private constructor(): World() {
             |swaying to and fro almost as if alive. A cold wind blows up the
             |staircase. There is a passage at the top of a dome behind you.""")
     {
-        // UP: twoWay from pitTop
-        twoWay(eastBank, WEST)
-        twoWay(kingHall, DOWN)
-        oneWay(kingHall, NORTH) // the return passage from kingHall is EAST
-        twoWay(nuggetRoom, SOUTH)
+        (exit named "dome" and up to pitTop unless { player has nugget }
+                thenSay "An invisible force stops you from climbing the dome.")
+        west to eastBank
+        down and north to kingHall
+        south to nuggetRoom
 
-        hereShared(stoneSteps)
-        hereShared(lurkingDwarf)
+        - stoneSteps
+        - dwarf
 
         // Have the magic word du jour work as advertised.
         action(magicWord) {
@@ -435,7 +424,6 @@ class ColossalCave private constructor(): World() {
               |>>Foof!<<"""
             player moveTo outsideGrate
         }
-
         // Any other magic word is recognized but frowned upon.
         // Note that this also defines a discouraging action for the currently valid magic word.
         // However, its real teleport action defined earlier will take precedence.
@@ -444,28 +432,25 @@ class ColossalCave private constructor(): World() {
                 + "A hollow voice says, \"Fool!\""
             }
         }
-
-        allowPlayerExit { newRoom ->
-            declineIf({ newRoom == pitTop && player has nugget },
-                    "An invisible force stops you from climbing the dome.")
-        }
     }
 
     val eastBank = darkRoom("You're on east bank of fissure.",
             """You are on the east bank of a fissure slicing clear across the hall.
             |The mist is quite thick here, and the fissure is too wide to jump.""")
     {
-        // EAST: twoWay from mistHall
-        hereShared(lurkingDwarf)
+        east to mistHall
+
+        - dwarf
     }
 
     val nuggetRoom = darkRoom("You're in nugget-of-gold room.",
             """This is a low room with a crude note on the wall. The note says,
             |"You won't get it up the steps".""")
     {
-        // NORTH: twoWay from mistHall
-        here(nugget)
-        hereShared(lurkingDwarf)
+        north and out to mistHall
+
+        - nugget
+        - dwarf
     }
 
     val nugget = item("nugget", "gold",
@@ -477,19 +462,16 @@ class ColossalCave private constructor(): World() {
             """You are in the Hall of the Mountain King, with passages off in all
             |directions.""")
     {
-        // UP: twoWay from mistHall
-        oneWay(mistHall, EAST) // the return passage from mistHall is NORTH
-        oneWay(unimplementedPassage, NORTH)
-        oneWay(unimplementedPassage, SOUTH)
-        oneWay(unimplementedPassage, WEST)
-        oneWay(unimplementedPassage, SOUTHWEST)
+        up and east to mistHall
+        (north and south and west and southwest
+                noEntry
+                    """The passage is blocked by orange safety fencing with a sign saying,
+                    |"No entry. This part of the cave is under construction.""""
+                unless { this has snake }
+                    thenSay "You can't get by the snake.")
 
-        here(snake)
-        hereShared(lurkingDwarf)
-
-        allowPlayerExit { newRoom ->
-            declineIf({ this has snake && newRoom != mistHall }, "You can't get by the snake.")
-        }
+        - snake
+        - dwarf
 
         onItemMoveIn(bird) {
             if (this has snake) {
@@ -499,10 +481,6 @@ class ColossalCave private constructor(): World() {
             }
         }
     }
-
-    val unimplementedPassage = UnenterableRoom(
-            """The passage is blocked by orange safety fencing with a sign saying,
-            |"No entry. This part of the cave is under construction."""")
 
     val snake = fixture("snake", message = "A huge green fierce snake bars the way!") {
         cantTakeMessage = "This doesn't sound like a very good idea."
@@ -636,7 +614,7 @@ class ColossalCave private constructor(): World() {
     private inner class Outdoors(summary: String, description: String) : Room(summary, description) {
         override fun exitTo(direction: Direction): Room? {
             return super.exitTo(direction)
-                    ?: if (direction in Direction.compassDirections) forest else null
+                    ?: if (direction in StandardDirection.compassDirections) forest else null
         }
     }
 

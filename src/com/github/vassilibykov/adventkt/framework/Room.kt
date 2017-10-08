@@ -16,6 +16,8 @@
 
 package com.github.vassilibykov.adventkt.framework
 
+import com.github.vassilibykov.adventkt.cave.DirectionAction
+
 typealias PlayerApprover = Room.(Room) -> Boolean
 typealias PlayerReactor = Room.(Room) -> Unit
 typealias ItemApprover = Room.(ItemOwner, Item) -> Boolean
@@ -37,9 +39,34 @@ open class Room(private val _shortDescription: String, _description: String) : W
     open val shortDescription
         get() = _shortDescription
     override val items = mutableListOf<Item>()
-    private val exits = mutableMapOf<Direction, Room>()
+    internal val exits = mutableMapOf<Direction, RoomExit>()
     private val vocabulary = mutableListOf<Action>()
     var visited = false
+
+    // Exits to standard directions, introducing DSL statements
+    internal val north = RoomExit(this, StandardDirection.NORTH)
+    internal val northeast = RoomExit(this, StandardDirection.NORTHEAST)
+    internal val east = RoomExit(this, StandardDirection.EAST)
+    internal val southeast = RoomExit(this, StandardDirection.SOUTHEAST)
+    internal val south = RoomExit(this, StandardDirection.SOUTH)
+    internal val southwest = RoomExit(this, StandardDirection.SOUTHWEST)
+    internal val west = RoomExit(this, StandardDirection.WEST)
+    internal val northwest = RoomExit(this, StandardDirection.NORTHWEST)
+    internal val up = RoomExit(this, StandardDirection.UP)
+    internal val down = RoomExit(this, StandardDirection.DOWN)
+    internal val `in` = RoomExit(this, StandardDirection.IN)
+    internal val out = RoomExit(this, StandardDirection.OUT)
+
+    internal val detail = RoomDetailBuilder(this)
+
+    internal inner class CustomExitBuilder {
+        infix fun named(name: String): RoomExit {
+            val direction = CustomDirection(name)
+            vocabulary.add(DirectionAction(name))
+            return RoomExit(this@Room, direction)
+        }
+    }
+    internal val exit = CustomExitBuilder()
 
     internal var configurator: (Room.()->Unit)? = null
     private val playerMoveInApprovers = mutableListOf<PlayerApprover>()
@@ -59,62 +86,15 @@ open class Room(private val _shortDescription: String, _description: String) : W
      */
 
     /**
-     * Declare a two-way passage between this room and [target].
-     * The passage leaves this room in the specified direction(s),
-     * and the target room in the opposite direction(s).
+     * Declare an item as belonging to this room. The room becomes the owner
+     * of the item, unless the item already has a (non-LIMBO) owner.
      */
-    internal fun twoWay(target: Room, vararg directions: Direction) {
-        for (direction in directions) {
-            if (exits.containsKey(direction)) {
-                throw IllegalArgumentException("exit to $direction already exists in $_shortDescription")
-            }
-            val opposite = direction.opposite()
-            if (target.exits.containsKey(opposite)) {
-                throw IllegalArgumentException("exit to $opposite already exists in $target._shortDescription")
-            }
-            addExit(direction, target)
-            target.addExit(opposite, this)
+    internal operator fun Item.unaryMinus() {
+        if (this isIn Item.LIMBO) {
+            primitiveMoveTo(this@Room)
+        } else {
+            this@Room.items.add(this)
         }
-    }
-
-    /**
-     * Declare a one-way passage between this room and [target].
-     * The passage leaves this room in the specified direction(s).
-     */
-    internal fun oneWay(target: Room, vararg directions: Direction) {
-        for (direction in directions) {
-            if (exits.containsKey(direction)) {
-                throw IllegalArgumentException("exit to $direction already exists")
-            }
-            addExit(direction, target)
-        }
-    }
-
-    /**
-     * Declare an item which belongs to this room.
-     */
-    internal fun here(item: Item): Item {
-        item.primitiveMoveTo(this)
-        return item
-    }
-
-    /**
-     * Declare an item which officially belongs to another location, but is also
-     * visible in this room.
-     */
-    internal fun hereShared(item: Item): Item {
-        items.add(item)
-        return item
-    }
-
-    /**
-     * Declare a detail: a hidden item which can be looked at, producing the specified
-     * description message.
-     */
-    internal fun detail(vararg names: String, extraVerbs: Collection<String> = setOf(), message: String): Detail {
-        val detail = Detail(*names, extraVerbs = extraVerbs, message = message)
-        here(detail)
-        return detail
     }
 
     /**
@@ -239,10 +219,6 @@ open class Room(private val _shortDescription: String, _description: String) : W
      * @see Item.moveTo
      */
     internal fun onItemMoveOut(reactor: ItemReactor) = itemMoveOutReactors.add(reactor)
-
-//    internal fun onItemMoveOut(item: Item, reactor: Room.(ItemOwner)->Unit) {
-//        onItemMoveOut { oldRoom, movedItem -> if (movedItem == item) reactor(this, oldRoom) }
-//    }
 
     /**
      * Declare a reaction block evaluated after the specified item is moved out
@@ -373,11 +349,16 @@ open class Room(private val _shortDescription: String, _description: String) : W
         }
     }
 
-    open fun exitTo(direction: Direction): Room? = exits[direction]
+    open fun exitTo(direction: Direction): Room? = exits[direction]?.target
+
+    open fun exitTo(directionName: String): Room? {
+        val dir = exits.keys.firstOrNull {
+            it.name.equals(directionName, ignoreCase = true) || it.shortcut.equals(directionName, ignoreCase = true)
+        }
+        return dir?.let { exitTo(it) }
+    }
 
     fun findAction(word: String): Action? = vocabulary.find { word in it.words }
-
-    private fun addExit(direction: Direction, target: Room) = exits.put(direction, target)
 
     override fun primitiveAddItem(item: Item) {
         items.add(item)

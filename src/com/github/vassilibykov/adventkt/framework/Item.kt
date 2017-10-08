@@ -32,8 +32,8 @@ package com.github.vassilibykov.adventkt.framework
 
 open class Item (
         private vararg val _names: String,
-        private var owned: ()->String,
-        private val dropped: ()->String)
+        internal var owned: ()->String,
+        internal var dropped: ()->String)
     : World.Configurable
 {
     constructor(vararg  names: String, owned: String, dropped: String)
@@ -44,6 +44,11 @@ open class Item (
 
     var owner = LIMBO
         internal set
+    init {
+        LIMBO.primitiveAddItem(this)
+    }
+
+
     val names = _names.toSet()
     internal var isPlural = false
     val primaryName
@@ -77,6 +82,8 @@ open class Item (
     internal var configurator: (Item.()->Unit)? = null
     private val moveApprovers = mutableListOf<Item.(ItemOwner)->Boolean>()
     private var turnEndAction = {}
+
+    infix fun isIn(owner: ItemOwner) = this.owner == owner
 
     /*
         DSL declarations

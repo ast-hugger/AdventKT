@@ -75,7 +75,7 @@ abstract class World internal constructor() {
                 parser.process(command)
             }
         } catch (e: QuitException) {
-            println("THE END")
+            println("\n   THE END\n")
         }
     }
 
@@ -168,7 +168,7 @@ abstract class World internal constructor() {
      * instance creator, typically a factory method in the companion object of a
      * subclass, to invoke this method on a freshly created instance.
      *
-     * @see ColossalCave.create
+     * @see com.github.vassilibykov.adventkt.cave.ColossalCave.create
      */
     internal fun runObjectSetup() {
         val configurationContext = ConfigurationContext()

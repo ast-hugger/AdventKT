@@ -26,15 +26,8 @@ import com.github.vassilibykov.adventkt.cave.player
  */
 abstract class MovementAction(word: String) : Action(word) {
     internal fun movePlayer(where: String) {
-        val direction = Direction.named(where)
-        if (direction == null) {
-            println("You can't go to '$where'")
-        } else {
-            val destination = player.room.exitTo(direction)
-            if (destination == null) {
-                println("You can't go $direction.")
-            } else
-                player.moveTo(destination)
-        }
+        player.room.exitTo(where)
+                ?. let { player.moveTo(it) }
+                ?: say("You can't go $where.")
     }
 }

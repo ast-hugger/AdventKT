@@ -18,17 +18,15 @@ package com.github.vassilibykov.adventkt.framework
 
 /**
  * A simple hidden [Fixture] with no special behavior other than providing a
- * description when it's looked at.
+ * description when it's looked at. Typically created by a [RoomDetailBuilder]
+ * used via the DSL.
  *
  * @author Vassili Bykov
  */
-class Detail(vararg names: String,
-             message: ()->String,
-             private val extraVerbs: Collection<String> = setOf())
-    : Fixture(*names, message = message)
+class Detail(vararg names: String)
+    : Fixture(*names, message = "")
 {
-    constructor(vararg names: String, message: String, extraVerbs: Collection<String>)
-        : this(*names, message = { message }, extraVerbs = extraVerbs)
+    internal val extraVerbs = mutableSetOf<String>()
 
     override var isHidden = true
 

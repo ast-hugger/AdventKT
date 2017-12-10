@@ -43,7 +43,7 @@ class ColossalCave private constructor(): World() {
         Rooms.
      */
 
-    // An 'outdoor()' declaration is defined at the end of this class.
+    // An 'outdoors()' declaration is defined at the end of this class.
     // It is a room in which any not explicitly set exit leads to the 'forest' location.
     // Any room declaration starts with two arguments: the short summary displayed
     // when revisiting the room, and a long description printed on first visit.

@@ -42,6 +42,10 @@ ultimately create a particular structure of those classes and their subclasses.
 The world definition DSL as seen in the `ColossalCave` class is defined by a set
 of methods in `World` and `Room`, and to a lesser degree, the `Item` class.
 
+## Contact
+
+My email is `<first name> dot <last name> at gmail dot com`.
+
 ## Links of interest
 
 [Open Adventure](https://gitlab.com/esr/open-adventure), the original Colossal Cave version 2.5  
